@@ -42,7 +42,7 @@ export const voidWeapons = [
     category: 'signature',
     signatureCoreId: 'nova',
     rarity: 'legendary',
-    color: '#ff9b3d',
+    color: '#fff7cf',
     glyph: '◉',
     description: 'AETHER · SINGULARITY CONTROL',
     stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
