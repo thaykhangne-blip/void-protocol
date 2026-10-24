@@ -1194,6 +1194,7 @@ button.global-back-button:hover{
 #modal.core-hologram-modal .core-holo-planet{display:grid;place-items:center;overflow:visible!important}
 #modal.core-hologram-modal .core-holo-planet .world-holo-planet-surface{inset:0;opacity:.9}
 #modal.core-hologram-modal .core-holo-planet #coreHoloGlyph{position:absolute;z-index:5;font-size:clamp(60px,8vw,100px);font-weight:700;line-height:1;color:var(--world-accent);text-shadow:0 0 14px color-mix(in srgb,var(--world-accent) 80%,transparent),0 0 40px color-mix(in srgb,var(--world-accent) 50%,transparent)}
+#modal.core-hologram-modal .core-holo-planet #coreHoloGlyph.aether-glyph{color:#000!important;text-shadow:none!important;-webkit-text-stroke:1px #000;filter:none!important;}
 #modal.core-hologram-modal .core-holo-readouts{grid-template-columns:repeat(3,minmax(0,1fr))!important}
 #modal.core-hologram-modal .core-holo-details{display:block;width:100%;margin-top:8px;padding:10px 12px;border:1px solid rgba(111,190,232,.2);border-radius:6px;background:rgba(6,15,29,.75);color:#91aac7;font:10px/1.3 monospace;letter-spacing:.12em;cursor:pointer}
 #modal.core-hologram-modal .core-holo-details:hover{border-color:var(--world-accent);color:var(--world-accent)}
