@@ -1202,7 +1202,7 @@ function shoot(){
   // Event Horizon must cross the entire arena, not stop at Nova's normal targeting range.
   const length=Math.max(0,Math.min(edgeX>0?edgeX:Infinity,edgeY>0?edgeY:Infinity));
   const eventHorizonDamage=[2,2.25,2.5,2.75,3][rank-1];
-  lasers.push({x:player.x,y:player.y,angle,vx,vy,length:Number.isFinite(length)?length:Math.max(W,H),damage:player.damage*eventHorizonDamage*(player.laserDamageMult||1),color:'#f0c8ff',life:.28,maxLife:.28,ticks:1,tickTimer:0,hitRadius:10+(player.laserWidthBonus||0),ricochetsLeft:0,ricochetChecked:false,voidWeaponEnhanced:true});
+  lasers.push({x:player.x,y:player.y,angle,vx,vy,length:Number.isFinite(length)?length:Math.max(W,H),damage:player.damage*eventHorizonDamage*(player.laserDamageMult||1),color:'#ffcf69',coreId:'nova',life:.28,maxLife:.28,ticks:1,tickTimer:0,hitRadius:12+(player.laserWidthBonus||0),ricochetsLeft:0,ricochetChecked:false,voidWeaponEnhanced:true});
   player.voidWeaponChargedAttack=false;
  }else if(player?.voidWeaponPassive==='thunderclap-protocol'&&player.voidWeaponChargedAttack&&core?.id==='flash'){
   const first=player.voidWeaponChargedTarget||getPrimaryAttackTarget();const rank=Math.max(1,Math.min(5,player.voidWeaponRank||1));
