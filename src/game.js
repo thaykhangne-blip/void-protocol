@@ -2068,7 +2068,7 @@ ctx.globalAlpha=.95;ctx.strokeStyle='#ffffff';ctx.lineWidth=1;
 ctx.beginPath();ctx.ellipse(0,0,rx-5,ry-2,-.08,Math.PI,Math.PI*2);ctx.stroke();
 for(let i=0;i<2;i++){
  const x=(i===0?1:-1)*Math.cos(orbit)*sep,y=(i===0?1:-1)*Math.sin(orbit)*sep*.42;
- // Black event horizons with a layered orange-white photon ring.
+ // Black event horizons with layered pale-gold photon rings.
  ctx.globalAlpha=.18+.08*pulse;ctx.strokeStyle='#fff0a6';ctx.lineWidth=5;
  ctx.beginPath();ctx.arc(x,y,br+1.2,0,Math.PI*2);ctx.stroke();
  ctx.globalAlpha=1;ctx.fillStyle='#000000';ctx.beginPath();ctx.arc(x,y,br,0,Math.PI*2);ctx.fill();
@@ -2079,7 +2079,7 @@ ctx.globalAlpha=.24+.10*pulse;ctx.strokeStyle='#fff7cf';ctx.lineWidth=7;
 ctx.beginPath();ctx.ellipse(0,0,rx,ry,-.08,0,Math.PI);ctx.stroke();
 ctx.globalAlpha=.98;ctx.strokeStyle='#fff7cf';ctx.lineWidth=2.5;
 ctx.beginPath();ctx.ellipse(0,0,rx,ry,-.08,0,Math.PI);ctx.stroke();
-ctx.globalAlpha=.98;ctx.strokeStyle='#ffe1b8';ctx.lineWidth=1;
+ctx.globalAlpha=.98;ctx.strokeStyle='#fff7cf';ctx.lineWidth=1;
 ctx.beginPath();ctx.ellipse(0,0,rx-5,ry-2,-.08,0,Math.PI);ctx.stroke();
 // Four tiny moving points; no per-frame glow or gradient allocations.
 for(let i=0;i<4;i++){
