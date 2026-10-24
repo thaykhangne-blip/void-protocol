@@ -1367,7 +1367,14 @@ function showPortals(){
   const milestoneKey=`${currentWorld}:${room}`;
   if(!milestoneDeliveriesPresented.has(milestoneKey)){
    const pending=(saveData.pendingVoidWeaponRewards||[]).find(item=>Number(item.worldId)===Number(currentWorld)&&Number(item.roomNumber)===Number(room));
-   const delivery=pending||{type:'nexus-fragments',amount:0,worldId:currentWorld,roomNumber:room,claimKey:`presentation-only:${milestoneKey}`,presentationOnly:true};
+   let delivery=pending;
+   if(!delivery){
+    const roll=Math.random();let rarity=null;
+    if(roll<.05)rarity='legendary';else if(roll<.17)rarity='unique';else if(roll<.50)rarity='rare';
+    if(rarity){const pool=voidWeapons.filter(weapon=>weapon.rarity===rarity);const weapon=pool[Math.floor(Math.random()*pool.length)];const grant=grantVoidWeaponToSave(saveData,weapon.id,1);saveData=grant.saveData;delivery={type:'weapon',weaponId:weapon.id,rarity:weapon.rarity,convertedFragments:grant.convertedFragments||0,worldId:currentWorld,roomNumber:room,claimKey:`fallback:${currentWorld}:${room}:${Date.now()}`};}
+    else{const amount=15+currentWorld*5;saveData.coreCurrency=(saveData.coreCurrency||0)+amount;delivery={type:'nexus-fragments',amount,worldId:currentWorld,roomNumber:room,claimKey:`fallback:${currentWorld}:${room}:${Date.now()}`};}
+    saveData.pendingVoidWeaponRewards=[...(saveData.pendingVoidWeaponRewards||[]),delivery];persist();
+   }
    milestoneDeliveriesPresented.add(milestoneKey);
    showVoidWeaponDelivery(delivery,()=>showPortals());
    return;
