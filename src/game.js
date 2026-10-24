@@ -1321,9 +1321,9 @@ function castUltimate(){
    notify(`AETHER · BLACK SUN · ${duration.toFixed(1)}s GRAVITY FIELD · COLLAPSE DAMAGE SCALES WITH CAPTURED ENEMIES`,2);
  }else{
    const ax=mouse.dx||1,ay=mouse.dy||0;const len=Math.hypot(ax,ay)||1;const old={x:player.x,y:player.y};player.x=Math.max(16,Math.min(W-16,player.x+ax/len*(155+lv*28)));player.y=Math.max(16,Math.min(H-16,player.y+ay/len*(155+lv*28)));player.inv=Math.max(player.inv,.42);player.ultHaste=12+lv;
-   const radius=Math.min(ultRange,115+lv*16+spent*.35),dmg=(42+lv*20)*energyPower*(1+lv*.18);burst(old.x,old.y,'#9f5cff',22);burst(player.x,player.y,'#d2a0ff',36);ultFx.push({x:player.x,y:player.y,r:radius,life:.42,max:.42,color:'#ff9b3d'});
-   for(const e of enemies){if(e.hp>0&&dist(player,e)<radius){applyDamage(e,dmg,'#c18aff',true,'NOVA');let dx=e.x-player.x,dy=e.y-player.y,l=Math.hypot(dx,dy)||1;e.x+=dx/l*18;e.y+=dy/l*18;burst(e.x,e.y,'#bd7aff',7)}}
-   if(blackHole&&dist(player,blackHole)<radius+blackHole.r)applyDamage(blackHole,dmg,'#c18aff',true,'NOVA');
+   const radius=Math.min(ultRange,115+lv*16+spent*.35),dmg=(42+lv*20)*energyPower*(1+lv*.18);burst(old.x,old.y,'#ff9b3d',22);burst(player.x,player.y,'#ffcf69',36);ultFx.push({x:player.x,y:player.y,r:radius,life:.42,max:.42,color:'#ff9b3d'});
+   for(const e of enemies){if(e.hp>0&&dist(player,e)<radius){applyDamage(e,dmg,'#ff9b3d',true,'AETHER');let dx=e.x-player.x,dy=e.y-player.y,l=Math.hypot(dx,dy)||1;e.x+=dx/l*18;e.y+=dy/l*18;burst(e.x,e.y,'#bd7aff',7)}}
+   if(blackHole&&dist(player,blackHole)<radius+blackHole.r)applyDamage(blackHole,dmg,'#ff9b3d',true,'AETHER');
    notify(`PHASE NOVA · ${spent} ENERGY · OVERCLOCK ${player.ultHaste.toFixed(0)}s`);
  }
  updateUI();
@@ -1452,7 +1452,7 @@ function perkExchangeInfo(name){
   [/CUBIC OVERLOAD/,'Elemental cube damage +10% and cube size +6% per rank.'],
   [/CHAIN REACTION/,'Lightning chains hit one additional enemy and deal +15% chain damage per rank.'],
   [/FROST LATTICE/,'Frost hits add one chill stack and freeze requires fewer stacks per rank.'],
-  [/NOVA SWARM/,'Aether cube salvos gain one homing missile and +5% missile damage per rank.'],
+  [/AETHER SWARM/,'Aether cube salvos gain one homing missile and +5% missile damage per rank.'],
   [/BURNING CONSTELLATION/,'Fire burn damage +20% per rank.'],
   [/INFERNAL CONFLUX/,'Ring of Fire damage +22%, burn DPS +4, and radius +8 per rank.'],
   [/ABSOLUTE AEGIS/,'Cryo Shield gains +14% max-hull capacity and +0.7 seconds duration per rank.'],
