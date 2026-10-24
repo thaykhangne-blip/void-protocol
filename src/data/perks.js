@@ -26,7 +26,7 @@ export const PERKCODEXDATA=[
 ["FROST: GLACIER HEART","⬡","Rare · Reduce incoming damage by 8%."],
 ["FROST: SHARDSTORM","❄","Rare · Critical chance +5 percentage points."],
 ["FROST: ZERO-POINT FRACTURE","✦","Rare · Deal 15% more damage to frozen enemies."],
-["AETHER: BEAM CALIBRATION","✦","Singularity beam damage +10%."],
+["AETHER: BEAM CALIBRATION","✦","Singularity shard damage +10%."],
 ["AETHER: PHOTON LENS","◎","Critical chance +4 percentage points."],
 ["AETHER: AFTERIMAGE ARRAY","↠","ATK Speed +10%."],
 ["AETHER: EVENT CHASER","◉","Deal 12% more damage to bosses and singularities."],
