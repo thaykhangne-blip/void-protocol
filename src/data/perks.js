@@ -42,7 +42,7 @@ export const PERKCODEXDATA=[
 ["NATURE: HUNTER BLOOM","✿","Rare · Attack damage +10%."],
 ["NATURE: LIVING CANOPY","❧","Rare · Reduce incoming damage by 8%."],
 ["PRISM: SPECTRAL FOCUS","◈","Attack damage +8%."],
-["PRISM: FIVEFOLD RESONANCE","◈","Critical chance +4 percentage points."],
+["PRISM: FOURFOLD RESONANCE","◈","Critical chance +4 percentage points."],
 ["PRISM: CHROMATIC SHELL","⬢","Rare · Maximum HP +10 and restore 10 hull."],
 ["PRISM: ELEMENTAL AFTERSHOCK","✦","Rare · Elemental damage +15%."],
 ["CRIMSON: IRON OATH","⟡","DEF +4."],
