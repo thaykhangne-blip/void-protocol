@@ -5,7 +5,7 @@ export function fireNovaAutoAttack(context, locals) {
  const { player, blackHole, enemies, core, CORE_TARGET_RANGE, mouse, sfx, pick, ELEMENTAL_CORE_ELEMENTS, bullets, launchElementalNovaSalvo, natureDrones, withinCoreRange, dist, skillFx, rand, applyDamage, triggerRicochetChain, burst, pointSegmentDistance, W, H, lasers, RICOCHET_LINK_RANGE, addLightningArc, element, energy, firePhaseFlowAttack } = context;
  const { coreId, target, angle, extendedProjectileCore, attackProjectileRange } = locals;
 
-  // Nova's normal attack is a focused physical laser. Overclock charges every fourth attack.
+  // Aether's normal attack is a focused singularity laser. Orbital Overdrive charges every fourth attack.
   const overclockedNovaShot=!!player.novaOverclock&&((player.novaOverclockCount=(player.novaOverclockCount||0)+1)>=4);if(overclockedNovaShot)player.novaOverclockCount=0;
   const total=Math.max(1,Math.min(5,player.shots||1)),spread=.14,laneGap=24;
   for(let i=0;i<total;i++){
@@ -20,7 +20,7 @@ export function fireNovaAutoAttack(context, locals) {
    const length=Math.min(CORE_TARGET_RANGE,Math.max(0,Math.min(edgeX>0?edgeX:Infinity,edgeY>0?edgeY:Infinity)));
    lasers.push({x:ox,y:oy,angle:a,vx,vy,length:Number.isFinite(length)?length:Math.max(W,H),damage:player.damage*.70*(player.laserDamageMult||1)*(overclockedNovaShot?1.35:1)*getProjectileDamageMultiplier(total,player.baseShots,player.projectileDamagePenalty??.12),color:overclockedNovaShot?'#ffedb0':'#ff9b3d',coreId:'nova',life:.16,maxLife:.16,ticks:1,tickTimer:0,hitRadius:6+(player.laserWidthBonus||0)+(overclockedNovaShot?3:0),ricochetsLeft:player.ricochet||0,ricochetChecked:false});
   }
-  // Nova's primary weapon is a laser, so its side cannons must emit side beams
+  // Aether's primary weapon is a laser, so its side cannons must emit side beams
   // rather than ordinary ray bullets (which are not processed as laser hits).
   if(player.sideCannons){
    const cannonCount=Math.min(4,2*(player.sideCannons||0));
