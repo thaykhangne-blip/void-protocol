@@ -19,7 +19,7 @@ export function fireNovaAutoAttack(context, locals) {
   const vx=Math.cos(a),vy=Math.sin(a);
   bullets.push({
    x:ox,y:oy,vx:vx*player.shotSpeed*1.55,vy:vy*player.shotSpeed*1.55,
-   r:5+(player.laserWidthBonus||0)*.18,life:2.2,rangeLeft:CORE_TARGET_RANGE,
+   r:5+(player.laserWidthBonus||0)*.18+(overclockedNovaShot?2:0),life:2.2,rangeLeft:CORE_TARGET_RANGE,
    damage:player.damage*.78*(player.laserDamageMult||1)*(overclockedNovaShot?1.35:1)*getProjectileDamageMultiplier(total,player.baseShots,player.projectileDamagePenalty??.12),
    color:overclockedNovaShot?'#ffffff':'#fff0a6',type:'aether',coreId:'nova',
    pierce:Math.max(1,player.pierce||0),hitEnemies:[],aetherPierceCount:0,
