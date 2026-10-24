@@ -1319,7 +1319,6 @@ function castUltimate(){
    skillFx.push({type:'aetherUltWell',x:targetX,y:targetY,life:duration,max:duration,radius,color:'#ff9b3d',damage:player.damage*(.22+lv*.06)*energyPower,collapseDamage,tickTimer:.15,isUltimate:true});
    burst(targetX,targetY,'#ff9b3d',34);burst(targetX,targetY,'#050509',22);burst(targetX,targetY,'#ffcf69',12);
    notify(`AETHER · BLACK SUN · ${duration.toFixed(1)}s GRAVITY FIELD · COLLAPSE DAMAGE SCALES WITH CAPTURED ENEMIES`,2);
- }else{· 12s');
  }else{
    const ax=mouse.dx||1,ay=mouse.dy||0;const len=Math.hypot(ax,ay)||1;const old={x:player.x,y:player.y};player.x=Math.max(16,Math.min(W-16,player.x+ax/len*(155+lv*28)));player.y=Math.max(16,Math.min(H-16,player.y+ay/len*(155+lv*28)));player.inv=Math.max(player.inv,.42);player.ultHaste=12+lv;
    const radius=Math.min(ultRange,115+lv*16+spent*.35),dmg=(42+lv*20)*energyPower*(1+lv*.18);burst(old.x,old.y,'#9f5cff',22);burst(player.x,player.y,'#d2a0ff',36);ultFx.push({x:player.x,y:player.y,r:radius,life:.42,max:.42,color:'#c18aff'});
