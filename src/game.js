@@ -1180,7 +1180,7 @@ function configureVoidWeaponAutoAttack(target){
  player.voidWeaponAutoCount=(player.voidWeaponAutoCount||0)+1;
  const rank=Math.max(1,Math.min(5,player.voidWeaponRank||1));
  if(effect==='eventide-array'&&player.voidWeaponAutoCount>=[5,5,4,4,3][rank-1]){
-  player.voidWeaponAutoCount=0;player.voidWeaponChargedAttack=true;player.voidWeaponChargedTarget=enemies.filter(e=>e.hp>0).sort((a,b)=>dist(player,a)-dist(player,b))[0]||target;
+  player.voidWeaponAutoCount=0;player.voidWeaponChargedAttack=true;player.voidWeaponChargedTarget=target===blackHole?blackHole:(enemies.filter(e=>e.hp>0).sort((a,b)=>dist(player,a)-dist(player,b))[0]||target);
  }else if(effect==='thunderclap-protocol'&&player.voidWeaponAutoCount>=[6,5,4,3,3][rank-1]){
   player.voidWeaponAutoCount=0;player.voidWeaponChargedAttack=true;player.voidWeaponChargedTarget=target;
  }else if(effect==='cinder-oath'){
