@@ -43,15 +43,15 @@ export const voidWeapons = [
     signatureCoreId: 'nova',
     rarity: 'legendary',
     color: '#ff9b3d',
-    glyph: '✧',
-    description: 'NOVA · LASER PENETRATION',
+    glyph: '◉',
+    description: 'AETHER · SINGULARITY CONTROL',
     stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
     passive: {
       name: 'Eventide Array',
       effectId: 'eventide-array',
       statKey: 'fireRate',
       values: [0.10, 0.12, 0.14, 0.16, 0.18],
-      description: 'Attack Speed: +10% / 12% / 14% / 16% / 18%. Infinite Line: Each additional enemy pierced by a laser increases that laser’s damage by 12% / 15% / 18% / 21% / 24%, stacking up to four times. Event Horizon: Every 5 / 4 / 3 / 3 / 2 auto-attacks, the next attack fires an enhanced piercing beam dealing 200% / 225% / 250% / 275% / 300% ATK. The beam pierces all enemies and gains the full Infinite Line bonus.'
+      description: 'Attack Speed: +10% / 12% / 14% / 16% / 18%. Event Horizon: Every 5 / 4 / 3 / 3 / 2 auto-attacks, create a black hole at the nearest enemy. The singularity pulls nearby enemies inward and collapses for 200% / 225% / 250% / 275% / 300% ATK damage. Each refinement increases the pull radius and collapse damage.'
     }
   },
   {
