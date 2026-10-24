@@ -18,7 +18,7 @@ export function fireNovaAutoAttack(context, locals) {
    const edgeX=vx>0?(W-ox)/vx:vx<0?(0-ox)/vx:Infinity;
    const edgeY=vy>0?(H-oy)/vy:vy<0?(0-oy)/vy:Infinity;
    const length=Math.min(CORE_TARGET_RANGE,Math.max(0,Math.min(edgeX>0?edgeX:Infinity,edgeY>0?edgeY:Infinity)));
-   lasers.push({x:ox,y:oy,angle:a,vx,vy,length:Number.isFinite(length)?length:Math.max(W,H),damage:player.damage*.70*(player.laserDamageMult||1)*(overclockedNovaShot?1.35:1)*getProjectileDamageMultiplier(total,player.baseShots,player.projectileDamagePenalty??.12),color:overclockedNovaShot?'#8ffaff':'#bd78ff',life:.16,maxLife:.16,ticks:1,tickTimer:0,hitRadius:6+(player.laserWidthBonus||0)+(overclockedNovaShot?3:0),ricochetsLeft:player.ricochet||0,ricochetChecked:false});
+   lasers.push({x:ox,y:oy,angle:a,vx,vy,length:Number.isFinite(length)?length:Math.max(W,H),damage:player.damage*.70*(player.laserDamageMult||1)*(overclockedNovaShot?1.35:1)*getProjectileDamageMultiplier(total,player.baseShots,player.projectileDamagePenalty??.12),color:overclockedNovaShot?'#ffedb0':'#ff9b3d',coreId:'nova',life:.16,maxLife:.16,ticks:1,tickTimer:0,hitRadius:6+(player.laserWidthBonus||0)+(overclockedNovaShot?3:0),ricochetsLeft:player.ricochet||0,ricochetChecked:false});
   }
   // Nova's primary weapon is a laser, so its side cannons must emit side beams
   // rather than ordinary ray bullets (which are not processed as laser hits).
@@ -33,7 +33,7 @@ export function fireNovaAutoAttack(context, locals) {
     const edgeX=vx>0?(W-ox)/vx:vx<0?(0-ox)/vx:Infinity;
     const edgeY=vy>0?(H-oy)/vy:vy<0?(0-oy)/vy:Infinity;
     const length=Math.min(CORE_TARGET_RANGE,Math.max(0,Math.min(edgeX>0?edgeX:Infinity,edgeY>0?edgeY:Infinity)));
-    lasers.push({x:ox,y:oy,angle:a,vx,vy,length:Number.isFinite(length)?length:Math.max(W,H),damage:player.damage*.48*(player.laserDamageMult||1),color:'#d2a0ff',life:.16,maxLife:.16,ticks:1,tickTimer:0,hitRadius:3.5+(player.laserWidthBonus||0),ricochetsLeft:player.ricochet||0,ricochetChecked:false,isSideCannon:true});
+    lasers.push({x:ox,y:oy,angle:a,vx,vy,length:Number.isFinite(length)?length:Math.max(W,H),damage:player.damage*.48*(player.laserDamageMult||1),color:'#ffb84d',coreId:'nova',life:.16,maxLife:.16,ticks:1,tickTimer:0,hitRadius:3.5+(player.laserWidthBonus||0),ricochetsLeft:player.ricochet||0,ricochetChecked:false,isSideCannon:true});
    }
   }
  
