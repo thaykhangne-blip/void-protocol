@@ -1850,59 +1850,45 @@ function drawMenuCinematicBackground(){
 }
 
 function drawAetherSingularity(fx){
- const ctxTime=performance.now()*.001,isUlt=fx.type==='aetherUltWell',isCollapse=fx.type==='aetherCollapse';
+ const t=performance.now()*.001,isUlt=fx.type==='aetherUltWell',isCollapse=fx.type==='aetherCollapse';
  const progress=1-Math.max(0,fx.life)/Math.max(.001,fx.max),fade=Math.max(0,fx.life/Math.max(.001,fx.max));
  const fieldRadius=(fx.radius||80)*(isCollapse?.25+progress*.9:1);
  const diskRadius=Math.min(isUlt?76:58,Math.max(22,fieldRadius*(isUlt?.34:fx.weaponEnhanced?.31:.29)));
- const horizonRadius=Math.max(7,diskRadius*(isUlt?.22:.19));
- const spin=ctxTime*(isUlt?-.9:-1.25);
+ const horizonRadius=Math.max(7,diskRadius*(isUlt?.22:.19)),spin=t*(isUlt?-.9:-1.25);
  ctx.save();ctx.translate(fx.x,fx.y);
- // The gravitational influence is present, but the boundary stays faint and unobtrusive.
- ctx.globalAlpha=(isCollapse?fade*.22:.105)*(isUlt?1.2:1);
- ctx.strokeStyle='#ffb765';ctx.lineWidth=.8;ctx.setLineDash([2,8]);ctx.lineDashOffset=-ctxTime*9;
- ctx.beginPath();ctx.arc(0,0,fieldRadius,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
+ // Keep the field readable without rebuilding gradients or dashed strokes every frame.
+ ctx.globalAlpha=(isCollapse?fade*.2:.09)*(isUlt?1.2:1);
+ ctx.strokeStyle='#ffb765';ctx.lineWidth=.8;ctx.beginPath();ctx.arc(0,0,fieldRadius,0,Math.PI*2);ctx.stroke();
  if(isCollapse){
-  ctx.globalAlpha=fade*.3;ctx.strokeStyle='#ffd8a0';ctx.lineWidth=1.2;
-  ctx.beginPath();ctx.arc(0,0,fieldRadius*.78,0,Math.PI*2);ctx.stroke();
-  ctx.restore();return;
+  ctx.globalAlpha=fade*.28;ctx.strokeStyle='#ffd8a0';ctx.lineWidth=1.2;
+  ctx.beginPath();ctx.arc(0,0,fieldRadius*.78,0,Math.PI*2);ctx.stroke();ctx.restore();return;
  }
- // A restrained gravitational glow around a perfectly dark event horizon.
- const glow=ctx.createRadialGradient(0,0,horizonRadius*.7,0,0,diskRadius*1.12);
- glow.addColorStop(0,'rgba(0,0,0,0.98)');glow.addColorStop(.22,'rgba(2,3,9,0.96)');
- glow.addColorStop(.42,'rgba(22,12,17,0.42)');glow.addColorStop(.68,'rgba(255,139,54,0.075)');glow.addColorStop(1,'rgba(255,139,54,0)');
- ctx.globalAlpha=.9*fade;ctx.fillStyle=glow;ctx.beginPath();ctx.arc(0,0,diskRadius*1.12,0,Math.PI*2);ctx.fill();
- // Thin, tilted accretion bands: warm inner photons, cooler dim outer material.
- ctx.rotate(-.12+Math.sin(ctxTime*.18)*.025);
+ // Flat translucent layers replace per-frame radial gradients and shadow filters.
+ ctx.globalAlpha=.12*fade;ctx.fillStyle='#ff8b36';ctx.beginPath();ctx.arc(0,0,diskRadius*1.1,0,Math.PI*2);ctx.fill();
+ ctx.globalAlpha=.16*fade;ctx.fillStyle='#130c12';ctx.beginPath();ctx.ellipse(0,0,diskRadius,diskRadius*.27,Math.sin(t*.18)*.025,0,Math.PI*2);ctx.fill();
+ ctx.rotate(-.12+Math.sin(t*.18)*.025);
  const bands=[
-  {r:diskRadius, ry:.27, color:'rgba(255,157,76,0.42)', width:1.05, phase:spin},
-  {r:diskRadius*.82, ry:.22, color:'rgba(255,210,151,0.62)', width:.85, phase:-spin*.72},
-  {r:diskRadius*.65, ry:.19, color:'rgba(255,112,48,0.48)', width:1.15, phase:spin*1.3}
+  {r:diskRadius,ry:.27,color:'rgba(255,157,76,0.42)',width:1.05,phase:spin},
+  {r:diskRadius*.72,ry:.19,color:'rgba(255,190,120,0.48)',width:.9,phase:-spin*.72}
  ];
  for(const band of bands){
   ctx.save();ctx.rotate(band.phase*.08);ctx.globalAlpha=fade;ctx.strokeStyle=band.color;ctx.lineWidth=band.width;
   ctx.beginPath();ctx.ellipse(0,0,band.r,band.r*band.ry,0,0,Math.PI*2);ctx.stroke();
-  // Uneven luminous arcs make the disk feel like hot matter in orbit, not a UI target ring.
-  ctx.strokeStyle=band.color.replace(/0\.\d+\)/,'0.85)');
-  ctx.lineWidth=band.width+.25;ctx.beginPath();
-  ctx.ellipse(0,0,band.r,band.r*band.ry,0,spin*.45,spin*.45+Math.PI*(.48+band.r/diskRadius*.28));ctx.stroke();
-  ctx.restore();
+  ctx.strokeStyle='rgba(255,210,151,0.72)';ctx.lineWidth=band.width+.2;ctx.beginPath();
+  ctx.ellipse(0,0,band.r,band.r*band.ry,0,spin*.45,spin*.45+Math.PI*(.65+band.r/diskRadius*.18));ctx.stroke();ctx.restore();
  }
- // Small orbiting photon knots add motion without filling the effect with particles.
+ // Fewer orbiting photon knots; no per-particle shadow blur.
  ctx.save();ctx.globalCompositeOperation='lighter';
- for(let i=0;i<(isUlt?7:5);i++){
-  const a=spin*(.8+i*.055)+i*Math.PI*2/(isUlt?7:5),rr=diskRadius*(.56+(i%3)*.105);
-  const px=Math.cos(a)*rr,py=Math.sin(a)*rr*.23;
-  ctx.globalAlpha=fade*(i%2?.48:.7);ctx.fillStyle=i%3===0?'#ffe0ae':'#ff9a52';
-  ctx.shadowColor=ctx.fillStyle;ctx.shadowBlur=3.5;ctx.beginPath();ctx.arc(px,py,i%3===0?1.25:.8,0,Math.PI*2);ctx.fill();
+ const knots=isUlt?5:3;
+ for(let i=0;i<knots;i++){
+  const a=spin*(.8+i*.055)+i*Math.PI*2/knots,rr=diskRadius*(.58+(i%3)*.09);
+  ctx.globalAlpha=fade*(i%2?.45:.65);ctx.fillStyle=i%3===0?'#ffe0ae':'#ff9a52';
+  ctx.beginPath();ctx.arc(Math.cos(a)*rr,Math.sin(a)*rr*.23,i%3===0?1.15:.8,0,Math.PI*2);ctx.fill();
  }
  ctx.restore();
- // Photon ring and event horizon remain the sharpest features.
- ctx.globalAlpha=.8*fade;ctx.strokeStyle='rgba(255,211,153,.88)';ctx.lineWidth=.9;
- ctx.shadowColor='#ffb768';ctx.shadowBlur=4;ctx.beginPath();ctx.arc(0,0,horizonRadius*1.14,0,Math.PI*2);ctx.stroke();
- ctx.shadowBlur=0;ctx.globalAlpha=1;ctx.fillStyle='#000';ctx.beginPath();ctx.arc(0,0,horizonRadius,0,Math.PI*2);ctx.fill();
- const inner=ctx.createRadialGradient(-horizonRadius*.22,-horizonRadius*.28,0,0,0,horizonRadius);
- inner.addColorStop(0,'#010207');inner.addColorStop(.7,'#000105');inner.addColorStop(1,'#030309');
- ctx.fillStyle=inner;ctx.beginPath();ctx.arc(0,0,horizonRadius*.98,0,Math.PI*2);ctx.fill();
+ ctx.globalAlpha=.72*fade;ctx.strokeStyle='rgba(255,211,153,.8)';ctx.lineWidth=.9;
+ ctx.beginPath();ctx.arc(0,0,horizonRadius*1.14,0,Math.PI*2);ctx.stroke();
+ ctx.globalAlpha=1;ctx.fillStyle='#000';ctx.beginPath();ctx.arc(0,0,horizonRadius,0,Math.PI*2);ctx.fill();
  ctx.restore();
 }
 function draw(){let orbSize=7;c.style.cursor=state==='portalTransition'||state==='roomTransition'?'none':state==='portal'&&portals.some(p=>Math.hypot(mouse.x-p.x,mouse.y-p.y)<=p.r+16)?'pointer':'crosshair';const runHud=!!player&&['playing','portal','shop','levelup','evolution','worldcomplete'].includes(state);const shardHudEl=$('shardHud'),ultimateHudEl=$('ultimateHud'),skillHudEl=$('skillHud'),dashHudEl=$('dashHud'),statusHudEl=$('statusHud'),dashStatusEl=$('dashStatus'),skillStatusEl=$('skillStatus');if(shardHudEl)shardHudEl.style.display=runHud?'flex':'none';if(ultimateHudEl)ultimateHudEl.style.display=runHud?'grid':'none';if(skillHudEl)skillHudEl.style.display=runHud?'grid':'none';if(dashHudEl)dashHudEl.style.display=runHud?'grid':'none';if(statusHudEl)statusHudEl.style.display=state==='playing'?'grid':'none';const dashCd=dashCooldown||0,dashCap=dashChargeCapacity(),dashCharges=Math.min(dashCap,Math.max(0,player?.dashCharges??1)),dashPips='◆'.repeat(dashCharges)+'◇'.repeat(dashCap-dashCharges);if(dashStatusEl)dashStatusEl.textContent=dashPips+' '+(dashCharges>=dashCap?'READY':dashCd>0?dashCd.toFixed(1)+'s':'RECHARGING');if(dashHudEl){dashHudEl.classList.toggle('ready',runHud&&dashCharges>0);dashHudEl.title=`Dash toward mouse · SPACE · ${dashCharges}/${dashCap} charges${dashCd>0?' · '+dashCd.toFixed(1)+'s to next charge':' · Ready'}`;}renderStatusHud();if(state==='worldselect'&&hoveredWorldPreview!==null&&hoveredWorldPreview!==-1){const previewNow=performance.now();if(previewNow-lastWorldPreviewFrame<100)return;lastWorldPreviewFrame=previewNow;}const skillCd=player?.skillCooldown||0;if(skillStatusEl){if(core?.id==='nature'){const charges=player?.natureDroneCharges||0;skillStatusEl.textContent='◆'.repeat(charges)+'◇'.repeat(Math.max(0,Math.min(2,player?.natureDroneCap||2)-charges))+'  '+(charges<Math.min(2,player?.natureDroneCap||2)?Math.max(0,player?.natureDroneChargeTimer||0).toFixed(1)+'s recharge':'READY');}else skillStatusEl.textContent=skillCd>0?skillCd.toFixed(1)+'s':(player?.skillActive>0?'ACTIVE':'READY');}if(skillHudEl){skillHudEl.classList.toggle('ready',runHud&&skillCd<=0);skillHudEl.title=core?.id==='nature'?`Symbiotic Deployment · E · ${player?.natureDroneCharges||0}/${Math.min(2,player?.natureDroneCap||2)} charges · ${((player?.natureDroneCharges||0)<Math.min(2,player?.natureDroneCap||2)?Math.max(0,player?.natureDroneChargeTimer||0).toFixed(1)+'s until next charge':'Fully charged')} · ${natureDrones.filter(d=>d.hp>0).length}/${player?.natureDroneCap||2} drones`:`${core?.id==='ember'?'Ring of Fire':core?.id==='frost'?'Cryo Shield':core?.id==='remielle'?'Daybreak Waltz · Prism Flight':core?.id==='elemental'?'Elemental Convergence · 5 effects + 10s elemental empowerment':core?.id==='flash'?'Static Shock · Thunderfield':'Homing Missiles'} · E · ${skillCd>0?skillCd.toFixed(1)+'s cooldown':'Ready'} · Rank ${player?.skillLevel||0}`;}ctx.clearRect(0,0,W,H);
