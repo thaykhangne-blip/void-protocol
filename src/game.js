@@ -615,7 +615,7 @@ const coreExclusiveAdditions={
  ['CRIMSON: BLOOD MOON','☠','Critical chance +5 percentage points.',true,()=>{player.critChance=Math.min(.6,(player.critChance||0)+.05)}]
  ]
 };
-function makeCoreExclusivePerk(coreId,entry){const [title,glyph,desc,rare,effect]=entry;return {title,glyph,color:({ember:'#ff4b2e',frost:'#8cecff',nova:'#c29aff',flash:'#ffe875',nature:'#70e58a',elemental:'#ff71cd',vengeance:'#ff304f'})[coreId],rarity:rare?'rare':undefined,desc:(rare?'RARE · ':'')+desc,action:()=>{effect();build.push(title.replace(/^[^:]+:\s*/,''));updateUI();}};}
+function makeCoreExclusivePerk(coreId,entry){const [title,glyph,desc,rare,effect]=entry;return {title,glyph,color:({ember:'#ff4b2e',frost:'#8cecff',nova:'#fff7cf',flash:'#ffe875',nature:'#70e58a',elemental:'#ff71cd',vengeance:'#ff304f'})[coreId],rarity:rare?'rare':undefined,desc:(rare?'RARE · ':'')+desc,action:()=>{effect();build.push(title.replace(/^[^:]+:\s*/,''));updateUI();}};}
 
 const exclusiveCorePerks={flash:{title:'FLASH: STORM CIRCUIT',glyph:'ϟ',color:'#ffe875',rarity:'rare',desc:`RARE · +1 chain jump and +15% chain damage per rank (max 2).`,action:()=>{player.flashChainBonus=Math.min(2,(player.flashChainBonus||0)+1);player.flashChainPower=(player.flashChainPower||1)*1.15;build.push('Flash: Storm Circuit')}},
 flashStatic:{title:'FLASH: STATIC OVERLOAD',glyph:'ϟ',color:'#ffe875',desc:'Stunned enemies take 10% more damage from all sources.',action:()=>{player.flashStunDamageBonus=(player.flashStunDamageBonus||0)+.10;build.push('Flash: Static Overload')}},
