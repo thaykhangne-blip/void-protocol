@@ -42,7 +42,7 @@ export const voidWeapons = [
     category: 'signature',
     signatureCoreId: 'nova',
     rarity: 'legendary',
-    color: '#d2a0ff',
+    color: '#ffb84d',
     glyph: '✧',
     description: 'NOVA · LASER PENETRATION',
     stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
