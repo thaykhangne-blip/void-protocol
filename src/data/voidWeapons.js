@@ -141,7 +141,7 @@ export const voidWeapons = [
       effectId: 'eventide-array',
       statKey: 'fireRate',
       values: [0.15, 0.20, 0.25, 0.30, 0.35],
-      description: 'Attack Speed: +15% / 20% / 25% / 30% / 35%. Event Horizon: Every 5 / 5 / 4 / 4 / 3 auto-attacks, create a black hole at the nearest enemy. The singularity pulls nearby enemies inward and collapses for 200% / 225% / 250% / 275% / 300% ATK damage. While an Eventide singularity is active, reduce incoming damage by 15% / 20% / 25% / 30% / 35%. No healing effect. While any black hole is present on the field, Aether Core takes 50% / 55% / 60% / 65% / 70% less damage and heals 5% / 5.5% / 6% / 6.5% / 7% of max HP every 2.5 seconds.'
+      description: 'Attack Speed: +15% / 20% / 25% / 30% / 35%. Event Horizon: Every 5 / 5 / 4 / 4 / 3 auto-attacks, create a black hole at the nearest enemy. The singularity pulls nearby enemies inward and collapses for 200% / 225% / 250% / 275% / 300% ATK damage. While an Eventide singularity is active, reduce incoming damage by 15% / 20% / 25% / 30% / 35%. While any black hole is present on the field, Aether Core takes 50% / 55% / 60% / 65% / 70% less damage and heals 5% / 5.5% / 6% / 6.5% / 7% of max HP every 2.5 seconds.'
     }
   },
   {
