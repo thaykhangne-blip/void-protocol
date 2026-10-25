@@ -37,24 +37,6 @@ export const voidWeapons = [
     }
   },
   {
-    id: 'eventide-array',
-    name: 'Eventide Array',
-    category: 'signature',
-    signatureCoreId: 'nova',
-    rarity: 'legendary',
-    color: '#fff7cf',
-    glyph: '◉',
-    description: 'AETHER · SINGULARITY CONTROL',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
-    passive: {
-      name: 'Eventide Array',
-      effectId: 'eventide-array',
-      statKey: 'fireRate',
-      values: [0.15, 0.20, 0.25, 0.30, 0.35],
-      description: 'Attack Speed: +15% / 20% / 25% / 30% / 35%. Event Horizon: Every 5 / 5 / 4 / 4 / 3 auto-attacks, create a black hole at the nearest enemy. The singularity pulls nearby enemies inward and collapses for 200% / 225% / 250% / 275% / 300% ATK damage. While any black hole is present on the field, Aether Core takes 50% / 55% / 60% / 65% / 70% less damage and heals 5% / 5.5% / 6% / 6.5% / 7% of max HP every 2.5 seconds.'
-    }
-  },
-  {
     id: 'thunderclap-protocol',
     name: 'Thunderclap Protocol',
     category: 'signature',
@@ -142,6 +124,24 @@ export const voidWeapons = [
       statKey: 'critChance',
       values: [0.10, 0.12, 0.14, 0.16, 0.18],
       description: 'Critical Rate: +10% / 12% / 14% / 16% / 18%. Luminous Afterimage: Each Light Crystal increases Void Burst damage by 8% / 10% / 12% / 14% / 16%, up to five stacks. Dawn’s Echo: Triggering Lumox at four stacks launches 2 / 3 / 4 / 5 / 6 luminous feathers. Each feather deals 75% / 90% / 105% / 120% / 135% ATK and pierces one additional enemy per refinement rank. Each activation has a 25% / 30% / 35% / 40% / 45% chance to generate one Light Crystal.'
+    }
+  },
+  {
+    id: 'eventide-array',
+    name: 'Eventide Array',
+    category: 'signature',
+    signatureCoreId: 'nova',
+    rarity: 'legendary',
+    color: '#fff7cf',
+    glyph: '◉',
+    description: 'AETHER · SINGULARITY CONTROL',
+    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    passive: {
+      name: 'Eventide Array',
+      effectId: 'eventide-array',
+      statKey: 'fireRate',
+      values: [0.15, 0.20, 0.25, 0.30, 0.35],
+      description: 'Attack Speed: +15% / 20% / 25% / 30% / 35%. Event Horizon: Every 5 / 5 / 4 / 4 / 3 auto-attacks, create a black hole at the nearest enemy. The singularity pulls nearby enemies inward and collapses for 200% / 225% / 250% / 275% / 300% ATK damage. While any black hole is present on the field, Aether Core takes 50% / 55% / 60% / 65% / 70% less damage and heals 5% / 5.5% / 6% / 6.5% / 7% of max HP every 2.5 seconds.'
     }
   },
   {
