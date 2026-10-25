@@ -1060,7 +1060,7 @@ function spawnBossMinion(kind='mini'){if(!player||!blackHole||enemies.filter(e=>
 function applyWorldBossDebuff(bh){if(!player||!bh)return;const worldIndex=Math.max(0,currentWorld);if(worldIndex===0){player.burn=Math.max(player.burn||0,3.5);player.burnDps=Math.max(player.burnDps||0,Math.max(4,player.maxHp*.025));burst(player.x,player.y,'#ff9c65',12);notify('BOSS CURSE · IGNITED');}else if(worldIndex===1){player.frozen=Math.max(player.frozen||0,1.1);player.slow=Math.max(player.slow||0,2.4);burst(player.x,player.y,'#8cecff',14);notify('BOSS CURSE · FROSTBOUND');}else if(worldIndex===2){player.bound=Math.max(player.bound||0,1.8);burst(player.x,player.y,'#8bffc7',14);notify('BOSS CURSE · ROOT BIND');}else{const angle=Math.atan2(player.y-bh.y,player.x-bh.x);for(let i=0;i<3;i++){const a=angle+(i-1)*.32;enemyShots.push({x:bh.x+Math.cos(a)*bh.r,y:bh.y+Math.sin(a)*bh.r,vx:Math.cos(a)*235,vy:Math.sin(a)*235,r:6,life:4,color:'#d6a0ff',homing:true,turnRate:2.2,damage:18+currentWorld*4});}burst(bh.x,bh.y,'#d6a0ff',12);notify('BOSS CURSE · HOMING MISSILES');}sfx('damage');}
 function spawnMiniBoss(){const lateStageFactor=currentWorld===-1||room<10?1:1.25+(room-10)*.075+Math.pow((room-10)/10,2)*.25;const lateDamageFactor=currentWorld===-1||room<10?1:1.15+(room-10)*.045+Math.pow((room-10)/10,2)*.15;const hp=Math.round((620+room*58+Math.pow(room,1.2)*2)*(1+(level-1)*.078)*(1+currentWorld*.22+Math.pow(currentWorld,2)*.012)*lateStageFactor);const colors=['#ff754f','#78eaff','#86ffc2','#d4a0ff'];const names=['CINDER JUGGERNAUT','CRYO WARDEN','VERDANT EXECUTIONER','RIFT COLOSSUS'];const color=colors[currentWorld]||'#d4a0ff';enemies.push({id:'miniboss-'+currentWorld+'-'+room+'-'+Math.random().toString(36).slice(2),x:player.x<W/2?W-70:70,y:rand(90,H-90),r:23,hp,maxHp:hp,speed:(48+room*.7+currentWorld*5)*(1+Math.min(.15,(level-1)*.004)+currentWorld*.025)*(currentWorld!==-1&&room>=10?1.05+(room-10)*.012:1),damage:(24+room*.65+currentWorld*5)*(1+(level-1)*.025)*(1+currentWorld*.04)*lateDamageFactor,type:names[currentWorld]||'VOID CHAMPION',role:'miniboss',isMiniBoss:true,color,cd:1.25,slow:0,burn:0,frostStacks:0,frozen:0,minionTimer:2.2,shieldTriggered:false,shieldHp:0,shieldMax:0,shieldPulse:0,shieldCooldown:rand(7,11),shieldRecasts:0});}
 function getPriorityTarget(origin,maxRange=Infinity,excluded=[]){const usable=t=>!!t&&t.hp>0&&!t.inactive&&!excluded.includes(t)&&dist(origin,t)<=maxRange;if(blackHole&&usable(blackHole))return blackHole;const objectives=[];for(const e of enemies){if(usable(e)&&(e.isMiniBoss||e.isFinalBoss||e.isBoss||e.role==='miniboss'||e.role==='boss'))objectives.push(e)}if(objectives.length)return objectives.sort((a,b)=>dist(origin,a)-dist(origin,b))[0];let target=null,best=maxRange;for(const e of enemies){const d=dist(origin,e);if(e.hp>0&&!e.inactive&&!excluded.includes(e)&&d<best){best=d;target=e}}return target}function nearestTarget(maxRange=Infinity){return getPriorityTarget(player,maxRange)}
-function getPrimaryAttackTarget(){return selectPrimaryAttackTarget({player,core,coreTargetRange:CORE_TARGET_RANGE,nearestTarget});}
+function getPrimaryAttackTarget(){const coreTargetRange=core?.id==='nova'?(104+Math.min(28,(player?.evoTier||0)*7)):CORE_TARGET_RANGE;return selectPrimaryAttackTarget({player,core,coreTargetRange,nearestTarget});}
 function drawPrimaryTargetIndicator(target){if(!target)return;const pulse=.5+.5*Math.sin(performance.now()*.006),radius=(target.r||10)+14+pulse*1.2,elementalRainbow=core?.id==='elemental';ctx.save();ctx.translate(target.x,target.y);ctx.globalAlpha=.95;ctx.lineWidth=elementalRainbow?2.2:1.8;ctx.shadowBlur=10+pulse*5+(elementalRainbow?5:0);for(let i=0;i<4;i++){const a=i*Math.PI/2+.32,color=elementalRainbow?rainbowCoreColor(i*90+performance.now()*.04):(core?.color||'#72f6ff');ctx.strokeStyle=color;ctx.shadowColor=color;ctx.beginPath();ctx.arc(0,0,radius,a,(i+1)*Math.PI/2-.32);ctx.stroke();}ctx.shadowBlur=0;ctx.globalAlpha=.9;ctx.lineWidth=elementalRainbow?2:1.2;for(let i=0;i<4;i++){const a=i*Math.PI/2+Math.PI/4+performance.now()*.00012,x=Math.cos(a),y=Math.sin(a),color=elementalRainbow?rainbowCoreColor(i*90+45+performance.now()*.04):'#ffffff';ctx.strokeStyle=color;ctx.beginPath();ctx.moveTo(x*(radius+2),y*(radius+2));ctx.lineTo(x*(radius+(elementalRainbow?7:6)),y*(radius+(elementalRainbow?7:6)));ctx.stroke();}ctx.fillStyle=elementalRainbow?rainbowCoreColor(180+performance.now()*.04):(core?.color||'#72f6ff');ctx.globalAlpha=.95;ctx.beginPath();ctx.arc(0,0,elementalRainbow?2.2:1.8,0,Math.PI*2);ctx.fill();ctx.restore()}
 function applyLumineBuildup(target,amount=1){
  if(core?.id!=='remielle'||!target||target.hp<=0)return;
@@ -1204,6 +1204,8 @@ function configureVoidWeaponAutoAttack(target){
  }
 }
 function shoot(){
+ // Black Sun suspends Aether's ring pulses and all auto-attack-triggered Void Weapon effects.
+ if(core?.id==='nova'&&skillFx.some(f=>f.type==='aetherBlackSun'&&f.life>0))return null;
  player.voidWeaponOnPrimaryAttack=configureVoidWeaponAutoAttack;
  const nextShootCd=executeAutoAttack({player,blackHole,enemies,addEnergy,core,CORE_TARGET_RANGE,getPrimaryAttackTarget,mouse,sfx,pick,ELEMENTAL_CORE_ELEMENTS,bullets,launchElementalVerdantSalvo,natureDrones,withinCoreRange,dist,skillFx,rand,applyDamage,triggerRicochetChain,burst,pointSegmentDistance,W,H,lasers,RICOCHET_LINK_RANGE,addLightningArc,element,energy,firePhaseFlowAttack});
  player.voidWeaponOnPrimaryAttack=null;
@@ -1256,12 +1258,9 @@ function useCoreSkill(){if(state==='paused'&&pausedFrom==='playing'&&player&&cor
  else if(core.id==='nature'){const droneCap=player.natureDroneCap||2;player.natureDroneCharges--;player.natureDroneChargeTimer=player.natureDroneCharges<Math.min(2,droneCap)?12:0;const haveSupport=natureDrones.some(d=>d.type==='support'&&d.hp>0);const type=haveSupport?'dps':'support';natureDrones.push({type,x:player.x+(type==='support'?-20:20),y:player.y-16,hp:type==='support'?42:34,maxHp:type==='support'?42:34,angle:rand(0,6.28),attackTimer:.25,healTimer:1,life:Infinity,boost:0});player.natureDrones=natureDrones;burst(player.x,player.y,'#70e58a',14);sfx('ultimate');notify(type==='support'?'SUPPORT DRONE DEPLOYED':'DPS DRONE DEPLOYED');}else if(core.id==='flash'){const stunDuration=(2.8+lv*.45)*(1+(player.flashStunDurationBonus||0));const targets=enemies.filter(e=>e.hp>0).sort((a,b)=>dist(player,a)-dist(player,b)).slice(0,3);for(const e of targets){addLightningArc(player,e);e.stunned=Math.max(e.stunned||0,stunDuration);e.stunDamageTaken=1.25;applyDamage(e,player.damage*(.72+lv*.12),'#ffe875',true,'STATIC SHOCK');burst(e.x,e.y,'#fff8c2',12);skillFx.push({type:'flashStun',x:e.x,y:e.y,life:stunDuration,max:stunDuration,radius:e.r+10,color:'#ffe875'});}sfx('ultimate');notify(`STATIC SHOCK · ${targets.length} ENEMIES STUNNED · +35% DAMAGE TAKEN`);}
  else if(core.id==='remielle'){player.phaseFlowTick=.12;player.inv=Math.max(player.inv,.25);player.phaseFlowBaseCrit=null;player.phaseFlowBaseRate=player.fireRate;player.phaseFlowBaseSpeed=null;player.phaseFlowCritBonus=0;player.fireRate*=1.25;player.skillShield=player.skillActive;player.skillShieldMax=Math.round(player.maxHp*.25);player.skillShieldHp=player.skillShieldMax;sfx('ultimate');burst(player.x,player.y,'#ff9ed8',22);skillFx.push({type:'phaseFlow',x:player.x,y:player.y,life:player.skillActive,max:player.skillActive,radius:player.r+24,color:'#ffffff',shieldAura:true});notify(`AURALIS · DAYBREAK WALTZ · FIRE RATE +25% · FLY SPEED +25% · SHIELD ${player.skillShieldMax}`,2);}
  else if(core.id==='nova'){
- const x=Math.max(32,Math.min(W-32,Number.isFinite(mouse.x)?mouse.x:player.x));
- const y=Math.max(32,Math.min(H-32,Number.isFinite(mouse.y)?mouse.y:player.y));
+ const x=player.x,y=player.y;
  const radius=(142+lv*10)*(1+(player.aetherWellRadiusBonus||0));
- let aimX=x-player.x,aimY=y-player.y;const aimLen=Math.hypot(aimX,aimY)||Math.hypot(mouse.dx||0,mouse.dy||0)||1;
- if(Math.hypot(x-player.x,y-player.y)<1){aimX=mouse.dx||1;aimY=mouse.dy||0;}
- skillFx.push({type:'aetherStasis',x,y,originX:x,originY:y,vx:aimX/aimLen,vy:aimY/aimLen,life:10,max:10,radius,color:'#fff0a6',damage:player.damage*(.20+lv*.045),collapseDamage:player.damage*(1.15+lv*.20)*(player.aetherCollapseMult||1),tickTimer:.2,phase:'stasis',weaponEnhanced:false});
+ skillFx.push({type:'aetherStasis',x,y,originX:x,originY:y,vx:0,vy:0,life:10,max:10,radius,color:'#fff0a6',damage:player.damage*(.20+lv*.045),collapseDamage:player.damage*(1.15+lv*.20)*(player.aetherCollapseMult||1),tickTimer:.2,phase:'stasis',weaponEnhanced:false});
  sfx('ultimate');burst(x,y,'#fff0a6',24);burst(x,y,'#08070a',12);
  notify('AETHER · EVENT HORIZON · 5s STASIS → 4s MOVING SINGULARITY → COLLAPSE',2);}
  updateUI();}
@@ -1272,11 +1271,28 @@ function updateCoreSkill(dt){if(!player||!core)return;clampVengeanceShields();if
  if(fx.type==='aetherStasis'&&state==='playing'){
   const elapsed=fx.max-fx.life,remain=Math.max(0,5-elapsed);
   if(elapsed<5){
-   fx.phase='stasis';fx.tickTimer=(fx.tickTimer||0)-dt;
+   // During stasis the field is anchored to the moving Aether core, not the cast location.
+   fx.x=player.x;fx.y=player.y;fx.phase='stasis';fx.tickTimer=(fx.tickTimer||0)-dt;
    for(const e of enemies){if(e.hp<=0||dist(e,fx)>fx.radius+(e.r||0))continue;e.stunned=Math.max(e.stunned||0,Math.min(remain,dt*1.5));e.stunDamageTaken=1;if(fx.tickTimer<=0)applyDamage(e,fx.damage,'#fff0a6',false,'AETHER EVENT HORIZON STASIS');}
    if(fx.tickTimer<=0)fx.tickTimer=.32;
   }else if(elapsed<9){
-   if(fx.phase!=='moving'){fx.phase='moving';burst(fx.x,fx.y,'#fff7cf',14);}
+   if(fx.phase!=='moving'){
+    fx.phase='moving';fx.x=player.x;fx.y=player.y;
+    // Prefer the singularity, then a boss. Otherwise aim at the densest enemy cluster.
+    let aimTarget=blackHole&&!blackHole.inactive&&blackHole.hp>0?blackHole:null;
+    if(!aimTarget)aimTarget=enemies.filter(e=>e.hp>0&&(e.isMiniBoss||e.isFinalBoss||e.role==='boss'||e.role==='miniboss'||e.role==='warden')).sort((a,b)=>dist(player,a)-dist(player,b))[0]||null;
+    let aimX=0,aimY=0;
+    if(aimTarget){aimX=aimTarget.x-fx.x;aimY=aimTarget.y-fx.y;}
+    else{
+     const alive=enemies.filter(e=>e.hp>0);
+     let best=null,bestCount=0;
+     for(const candidate of alive){const group=alive.filter(e=>dist(candidate,e)<=145);if(group.length>bestCount){best=group;bestCount=group.length;}}
+     if(best&&best.length){aimX=best.reduce((sum,e)=>sum+e.x,0)/best.length-fx.x;aimY=best.reduce((sum,e)=>sum+e.y,0)/best.length-fx.y;}
+     else{const randomAngle=Math.random()*Math.PI*2;aimX=Math.cos(randomAngle);aimY=Math.sin(randomAngle);}
+    }
+    const aimLength=Math.hypot(aimX,aimY)||1;fx.vx=aimX/aimLength;fx.vy=aimY/aimLength;
+    burst(fx.x,fx.y,'#fff7cf',14);
+   }
    fx.x=Math.max(32,Math.min(W-32,fx.x+fx.vx*185*dt));fx.y=Math.max(32,Math.min(H-32,fx.y+fx.vy*185*dt));
    fx.tickTimer=(fx.tickTimer||0)-dt;
    for(const e of enemies){if(e.hp<=0)continue;const dx=fx.x-e.x,dy=fx.y-e.y,d=Math.hypot(dx,dy)||1;if(d>=fx.radius)continue;const boss=e.isMiniBoss||e.isFinalBoss||e.role==='miniboss'||e.role==='warden',pull=(boss?64:285)*(1-d/fx.radius)*dt;e.x+=dx/d*pull;e.y+=dy/d*pull;if(fx.tickTimer<=0)applyDamage(e,fx.damage*(boss?.65:1),'#fff0a6',false,'AETHER EVENT HORIZON GRAVITY');}
@@ -1288,7 +1304,10 @@ function updateCoreSkill(dt){if(!player||!core)return;clampVengeanceShields();if
   }
  }
  if(fx.type==='aetherBlackSun'&&state==='playing'){
-  fx.x=player.x;fx.y=player.y;fx.tickTimer=(fx.tickTimer||0)-dt;
+  fx.x=player.x;fx.y=player.y;
+  // Black Sun grants continuous invulnerability for the entire transformation.
+  player.inv=Math.max(player.inv,dt+.05);
+  fx.tickTimer=(fx.tickTimer||0)-dt;
   for(const e of enemies){if(e.hp<=0)continue;const dx=fx.x-e.x,dy=fx.y-e.y,d2=dx*dx+dy*dy;if(d2>=fx.radius*fx.radius)continue;const d=Math.sqrt(d2)||1,boss=e.isMiniBoss||e.isFinalBoss||e.role==='boss'||e.role==='miniboss'||e.role==='warden';const pull=(boss?72:430)*(1-d/fx.radius)*dt;e.x+=dx/d*pull;e.y+=dy/d*pull;if(d<=Math.max(32,player.r+18))fx.capturedEnemies.add(e.id??e);if(fx.tickTimer<=0)applyDamage(e,fx.damage*(boss?.55:1),'#fff0a6',false,'BLACK SUN GRAVITY');}
   if(blackHole&&!blackHole.inactive&&blackHole.hp>0&&dist(fx,blackHole)<=fx.radius+(blackHole.r||0)&&fx.tickTimer<=0)applyDamage(blackHole,fx.damage*.55,'#fff0a6',false,'BLACK SUN GRAVITY');
   if(fx.tickTimer<=0)fx.tickTimer=.32;
@@ -1378,6 +1397,16 @@ function castUltimate(){
    const duration=10;
    const radius=Math.min(Math.max(W,H)*.72,Math.max(360,Math.min(W,H)*.62))*(1+(player.aetherWellRadiusBonus||0));
    const collapseDamage=player.damage*(2.8+lv*.55)*energyPower*(1+lv*.12)*(player.aetherCollapseMult||1);
+   // Detonate lingering Aether singularities and Eventide Array wells before Black Sun begins.
+   const lingeringWells=skillFx.filter(f=>f.type==='aetherWell'||f.type==='aetherUltWell'||(f.type==='aetherStasis'&&f.phase==='moving'));
+   for(const well of lingeringWells){
+    const wellRadius=well.radius||112,wellDamage=well.collapseDamage||player.damage*1.5;
+    burst(well.x,well.y,'#fff7cf',22);burst(well.x,well.y,'#050509',12);
+    skillFx.push({type:'aetherCollapse',x:well.x,y:well.y,life:.55,max:.55,radius:wellRadius,color:'#fff0a6'});
+    for(const enemy of enemies){if(enemy.hp<=0||dist(enemy,well)>wellRadius*1.12)continue;const boss=enemy.isMiniBoss||enemy.isFinalBoss||enemy.role==='boss'||enemy.role==='miniboss'||enemy.role==='warden';applyDamage(enemy,wellDamage*(boss?2:1),'#fff7cf',true,'AETHER SINGULARITY DETONATION');}
+    if(blackHole&&!blackHole.inactive&&blackHole.hp>0&&dist(blackHole,well)<=wellRadius+(blackHole.r||0))applyDamage(blackHole,wellDamage*2,'#fff7cf',true,'AETHER SINGULARITY DETONATION');
+   }
+   skillFx=skillFx.filter(f=>!lingeringWells.includes(f));
    skillFx.push({type:'aetherBlackSun',x:player.x,y:player.y,life:duration,max:duration,radius,color:'#fff0a6',damage:player.damage*(.17+lv*.035)*energyPower,collapseDamage,tickTimer:.2,capturedEnemies:new Set(),isUltimate:true});
    burst(player.x,player.y,'#fff0a6',38);burst(player.x,player.y,'#050509',28);burst(player.x,player.y,'#fff7cf',16);
    notify('AETHER · BLACK SUN · 10s TRANSFORMATION · CONSUME ENEMIES TO AMPLIFY COLLAPSE',2);
