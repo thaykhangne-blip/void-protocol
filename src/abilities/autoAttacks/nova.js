@@ -10,8 +10,9 @@ export function fireNovaAutoAttack(context, locals) {
  for (const enemy of enemies) {
   if (!enemy || enemy.hp <= 0) continue;
   const dx = player.x - enemy.x, dy = player.y - enemy.y, d = Math.hypot(dx, dy) || 1;
-  if (d > radius + (enemy.r || 0) || d < innerRadius) continue;
-  const falloff = Math.max(.15, 1 - Math.max(0, d - innerRadius) / Math.max(1, radius - innerRadius));
+  // The damaging radius matches the outer edge of the visible pulsating rings.
+  if (d > radius + (enemy.r || 0)) continue;
+  const falloff = Math.max(.15, 1 - d / Math.max(1, radius));
   const strength = (inward ? 42 : 19) * falloff;
   enemy.x += (inward ? dx / d : -dx / d) * strength;
   enemy.y += (inward ? dy / d : -dy / d) * strength;
