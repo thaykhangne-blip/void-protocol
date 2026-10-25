@@ -1046,6 +1046,8 @@ function completeObjectiveRoom(){if(state!=='playing'||objectiveClearing)return;
 function failDefense(){if(state==='dead')return;state='dead';saveData.bestRooms[currentWorld]=Math.max(saveData.bestRooms[currentWorld]||0,cleared);persist();showModal('ESCORT DESTROYED','SHIP LOST','The vessel was destroyed before the defense timer expired. The void has an irritatingly effective logistics department.',[{glyph:'↻',title:'REBOOT PARTICLE',desc:'Start a new run with a fresh core.',action:()=>{run++;start()}}])}
 function clearRoomProjectiles(){bullets.length=0;lasers.length=0;enemyShots.length=0;skillMissiles.length=0;lightningArcs.length=0;particles.length=0;damageTexts.length=0;skillFx=[];ultFx=[];featherTraps=[];}
 function enterRoom(){
+ // Room transitions must always release Aether's Black Sun auto-attack lock from the previous room.
+ shootCd=0;if(player)player.voidWeaponOnPrimaryAttack=null;
  if(currentWorld>=0&&room===10){
   const evidence=corporateMemos.find(entry=>entry.worldIndex===currentWorld&&entry.unlockRoom===10);
   if(evidence&&!saveData.storyProgress.recoveredFiles.includes(evidence.id)){
