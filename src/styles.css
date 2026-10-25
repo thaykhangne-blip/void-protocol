@@ -2477,3 +2477,6 @@ button.global-back-button { transition: opacity .18s ease; }
  #modal.core-hologram-modal .core-holo-planet #coreHoloGlyph{font-size:clamp(48px,12vw,70px)}
  #modal.core-hologram-modal .core-holo-nature .fx-stone{inset:26%}
 }
+
+/* The hologram motifs are the focal point; hide the legacy center glyph for every core. */
+#modal.core-hologram-modal #coreHoloGlyph{display:none!important}
