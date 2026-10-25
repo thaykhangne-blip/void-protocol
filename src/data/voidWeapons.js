@@ -9,7 +9,7 @@ export const voidWeapons = [
     color: '#ff9c65',
     glyph: '♨',
     description: 'EMBER · BURNING CRITICAL STRIKES',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.1, hpPct: 0.13, armorPct: 0.12 },
     passive: {
       name: 'Cinder Oath',
       effectId: 'cinder-oath',
@@ -27,7 +27,7 @@ export const voidWeapons = [
     color: '#8cecff',
     glyph: '❄',
     description: 'FROST · FREEZE AND SHATTER',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.11, hpPct: 0.14, armorPct: 0.13 },
     passive: {
       name: 'Stillpoint',
       effectId: 'stillpoint',
@@ -45,7 +45,7 @@ export const voidWeapons = [
     color: '#ffe875',
     glyph: 'ϟ',
     description: 'FLASH · CHAIN LIGHTNING',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.12, hpPct: 0.15, armorPct: 0.1 },
     passive: {
       name: 'Thunderclap Protocol',
       effectId: 'thunderclap-protocol',
@@ -63,7 +63,7 @@ export const voidWeapons = [
     color: '#70e58a',
     glyph: '❧',
     description: 'NATURE · DRONES AND SYMBIOSIS',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.13, hpPct: 0.12, armorPct: 0.11 },
     passive: {
       name: 'Verdant Covenant',
       effectId: 'verdant-covenant',
@@ -81,7 +81,7 @@ export const voidWeapons = [
     color: '#ff71cd',
     glyph: '◈',
     description: 'ELEMENTAL · REACTION CASCADES',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.1, hpPct: 0.13, armorPct: 0.12 },
     passive: {
       name: 'Prism Paradox',
       effectId: 'prism-paradox',
@@ -99,7 +99,7 @@ export const voidWeapons = [
     color: '#ff304f',
     glyph: '⟡',
     description: 'VENGEANCE · RISK AND EXECUTION',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.11, hpPct: 0.14, armorPct: 0.13 },
     passive: {
       name: 'Blood Dividend',
       effectId: 'blood-dividend',
@@ -117,7 +117,7 @@ export const voidWeapons = [
     color: '#ff9ed8',
     glyph: '✦',
     description: 'REMIELLE · LIGHT CRYSTALS AND FEATHERS',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.12, hpPct: 0.15, armorPct: 0.1 },
     passive: {
       name: 'Last Light, First Dawn',
       effectId: 'last-light-first-dawn',
@@ -135,7 +135,7 @@ export const voidWeapons = [
     color: '#fff7cf',
     glyph: '◉',
     description: 'AETHER · SINGULARITY CONTROL',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.13, hpPct: 0.12, armorPct: 0.11 },
     passive: {
       name: 'Eventide Array',
       effectId: 'eventide-array',
@@ -153,7 +153,7 @@ export const voidWeapons = [
     color: '#72dfff',
     glyph: '⌁',
     description: 'GENERAL · RAW DAMAGE',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.04, hpPct: 0.07, armorPct: 0.07 },
     passive: { name: 'Kinetic Overdrive', effectId: 'general-fracture-drive', statKey: 'damage', values: [0.08, 0.10, 0.12, 0.14, 0.16], description: 'Damage: +8% / 10% / 12% / 14% / 16%.' }
   },
   {
@@ -165,7 +165,7 @@ export const voidWeapons = [
     color: '#72dfff',
     glyph: '◌',
     description: 'GENERAL · CRITICAL PRECISION',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.05, hpPct: 0.08, armorPct: 0.08 },
     passive: { name: 'Deadeye Alignment', effectId: 'general-pale-orbit', statKey: 'critChance', values: [0.06, 0.08, 0.10, 0.12, 0.14], description: 'Critical Rate: +6% / 8% / 10% / 12% / 14%.' }
   },
   {
@@ -177,7 +177,7 @@ export const voidWeapons = [
     color: '#72dfff',
     glyph: '⬡',
     description: 'GENERAL · MAX HP REINFORCEMENT',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.06, hpPct: 0.09, armorPct: 0.05 },
     passive: { name: 'Layered Integrity', effectId: 'general-bastion-weave', statKey: 'hpPct', values: [0.12, 0.14, 0.16, 0.18, 0.20], description: 'Max HP: +12% / 14% / 16% / 18% / 20%.' }
   },
   {
@@ -189,7 +189,7 @@ export const voidWeapons = [
     color: '#c69aff',
     glyph: '✥',
     description: 'GENERAL · CRITICAL AMPLIFICATION',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.1, hpPct: 0.09, armorPct: 0.08 },
     passive: { name: 'Critical Mass', effectId: 'general-parallax-crown', statKey: 'critDamage', values: [0.16, 0.19, 0.22, 0.25, 0.28], description: 'Critical Damage: +16% / 19% / 22% / 25% / 28%.' }
   },
   {
@@ -201,7 +201,7 @@ export const voidWeapons = [
     color: '#c69aff',
     glyph: '⧖',
     description: 'GENERAL · ATTACK TEMPO',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.07, hpPct: 0.1, armorPct: 0.09 },
     passive: { name: 'Accelerated Cycle', effectId: 'general-chrono-spindle', statKey: 'fireRate', values: [0.10, 0.12, 0.14, 0.16, 0.18], description: 'Attack Speed: +10% / 12% / 14% / 16% / 18%.' }
   },
   {
@@ -213,7 +213,7 @@ export const voidWeapons = [
     color: '#c69aff',
     glyph: '⊙',
     description: 'GENERAL · DAMAGE CALIBRATION',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.08, hpPct: 0.11, armorPct: 0.1 },
     passive: { name: 'Convergence Index', effectId: 'general-singularity-compass', statKey: 'damage', values: [0.14, 0.16, 0.18, 0.20, 0.22], description: 'Damage: +14% / 16% / 18% / 20% / 22%.' }
   },
 ,
@@ -226,7 +226,7 @@ export const voidWeapons = [
     color: '#78dfff',
     glyph: '⌁',
     description: 'GENERAL · ATTACK POWER',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.06, hpPct: 0.09, armorPct: 0.05 },
     passive: { name: 'Vector Surge', effectId: 'general-ashen-vector', statKey: 'atkPct', values: [0.08, 0.1, 0.12, 0.14, 0.16], description: 'Attack: +8% / 10% / 12% / 14% / 16%.' }
   },
   {
@@ -238,7 +238,7 @@ export const voidWeapons = [
     color: '#78dfff',
     glyph: '✧',
     description: 'GENERAL · CRITICAL DAMAGE',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.07, hpPct: 0.06, armorPct: 0.06 },
     passive: { name: 'Shatterpoint', effectId: 'general-glass-comet', statKey: 'critDamage', values: [0.1, 0.12, 0.14, 0.16, 0.18], description: 'Critical Damage: +10% / 12% / 14% / 16% / 18%.' }
   },
   {
@@ -250,7 +250,7 @@ export const voidWeapons = [
     color: '#78dfff',
     glyph: '⬡',
     description: 'GENERAL · DEFENSE',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.04, hpPct: 0.07, armorPct: 0.07 },
     passive: { name: 'Fortified Chassis', effectId: 'general-iron-psalm', statKey: 'armorPct', values: [0.08, 0.1, 0.12, 0.14, 0.16], description: 'DEF: +8% / 10% / 12% / 14% / 16%.' }
   },
   {
@@ -262,7 +262,7 @@ export const voidWeapons = [
     color: '#78dfff',
     glyph: 'ϟ',
     description: 'GENERAL · ATTACK SPEED',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.05, hpPct: 0.08, armorPct: 0.08 },
     passive: { name: 'Overclock Loop', effectId: 'general-afterburn-coil', statKey: 'fireRate', values: [0.06, 0.08, 0.1, 0.12, 0.14], description: 'Attack Speed: +6% / 8% / 10% / 12% / 14%.' }
   },
   {
@@ -274,7 +274,7 @@ export const voidWeapons = [
     color: '#78dfff',
     glyph: '◉',
     description: 'GENERAL · CRITICAL RATE',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.06, hpPct: 0.09, armorPct: 0.05 },
     passive: { name: 'Focused Aperture', effectId: 'general-blue-shift-lens', statKey: 'critChance', values: [0.04, 0.05, 0.06, 0.07, 0.08], description: 'Critical Rate: +4% / 5% / 6% / 7% / 8%.' }
   },
   {
@@ -286,7 +286,7 @@ export const voidWeapons = [
     color: '#78dfff',
     glyph: '▣',
     description: 'GENERAL · MAX HP',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.07, hpPct: 0.06, armorPct: 0.06 },
     passive: { name: 'Pressure Shell', effectId: 'general-deepwell-plating', statKey: 'hpPct', values: [0.1, 0.12, 0.14, 0.16, 0.18], description: 'Max HP: +10% / 12% / 14% / 16% / 18%.' }
   },
   {
@@ -298,7 +298,7 @@ export const voidWeapons = [
     color: '#78dfff',
     glyph: '⧉',
     description: 'GENERAL · ATTACK POWER',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.04, hpPct: 0.07, armorPct: 0.07 },
     passive: { name: 'Momentum Matrix', effectId: 'general-kinetic-lattice', statKey: 'atkPct', values: [0.06, 0.08, 0.1, 0.12, 0.14], description: 'Attack: +6% / 8% / 10% / 12% / 14%.' }
   },
   {
@@ -310,7 +310,7 @@ export const voidWeapons = [
     color: '#78dfff',
     glyph: '∿',
     description: 'GENERAL · ATTACK SPEED',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.05, hpPct: 0.08, armorPct: 0.08 },
     passive: { name: 'Phase Rhythm', effectId: 'general-ghost-frequency', statKey: 'fireRate', values: [0.05, 0.07, 0.09, 0.11, 0.13], description: 'Attack Speed: +5% / 7% / 9% / 11% / 13%.' }
   },
   {
@@ -322,7 +322,7 @@ export const voidWeapons = [
     color: '#78dfff',
     glyph: '◇',
     description: 'GENERAL · DEFENSE',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.06, hpPct: 0.09, armorPct: 0.05 },
     passive: { name: 'Null Guard', effectId: 'general-nullstone-heart', statKey: 'armorPct', values: [0.1, 0.12, 0.14, 0.16, 0.18], description: 'DEF: +10% / 12% / 14% / 16% / 18%.' }
   },
   {
@@ -334,7 +334,7 @@ export const voidWeapons = [
     color: '#78dfff',
     glyph: '⟡',
     description: 'GENERAL · DAMAGE',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.07, hpPct: 0.06, armorPct: 0.06 },
     passive: { name: 'Redline Calibration', effectId: 'general-redline-prism', statKey: 'damage', values: [0.06, 0.08, 0.1, 0.12, 0.14], description: 'Damage: +6% / 8% / 10% / 12% / 14%.' }
   },
   {
@@ -346,7 +346,7 @@ export const voidWeapons = [
     color: '#c69aff',
     glyph: '◐',
     description: 'GENERAL · DAMAGE',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.07, hpPct: 0.1, armorPct: 0.09 },
     passive: { name: 'Eclipse Alignment', effectId: 'general-eclipse-regulator', statKey: 'damage', values: [0.16, 0.18, 0.2, 0.22, 0.24], description: 'Damage: +16% / 18% / 20% / 22% / 24%.' }
   },
   {
@@ -358,7 +358,7 @@ export const voidWeapons = [
     color: '#c69aff',
     glyph: '▰',
     description: 'GENERAL · ATTACK POWER',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.08, hpPct: 0.11, armorPct: 0.1 },
     passive: { name: 'Overcharge Reserve', effectId: 'general-paradox-battery', statKey: 'atkPct', values: [0.14, 0.16, 0.18, 0.2, 0.22], description: 'Attack: +14% / 16% / 18% / 20% / 22%.' }
   },
   {
@@ -370,7 +370,7 @@ export const voidWeapons = [
     color: '#c69aff',
     glyph: '✦',
     description: 'GENERAL · CRITICAL RATE',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.09, hpPct: 0.12, armorPct: 0.07 },
     passive: { name: 'Starfall Focus', effectId: 'general-starfall-mandrel', statKey: 'critChance', values: [0.08, 0.1, 0.12, 0.14, 0.16], description: 'Critical Rate: +8% / 10% / 12% / 14% / 16%.' }
   },
   {
@@ -382,7 +382,7 @@ export const voidWeapons = [
     color: '#c69aff',
     glyph: '◉',
     description: 'GENERAL · MAX HP',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.1, hpPct: 0.09, armorPct: 0.08 },
     passive: { name: 'Horizon Integrity', effectId: 'general-event-horizon-shell', statKey: 'hpPct', values: [0.18, 0.2, 0.22, 0.24, 0.26], description: 'Max HP: +18% / 20% / 22% / 24% / 26%.' }
   },
   {
@@ -394,7 +394,7 @@ export const voidWeapons = [
     color: '#c69aff',
     glyph: '⚙',
     description: 'GENERAL · ATTACK SPEED',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.07, hpPct: 0.1, armorPct: 0.09 },
     passive: { name: 'Axiom Cycle', effectId: 'general-axiom-engine', statKey: 'fireRate', values: [0.14, 0.16, 0.18, 0.2, 0.22], description: 'Attack Speed: +14% / 16% / 18% / 20% / 22%.' }
   },
   {
@@ -406,7 +406,7 @@ export const voidWeapons = [
     color: '#c69aff',
     glyph: '✥',
     description: 'GENERAL · CRITICAL DAMAGE',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.08, hpPct: 0.11, armorPct: 0.1 },
     passive: { name: 'Fractured Impact', effectId: 'general-fractured-crown', statKey: 'critDamage', values: [0.22, 0.25, 0.28, 0.31, 0.34], description: 'Critical Damage: +22% / 25% / 28% / 31% / 34%.' }
   },
   {
@@ -418,7 +418,7 @@ export const voidWeapons = [
     color: '#ffcb70',
     glyph: '⧖',
     description: 'GENERAL · ATTACK TEMPO',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.12, hpPct: 0.15, armorPct: 0.1 },
     passive: { name: 'Omega Cycle', effectId: 'general-omega-spindle', statKey: 'fireRate', values: [0.2, 0.23, 0.26, 0.29, 0.32], description: 'Attack Speed: +20% / 23% / 26% / 29% / 32%.' }
   },
   {
@@ -430,7 +430,7 @@ export const voidWeapons = [
     color: '#ffcb70',
     glyph: '✺',
     description: 'GENERAL · DAMAGE',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.13, hpPct: 0.12, armorPct: 0.11 },
     passive: { name: 'Singularity Calibration', effectId: 'general-singularity-forge', statKey: 'damage', values: [0.24, 0.28, 0.32, 0.36, 0.4], description: 'Damage: +24% / 28% / 32% / 36% / 40%.' }
   },
   {
@@ -442,7 +442,7 @@ export const voidWeapons = [
     color: '#ffcb70',
     glyph: '⬡',
     description: 'GENERAL · MAX HP AND DEFENSE',
-    stats: { atkPct: 0, hpPct: 0, armorPct: 0 },
+    stats: { atkPct: 0.1, hpPct: 0.13, armorPct: 0.12 },
     passive: { name: 'Keystone Protocol', effectId: 'general-eternal-keystone', statKey: 'hpPct', values: [0.28, 0.32, 0.36, 0.4, 0.44], description: 'Max HP: +28% / 32% / 36% / 40% / 44%.' }
   }
 ];
