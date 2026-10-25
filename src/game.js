@@ -811,7 +811,25 @@ function showCoreSelection(previewCoreId=null){
  function typeCoreText(text){if(typeTimer)clearInterval(typeTimer);desc.textContent='';let pos=0;desc.classList.add('is-typing');typeTimer=setInterval(()=>{if(!desc.isConnected){clearInterval(typeTimer);return;}desc.textContent=text.slice(0,pos++);if(pos>text.length){clearInterval(typeTimer);typeTimer=null;desc.classList.remove('is-typing');}},22);}
  function selectCore(index,animate=true){selected=(index+cores.length)%cores.length;const c=cores[selected],unlocked=isCoreUnlocked(c.id),vals=statsFor(c);
  modal.style.setProperty('--world-accent',c.color||'#72f6ff');modal.style.setProperty('--world-secondary',c.color||'#174c78');modal.dataset.selectedCore=String(selected);
- $('coreHoloPlanet').className='world-holo-planet core-holo-planet'+(c.id==='elemental'?' elemental-spectrum':'')+(animate?' is-arriving':'');$('coreHoloGlyph').textContent=c.glyph||'✦';$('coreHoloGlyph').classList.toggle('aether-glyph',c.id==='nova');$('coreHoloGlyph').style.color=c.id==='nova'?'#000000':'';$('coreHoloGlyph').style.textShadow=c.id==='nova'?'0 0 8px rgba(255,247,207,.75),0 0 20px rgba(255,230,145,.42)':'';
+ $('coreHoloPlanet').className='world-holo-planet core-holo-planet core-holo-'+c.id+(c.id==='elemental'?' elemental-spectrum':'')+(animate?' is-arriving':'');
+ // Keep the original glyph as the readable focal point; the CSS effect layers sit behind/around it.
+ let coreFx=$('coreHoloFx');
+ if(!coreFx){coreFx=document.createElement('div');coreFx.id='coreHoloFx';coreFx.className='core-holo-fx';coreFx.setAttribute('aria-hidden','true');$('coreHoloPlanet').insertBefore(coreFx,$('coreHoloPlanet').firstChild);}
+ const coreFxMarkup={
+  ember:'<i class="fx-flame fx-flame-a"></i><i class="fx-flame fx-flame-b"></i><i class="fx-ember"></i><i class="fx-ember fx-ember-b"></i>',
+  frost:'<i class="fx-ice-cube"><b></b><b></b><b></b><b></b></i><i class="fx-ice-glint"></i>',
+  flash:'<i class="fx-lightning-orb"><b class="fx-bolt"></b><b class="fx-bolt fx-bolt-b"></b></i><i class="fx-static"></i>',
+  nature:'<i class="fx-stone"></i><i class="fx-vine fx-vine-a"></i><i class="fx-vine fx-vine-b"></i><i class="fx-leaf fx-leaf-a"></i><i class="fx-leaf fx-leaf-b"></i><i class="fx-leaf fx-leaf-c"></i>',
+  elemental:'<i class="fx-prism"><b></b><b></b><b></b></i><i class="fx-prism-sweep"></i>',
+  vengeance:'<i class="fx-blood-orb"></i><i class="fx-blood-ring"></i><i class="fx-blood-drop"></i>',
+  remielle:'<i class="fx-light-crystal fx-crystal-a"></i><i class="fx-light-crystal fx-crystal-b"></i><i class="fx-light-crystal fx-crystal-c"></i><i class="fx-light-flare"></i>',
+  nova:'<i class="fx-aether-ring"></i><i class="fx-aether-disc"></i><i class="fx-aether-lens"></i><i class="fx-aether-particle"></i>'
+ };
+ coreFx.innerHTML=coreFxMarkup[c.id]||coreFxMarkup.ember;
+ $('coreHoloGlyph').textContent=c.glyph||'✦';
+ $('coreHoloGlyph').classList.toggle('aether-glyph',c.id==='nova');
+ $('coreHoloGlyph').style.color=c.id==='nova'?'#fff4c8':'';
+ $('coreHoloGlyph').style.textShadow=c.id==='nova'?'0 0 8px rgba(255,247,207,.75),0 0 20px rgba(255,230,145,.42)':'';
  const coreIconInfo={
  ember:{a:[['✦','NORMAL ATTACK','Fire shots ignite enemies, dealing burn damage over time.'],['✧','PASSIVE','Critical hits against burning enemies deal +25% critical damage, gaining another +1% per player level.'],['E','CORE SKILL','RING OF FIRE · Cooldown 14s. Surround yourself with a damaging orange fire ring that burns nearby enemies.'],['Q','ULTIMATE','SOLAR FLARE · Spend 100 energy to scorch all enemies and ignite them, dealing burst damage followed by burn damage over time.']],e:[['♨','LV 5','Burn damage +30% from all sources.'],['✹','LV 10','Burning enemies explode on defeat, damaging and igniting nearby enemies.'],['✦','LV 15','Defeating a burning enemy restores 3 hull.'],['☀','LV 20','Deal 20% more damage to burning enemies.']]},
  frost:{a:[['❄','NORMAL ATTACK','Ice bolts apply chill. At 5 stacks, enemies freeze briefly.'],['✧','PASSIVE','While a shield is active, Frost deals +25% damage, gaining another +0.75% per player level.'],['E','CORE SKILL','Gain a shield and a frost field that chills enemies. Enemies that hit the shield freeze instantly.'],['Q','ULTIMATE','A 5-second blizzard damages enemies, then freezes survivors.']],e:[['❄','LV 5','Ice hits slow enemies for 50% longer.'],['⬡','LV 10','Gain +12 armor and +12 maximum hull, then restore 12 hull.'],['✧','LV 15','Deal 15% more damage to slowed enemies.'],['❅','LV 20','Chill/slow duration is set to 3.2 seconds.']]},
