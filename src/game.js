@@ -569,8 +569,8 @@ const coreExclusiveAdditions={
  ['EMBER: SCORCHING WAKE','♨','Fire rate +10%.',false,()=>{player.fireRate*=1.10}],
  ['EMBER: ASHEN APPETITE','♥','Maximum hull +8 and restore 8 hull.',false,()=>{player.maxHp+=8;player.hp=Math.min(player.maxHp,player.hp+8)}],
  ['EMBER: SUNFIRE RESERVOIR','☼','Maximum hull +12 and restore 12 hull.',false,()=>{player.maxHp+=12;player.hp=Math.min(player.maxHp,player.hp+12)}],
- ['EMBER: CROWN OF CINDERS','♛','Burn damage +12%; burning enemies are more vulnerable to your fire kit.',false,()=>{player.burnMult=(player.burnMult||1)*1.12}],
- ['EMBER: IGNITION CASCADE','☄','Critical chance +5 percentage points.',false,()=>{player.critChance=Math.min(.75,(player.critChance||0)+.05)}],
+ ['EMBER: CROWN OF CINDERS','♛','Burn damage +12%; burning enemies are more vulnerable to your fire kit.',true,()=>{player.burnMult=(player.burnMult||1)*1.12}],
+ ['EMBER: IGNITION CASCADE','☄','Critical chance +5 percentage points.',true,()=>{player.critChance=Math.min(.75,(player.critChance||0)+.05)}],
  ['EMBER: LAST SPARK','✹','RARE · Deal 15% more damage while below 35% HP.',true,()=>{player.emberLastSpark=true}]
  ],
  frost:[
@@ -579,8 +579,8 @@ const coreExclusiveAdditions={
  ['FROST: STILLWATER FOCUS','◇','Critical damage +15%.',false,()=>{player.critDamage=(player.critDamage||1.5)*1.15}],
  ['FROST: BLUE HOUR','✧','Maximum hull +10 and restore 10 hull.',false,()=>{player.maxHp+=10;player.hp=Math.min(player.maxHp,player.hp+10)}],
  ['FROST: GLACIER HEART','⬡','Reduce incoming damage by 8%.',true,()=>{player.frostGlacierHeart=true}],
- ['FROST: SHARDSTORM','❄','Critical chance +5 percentage points.',false,()=>{player.critChance=Math.min(.6,(player.critChance||0)+.05)}],
- ['FROST: ZERO-POINT FRACTURE','✦','Attack damage +10%.',false,()=>{player.damage*=1.10}]
+ ['FROST: SHARDSTORM','❄','Critical chance +5 percentage points.',true,()=>{player.critChance=Math.min(.6,(player.critChance||0)+.05)}],
+ ['FROST: ZERO-POINT FRACTURE','✦','Attack damage +10%.',true,()=>{player.damage*=1.10}]
  ],
  nova:[
  ['AETHER: SHARD CALIBRATION','✦','Aether shard damage +10%.',false,()=>{player.damage*=1.10}],
@@ -588,26 +588,26 @@ const coreExclusiveAdditions={
  ['AETHER: AFTERIMAGE ARRAY','↠','Fire rate +10%.',false,()=>{player.fireRate*=1.10}],
  ['AETHER: EVENT CHASER','◉','Deal 12% more damage per rank to bosses and singularities.',false,()=>{player.singularityHunter=Math.min(3,(player.singularityHunter||0)+1)}],
  ['AETHER: COLLAPSING STAR','✹','Critical damage +20%.',true,()=>{player.critDamage=(player.critDamage||1.5)*1.20}],
- ['AETHER: GRAVITY WELL','◉','Maximum hull +10 and restore 10 hull.',false,()=>{player.maxHp+=10;player.hp=Math.min(player.maxHp,player.hp+10)}],
+ ['AETHER: GRAVITY WELL','◉','Maximum hull +10 and restore 10 hull.',true,()=>{player.maxHp+=10;player.hp=Math.min(player.maxHp,player.hp+10)}],
  ['AETHER: LUMINAL OVERDRIVE','✦','Attack damage +12%.',true,()=>{player.damage*=1.12}]
  ],
  flash:[
  ['FLASH: VOLTAGE SPIKE','ϟ','Attack damage +8%.',false,()=>{player.damage*=1.08}],
  ['FLASH: ARC FLASH','ϟ','Fire rate +10%.',false,()=>{player.fireRate*=1.10}],
- ['FLASH: STORM CHASER','➤','Move speed +8%.',false,()=>{player.speed*=1.08}],
- ['FLASH: OVERLOAD WINDOW','ϟ','Lightning chains deal 15% more damage.',false,()=>{player.flashChainPower=(player.flashChainPower||1)*1.15}]
+ ['FLASH: STORM CHASER','➤','Move speed +8%.',true,()=>{player.speed*=1.08}],
+ ['FLASH: OVERLOAD WINDOW','ϟ','Lightning chains deal 15% more damage.',true,()=>{player.flashChainPower=(player.flashChainPower||1)*1.15}]
  ],
  nature:[
  ['NATURE: DEEP ROOTS','❧','Maximum hull +12 and restore 12 hull.',false,()=>{player.maxHp+=12;player.hp=Math.min(player.maxHp,player.hp+12)}],
  ['NATURE: POLLEN ARMOR','❧','Armor +3.',false,()=>{player.armor=Math.min(60,(player.armor||0)+3)}],
- ['NATURE: HUNTER BLOOM','✿','DPS drone attacks deal 16% more damage.',false,()=>{player.natureDpsDamageUpgrade=(player.natureDpsDamageUpgrade||0)+1}],
- ['NATURE: LIVING CANOPY','❧','Armor +4.',false,()=>{player.armor=Math.min(60,(player.armor||0)+4)}]
+ ['NATURE: HUNTER BLOOM','✿','DPS drone attacks deal 16% more damage.',true,()=>{player.natureDpsDamageUpgrade=(player.natureDpsDamageUpgrade||0)+1}],
+ ['NATURE: LIVING CANOPY','❧','Armor +4.',true,()=>{player.armor=Math.min(60,(player.armor||0)+4)}]
  ],
  elemental:[
  ['PRISM: SPECTRAL FOCUS','◈','Attack damage +8%.',false,()=>{player.damage*=1.08}],
  ['PRISM: FOURFOLD RESONANCE','◈','Critical chance +4 percentage points.',false,()=>{player.critChance=Math.min(.75,(player.critChance||0)+.04)}],
- ['PRISM: CHROMATIC SHELL','⬢','Maximum hull +10 and restore 10 hull.',false,()=>{player.maxHp+=10;player.hp=Math.min(player.maxHp,player.hp+10)}],
- ['PRISM: ELEMENTAL AFTERSHOCK','✦','Elemental damage +15%.',false,()=>{player.elementalDamageMult=(player.elementalDamageMult||1)*1.15}]
+ ['PRISM: CHROMATIC SHELL','⬢','Maximum hull +10 and restore 10 hull.',true,()=>{player.maxHp+=10;player.hp=Math.min(player.maxHp,player.hp+10)}],
+ ['PRISM: ELEMENTAL AFTERSHOCK','✦','Elemental damage +15%.',true,()=>{player.elementalDamageMult=(player.elementalDamageMult||1)*1.15}]
  ],
  vengeance:[
  ['CRIMSON: IRON OATH','⟡','Armor +4.',false,()=>{player.armor=Math.min(70,(player.armor||0)+4)}],
@@ -615,7 +615,7 @@ const coreExclusiveAdditions={
  ['CRIMSON: BLOOD MOON','☠','Critical chance +5 percentage points.',true,()=>{player.critChance=Math.min(.6,(player.critChance||0)+.05)}]
  ]
 };
-function makeCoreExclusivePerk(coreId,entry){const [title,glyph,desc,rare,effect]=entry;return {title,glyph,color:({ember:'#ff4b2e',frost:'#8cecff',nova:'#fff7cf',flash:'#ffe875',nature:'#70e58a',elemental:'#ff71cd',vengeance:'#ff304f'})[coreId],rarity:rare?'rare':undefined,desc:(rare?'RARE · ':'')+desc,action:()=>{effect();build.push(title.replace(/^[^:]+:\s*/,''));updateUI();}};}
+function makeCoreExclusivePerk(coreId,entry){const [title,glyph,desc,rare,effect]=entry;return {title,glyph,color:({ember:'#ff4b2e',frost:'#8cecff',nova:'#fff7cf',flash:'#ffe875',nature:'#70e58a',elemental:'#ff71cd',vengeance:'#ff304f'})[coreId],rarity:rare?'rare':undefined,desc:(rare?'RARE · ':'')+desc,action:()=>{effect();build.push(title);updateUI();}};}
 
 const exclusiveCorePerks={flash:{title:'FLASH: STORM CIRCUIT',glyph:'ϟ',color:'#ffe875',rarity:'rare',desc:`RARE · +1 chain jump and +15% chain damage per rank (max 2).`,action:()=>{player.flashChainBonus=Math.min(2,(player.flashChainBonus||0)+1);player.flashChainPower=(player.flashChainPower||1)*1.15;build.push('Flash: Storm Circuit')}},
 flashStatic:{title:'FLASH: STATIC OVERLOAD',glyph:'ϟ',color:'#ffe875',desc:'Stunned enemies take 10% more damage from all sources.',action:()=>{player.flashStunDamageBonus=(player.flashStunDamageBonus||0)+.10;build.push('Flash: Static Overload')}},
