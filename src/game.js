@@ -528,7 +528,8 @@ function perkRank(title){const t=String(title||'').toUpperCase();switch(t){
  case 'CAPACITOR KILLCHAIN':return Math.floor((player?.energyOnKill||0)/2);
  case 'MAGNETAR FIELD':return Math.max(0,Math.round(((player?.magnet||55)-55)/45));
  case 'PULSE REACTOR':return Math.ceil((player?.pulseAura||0)/24);
- case 'LIGHT FIELD':return player?.lightField||0;case 'PHASE RESERVE':return player?.extraDashChargeRank||0;case 'AFTERGLOW CAPACITOR':return player?.afterglowCapacitor||0;case 'SALVAGE DIVIDEND':return player?.salvageDividend||0;case 'LAST STAND':return player?.lastStand||0;case 'PHASE MOMENTUM':return player?.phaseMomentumRank||0;case 'REPAIR MATRIX':return player?.repairMatrix||0;case 'CRITICAL BATTERY':return player?.criticalBattery||0;case 'SINGULARITY HUNTER':return player?.singularityHunter||0;case 'AEGIS CIRCUIT':return player?.aegisCircuit||0;case 'OVERCLOCK RELAY':return player?.overclockRelay||0;
+ case 'LIGHT FIELD':return player?.lightField||0;case 'PHASE RESERVE':return player?.extraDashChargeRank||0;case 'AFTERGLOW CAPACITOR':return player?.afterglowCapacitor||0;case 'SALVAGE DIVIDEND':return player?.salvageDividend||0;case 'LAST STAND':return player?.lastStand||0;case 'PHASE MOMENTUM':return player?.phaseMomentumRank||0;case 'REPAIR MATRIX':return player?.repairMatrix||0;case 'CRITICAL BATTERY':return player?.criticalBattery||0;case 'SINGULARITY HUNTER':return player?.singularityHunter||0;
+ case 'AETHER: EVENT CHASER':return player?.singularityHunter||0;case 'AEGIS CIRCUIT':return player?.aegisCircuit||0;case 'OVERCLOCK RELAY':return player?.overclockRelay||0;
  case 'PRISM FLIGHT: SWIFT CURRENT':return player?.phaseFlowCadence||0;
  case 'PRISM FLIGHT: LASTING RADIANCE':return player?.phaseFlowDuration||0;
  case 'PRISM FLIGHT: PRISM ECHO':return player?.phaseFlowPower||0;
