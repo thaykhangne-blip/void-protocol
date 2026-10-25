@@ -1398,6 +1398,8 @@ function castUltimate(){
    const radius=Math.min(Math.max(W,H)*.72,Math.max(360,Math.min(W,H)*.62))*(1+(player.aetherWellRadiusBonus||0));
    const collapseDamage=player.damage*(2.8+lv*.55)*energyPower*(1+lv*.12)*(player.aetherCollapseMult||1);
    // Detonate lingering Aether singularities and Eventide Array wells before Black Sun begins.
+   // Clear any queued Eventide proc and remove ring visuals already in flight.
+   player.voidWeaponChargedAttack=false;player.voidWeaponChargedTarget=null;
    const lingeringWells=skillFx.filter(f=>f.type==='aetherWell'||f.type==='aetherUltWell'||(f.type==='aetherStasis'&&f.phase==='moving'));
    for(const well of lingeringWells){
     const wellRadius=well.radius||112,wellDamage=well.collapseDamage||player.damage*1.5;
@@ -1406,7 +1408,7 @@ function castUltimate(){
     for(const enemy of enemies){if(enemy.hp<=0||dist(enemy,well)>wellRadius*1.12)continue;const boss=enemy.isMiniBoss||enemy.isFinalBoss||enemy.role==='boss'||enemy.role==='miniboss'||enemy.role==='warden';applyDamage(enemy,wellDamage*(boss?2:1),'#fff7cf',true,'AETHER SINGULARITY DETONATION');}
     if(blackHole&&!blackHole.inactive&&blackHole.hp>0&&dist(blackHole,well)<=wellRadius+(blackHole.r||0))applyDamage(blackHole,wellDamage*2,'#fff7cf',true,'AETHER SINGULARITY DETONATION');
    }
-   skillFx=skillFx.filter(f=>!lingeringWells.includes(f));
+   skillFx=skillFx.filter(f=>!lingeringWells.includes(f)&&f.type!=='aetherRingPulse');
    skillFx.push({type:'aetherBlackSun',x:player.x,y:player.y,life:duration,max:duration,radius,color:'#fff0a6',damage:player.damage*(.17+lv*.035)*energyPower,collapseDamage,tickTimer:.2,capturedEnemies:new Set(),isUltimate:true});
    burst(player.x,player.y,'#fff0a6',38);burst(player.x,player.y,'#050509',28);burst(player.x,player.y,'#fff7cf',16);
    notify('AETHER · BLACK SUN · 10s TRANSFORMATION · CONSUME ENEMIES TO AMPLIFY COLLAPSE',2);
