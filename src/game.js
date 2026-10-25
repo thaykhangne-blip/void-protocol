@@ -207,7 +207,7 @@ const groups=[
 {key:'elemental',title:'PRISM CORE EXCLUSIVE',sub:'Cube projectiles and four-element combo upgrades.',accent:'#ff71cd',test:p=>p[0].startsWith('PRISM:')},
 {key:'vengeance',title:'CRIMSON CORE EXCLUSIVE',sub:'Blood shields, crimson blades, and berserker scaling.',accent:'#ff304f',test:p=>p[0].startsWith('CRIMSON:')},
 {key:'remielle',title:'AURALIS EXCLUSIVE',sub:'Lumine and Prism Flight upgrades.',accent:'#ff9ed8',test:p=>p[0].startsWith('AURALIS:')||['PRISMATIC SNARE','PRISM FLIGHT','PRISM FLIGHT: SWIFT CURRENT','PRISM FLIGHT: LASTING RADIANCE','PRISM FLIGHT: PRISM ECHO','PRISM FLIGHT: MULTIPLICITY','PRISMATIC','LUMINOUS WINGS'].includes(p[0])},
-{key:'nova',title:'AETHER EXCLUSIVE',sub:'Singularity, pull, and shard upgrades.',accent:'#fff7cf',test:p=>p[0].startsWith('AETHER:')||['SINGULARITY FOCUS','ORBITAL OVERDRIVE','GRAVITY MARK','FINAL COLLAPSE'].includes(p[0])}
+{key:'nova',title:'AETHER EXCLUSIVE',sub:'Singularity, Event Horizon, and Black Sun upgrades.',accent:'#fff7cf',test:p=>p[0].startsWith('AETHER:')||['EVENT HORIZON','SINGULARITY AMPLIFIER','GRAVITATIONAL RESONANCE','BLACK SUN AFTERSHOCK'].includes(p[0])}
 ];
 const card=(p)=>{const rare=PERK_RARITY[String(p[0]||'').trim().toUpperCase()]==='rare';return `<article class="codex-entry ${rare?'codex-featured':''}"><b>${p[1]} ${p[0]}${rare?'<span class="codex-rarity">RARE</span>':''}</b><small>${String(p[2]||'').replace(/^RARE ·\s*/,'')}</small></article>`;};
 const sections=groups.map(g=>{const seen=new Set();const sameBuffAliases={general:new Set(['RAPID PULSAR','ULTIMATE AMPLIFIER','CORE RESONANCE'])};const items=perks.filter(g.test).filter(p=>{const key=p[0].normalize('NFKC').replace(/\s+/g,' ').trim().toUpperCase();if(seen.has(key))return false;seen.add(key);if(sameBuffAliases[g.key]?.has(key))return false;return true});return items.length?`<section id="codex-section-${g.key}" class="codex-section" style="--codex-accent:${g.accent}"><div class="codex-section-head"><h3>${g.title}</h3><p>${g.sub}</p><span>${items.length} ENTRIES</span></div><div class="codex-list">${items.map(card).join('')}</div></section>`:''}).join('');
@@ -506,7 +506,7 @@ function perkRank(title){const t=String(title||'').toUpperCase();switch(t){
  case 'ULTIMATE MASTERY':return ultLevel||0;
  case 'EMBER: INFERNAL CONFLUX':return player?.emberSkillRelic||0;
  case 'FROST: ABSOLUTE AEGIS':return player?.frostSkillRelic||0;
- case 'AETHER: SINGULARITY FOCUS':return player?.novaSkillRelic||0;
+ case 'AETHER: BLACK SUN CATALYST':return player?.novaSkillRelic||0;
  case 'AURALIS: DAYBREAK CHORUS':return player?.remielleSkillRelic||0;
  case 'EMBER: PYRE CASCADE':return player?.pyreCascade||0;
  case 'FROST: CRYSTAL RESONANCE':return player?.crystalResonance||0;
@@ -530,7 +530,7 @@ function perkRank(title){const t=String(title||'').toUpperCase();switch(t){
  case 'MAGNETAR FIELD':return Math.max(0,Math.round(((player?.magnet||55)-55)/45));
  case 'PULSE REACTOR':return Math.ceil((player?.pulseAura||0)/24);
  case 'LIGHT FIELD':return player?.lightField||0;case 'PHASE RESERVE':return player?.extraDashChargeRank||0;case 'AFTERGLOW CAPACITOR':return player?.afterglowCapacitor||0;case 'SALVAGE DIVIDEND':return player?.salvageDividend||0;case 'LAST STAND':return player?.lastStand||0;case 'PHASE MOMENTUM':return player?.phaseMomentumRank||0;case 'REPAIR MATRIX':return player?.repairMatrix||0;case 'CRITICAL BATTERY':return player?.criticalBattery||0;case 'SINGULARITY HUNTER':return player?.singularityHunter||0;
- case 'AETHER: EVENT CHASER':return player?.singularityHunter||0;case 'AEGIS CIRCUIT':return player?.aegisCircuit||0;case 'OVERCLOCK RELAY':return player?.overclockRelay||0;
+ case 'AEGIS CIRCUIT':return player?.aegisCircuit||0;case 'OVERCLOCK RELAY':return player?.overclockRelay||0;
  case 'PRISM FLIGHT: SWIFT CURRENT':return player?.phaseFlowCadence||0;
  case 'PRISM FLIGHT: LASTING RADIANCE':return player?.phaseFlowDuration||0;
  case 'PRISM FLIGHT: PRISM ECHO':return player?.phaseFlowPower||0;
