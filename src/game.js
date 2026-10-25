@@ -201,12 +201,13 @@ const groups=[
 {key:'general',title:'CORE SYSTEMS & UNIVERSAL PERKS',sub:'Universal upgrades available to every core.',accent:'#72f6ff',test:p=>!p[0].startsWith('EMBER:')&&!p[0].startsWith('FROST:')&&!p[0].startsWith('AETHER:')&&!p[0].startsWith('AURALIS:')&&!p[0].startsWith('FLASH:')&&!p[0].startsWith('NATURE:')&&!p[0].startsWith('PRISM:')&&!p[0].startsWith('PRISM FLIGHT:')&&p[0]!=='AURALIS CORE · LUMINE'&&!['CINDERHEART','ASHFALL','PHOENIX FURNACE','INFERNO CROWN','PERMAFROST','GLACIAL BASTION','SHATTERGLASS','ABSOLUTE ZERO','PRISM FOCUS','OVERCLOCK','SPECTRUM BURN','EVENT HORIZON','ARC CONDUCTOR','STATIC CHARGE','CAPACITOR SURGE','THUNDERFIELD OVERDRIVE','PRISMATIC SNARE','PRISM FLIGHT','SWIFT CURRENT','LASTING RADIANCE','PRISM ECHO','MULTIPLICITY','PRISMATIC','LUMINOUS WINGS'].includes(p[0])},
 {key:'ember',title:'EMBER EXCLUSIVE',sub:'Burn and Ring of Fire upgrades.',accent:'#ff9c65',test:p=>p[0].startsWith('EMBER:')||['CINDERHEART','ASHFALL','PHOENIX FURNACE','INFERNO CROWN'].includes(p[0])},
 {key:'frost',title:'FROST EXCLUSIVE',sub:'Chill, critical hits, armor, and shield upgrades.',accent:'#8cecff',test:p=>p[0].startsWith('FROST:')||['PERMAFROST','GLACIAL BASTION','SHATTERGLASS','ABSOLUTE ZERO'].includes(p[0])},
-{key:'nova',title:'AETHER EXCLUSIVE',sub:'Singularity, pull, and shard upgrades.',accent:'#fff7cf',test:p=>p[0].startsWith('AETHER:')||['SINGULARITY FOCUS','ORBITAL OVERDRIVE','GRAVITY MARK','FINAL COLLAPSE'].includes(p[0])},
+
 {key:'flash',title:'FLASH EXCLUSIVE',sub:'Chain lightning, critical-hit upgrades, and core evolutions.',accent:'#ffe875',test:p=>p[0].startsWith('FLASH:')||['ARC CONDUCTOR','STATIC CHARGE','CAPACITOR SURGE','THUNDERFIELD OVERDRIVE'].includes(p[0])},
 {key:'nature',title:'NATURE EXCLUSIVE',sub:'Vine and drone upgrades.',accent:'#70e58a',test:p=>p[0].startsWith('NATURE:')},
 {key:'elemental',title:'PRISM CORE EXCLUSIVE',sub:'Cube projectiles and four-element combo upgrades.',accent:'#ff71cd',test:p=>p[0].startsWith('PRISM:')},
 {key:'vengeance',title:'CRIMSON CORE EXCLUSIVE',sub:'Blood shields, crimson blades, and berserker scaling.',accent:'#ff304f',test:p=>p[0].startsWith('CRIMSON:')},
 {key:'remielle',title:'AURALIS EXCLUSIVE',sub:'Lumine and Prism Flight upgrades.',accent:'#ff9ed8',test:p=>p[0].startsWith('AURALIS:')||['PRISMATIC SNARE','PRISM FLIGHT','PRISM FLIGHT: SWIFT CURRENT','PRISM FLIGHT: LASTING RADIANCE','PRISM FLIGHT: PRISM ECHO','PRISM FLIGHT: MULTIPLICITY','PRISMATIC','LUMINOUS WINGS'].includes(p[0])}
+{key:'nova',title:'AETHER EXCLUSIVE',sub:'Singularity, pull, and shard upgrades.',accent:'#fff7cf',test:p=>p[0].startsWith('AETHER:')||['SINGULARITY FOCUS','ORBITAL OVERDRIVE','GRAVITY MARK','FINAL COLLAPSE'].includes(p[0])},,
 ];
 const card=(p)=>{const rare=PERK_RARITY[String(p[0]||'').trim().toUpperCase()]==='rare';return `<article class="codex-entry ${rare?'codex-featured':''}"><b>${p[1]} ${p[0]}${rare?'<span class="codex-rarity">RARE</span>':''}</b><small>${String(p[2]||'').replace(/^RARE ·\s*/,'')}</small></article>`;};
 const sections=groups.map(g=>{const seen=new Set();const sameBuffAliases={general:new Set(['RAPID PULSAR','ULTIMATE AMPLIFIER','CORE RESONANCE'])};const items=perks.filter(g.test).filter(p=>{const key=p[0].normalize('NFKC').replace(/\s+/g,' ').trim().toUpperCase();if(seen.has(key))return false;seen.add(key);if(sameBuffAliases[g.key]?.has(key))return false;return true});return items.length?`<section id="codex-section-${g.key}" class="codex-section" style="--codex-accent:${g.accent}"><div class="codex-section-head"><h3>${g.title}</h3><p>${g.sub}</p><span>${items.length} ENTRIES</span></div><div class="codex-list">${items.map(card).join('')}</div></section>`:''}).join('');
@@ -824,7 +825,7 @@ function showCoreSelection(previewCoreId=null){
   elemental:'<i class="fx-prism"><b></b><b></b><b></b></i><i class="fx-prism-sweep"></i>',
   vengeance:'<i class="fx-blood-orb"></i><i class="fx-blood-ring"></i><i class="fx-blood-drop"></i>',
   remielle:'<i class="fx-light-crystal fx-crystal-a"></i><i class="fx-light-crystal fx-crystal-b"></i><i class="fx-light-crystal fx-crystal-c"></i><i class="fx-light-flare"></i>',
-  nova:'<i class="fx-aether-ring"></i><i class="fx-aether-disc"></i><i class="fx-aether-lens"></i><i class="fx-aether-particle"></i>'
+  nova:'<i class="fx-aether-disc"></i><i class="fx-aether-lens"></i><i class="fx-aether-particle"></i>'
  };
  coreFx.innerHTML=coreFxMarkup[c.id]||coreFxMarkup.ember;
  $('coreHoloGlyph').textContent='';
