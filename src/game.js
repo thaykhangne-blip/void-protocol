@@ -826,10 +826,10 @@ function showCoreSelection(previewCoreId=null){
   nova:'<i class="fx-aether-ring"></i><i class="fx-aether-disc"></i><i class="fx-aether-lens"></i><i class="fx-aether-particle"></i>'
  };
  coreFx.innerHTML=coreFxMarkup[c.id]||coreFxMarkup.ember;
- $('coreHoloGlyph').textContent=c.glyph||'✦';
- $('coreHoloGlyph').classList.toggle('aether-glyph',c.id==='nova');
- $('coreHoloGlyph').style.color=c.id==='nova'?'#fff4c8':'';
- $('coreHoloGlyph').style.textShadow=c.id==='nova'?'0 0 8px rgba(255,247,207,.75),0 0 20px rgba(255,230,145,.42)':'';
+ $('coreHoloGlyph').textContent='';
+ $('coreHoloGlyph').classList.remove('aether-glyph');
+ $('coreHoloGlyph').style.color='';
+ $('coreHoloGlyph').style.textShadow='';
  const coreIconInfo={
  ember:{a:[['✦','NORMAL ATTACK','Fire shots ignite enemies, dealing burn damage over time.'],['✧','PASSIVE','Critical hits against burning enemies deal +25% critical damage, gaining another +1% per player level.'],['E','CORE SKILL','RING OF FIRE · Cooldown 14s. Surround yourself with a damaging orange fire ring that burns nearby enemies.'],['Q','ULTIMATE','SOLAR FLARE · Spend 100 energy to scorch all enemies and ignite them, dealing burst damage followed by burn damage over time.']],e:[['♨','LV 5','Burn damage +30% from all sources.'],['✹','LV 10','Burning enemies explode on defeat, damaging and igniting nearby enemies.'],['✦','LV 15','Defeating a burning enemy restores 3 hull.'],['☀','LV 20','Deal 20% more damage to burning enemies.']]},
  frost:{a:[['❄','NORMAL ATTACK','Ice bolts apply chill. At 5 stacks, enemies freeze briefly.'],['✧','PASSIVE','While a shield is active, Frost deals +25% damage, gaining another +0.75% per player level.'],['E','CORE SKILL','Gain a shield and a frost field that chills enemies. Enemies that hit the shield freeze instantly.'],['Q','ULTIMATE','A 5-second blizzard damages enemies, then freezes survivors.']],e:[['❄','LV 5','Ice hits slow enemies for 50% longer.'],['⬡','LV 10','Gain +12 armor and +12 maximum hull, then restore 12 hull.'],['✧','LV 15','Deal 15% more damage to slowed enemies.'],['❅','LV 20','Chill/slow duration is set to 3.2 seconds.']]},
