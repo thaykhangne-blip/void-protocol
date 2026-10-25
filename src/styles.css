@@ -2391,3 +2391,89 @@ button.global-back-button { transition: opacity .18s ease; }
 #modal.core-hologram-modal .core-holo-planet.elemental-spectrum .core-holo-planet-surface:before{background:conic-gradient(from 45deg,#ff754f 0deg 90deg,#69eaff 90deg 180deg,#ffe66d 180deg 270deg,#70ed8b 270deg 360deg)!important;opacity:.7!important}
 #modal.core-hologram-modal .core-holo-planet.elemental-spectrum .world-holo-atmosphere{border-color:#ff71cd!important;box-shadow:0 0 20px #ff71cd44,inset 0 0 20px #ff71cd22!important}
 #modal.core-hologram-modal .core-holo-planet.elemental-spectrum #coreHoloGlyph{color:#fff!important;text-shadow:0 0 8px #fff,0 0 22px #ff71cd,0 0 34px #69eaff!important}
+
+
+/* CORE SELECTION HOLOGRAMS
+   Lightweight CSS-only material motifs. The original core glyph remains above each effect. */
+#modal.core-hologram-modal .core-holo-planet{--fx-accent:var(--world-accent);isolation:isolate;overflow:visible!important}
+#modal.core-hologram-modal .core-holo-planet .world-holo-planet-surface{z-index:0;opacity:.38!important;filter:saturate(.9)}
+#modal.core-hologram-modal .core-holo-planet:before{z-index:4;pointer-events:none}
+#modal.core-hologram-modal .core-holo-planet:after{z-index:3;pointer-events:none}
+#modal.core-hologram-modal .core-holo-fx{position:absolute;inset:0;z-index:2;display:block;pointer-events:none;overflow:visible}
+#modal.core-hologram-modal .core-holo-fx i,
+#modal.core-hologram-modal .core-holo-fx b{position:absolute;display:block;box-sizing:border-box}
+#modal.core-hologram-modal .core-holo-planet #coreHoloGlyph{z-index:6;position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(54px,7vw,88px);line-height:1;pointer-events:none}
+#modal.core-hologram-modal .core-holo-planet #coreHoloGlyph:not(.aether-glyph){text-shadow:0 0 10px #fff8,0 0 18px var(--world-accent),0 0 32px color-mix(in srgb,var(--world-accent) 70%,transparent)!important}
+#modal.core-hologram-modal .core-holo-planet.core-holo-ember .world-holo-planet-surface{background:radial-gradient(circle at 45% 56%,#fff8c5 0 3%,#ffcb69 9%,#f65b23 23%,#5e1522 49%,#090c18 73%)!important}
+#modal.core-hologram-modal .core-holo-ember .fx-flame{left:24%;top:18%;width:52%;height:66%;border-radius:58% 42% 54% 46%;background:linear-gradient(170deg,#fff9c2 0%,#ffc34d 22%,#ff6b2d 48%,#c82534 76%,transparent 100%);filter:drop-shadow(0 0 10px #ff8b35aa);clip-path:polygon(50% 0,62% 25%,80% 12%,75% 42%,94% 54%,78% 70%,67% 100%,32% 100%,19% 72%,5% 58%,26% 37%,29% 17%,43% 32%);transform-origin:50% 82%;animation:coreFlameDance 2.4s ease-in-out infinite alternate}
+#modal.core-hologram-modal .core-holo-ember .fx-flame-b{left:37%;top:34%;width:28%;height:43%;opacity:.75;animation-delay:-1.1s;filter:blur(1px) drop-shadow(0 0 8px #ffe08a}
+#modal.core-hologram-modal .core-holo-ember .fx-ember{left:23%;top:30%;width:5px;height:5px;border-radius:50%;background:#fff3a4;box-shadow:0 0 8px #ffb238;animation:coreEmberRise 3s linear infinite}
+#modal.core-hologram-modal .core-holo-ember .fx-ember-b{left:73%;top:56%;animation-delay:-1.4s}
+#modal.core-hologram-modal .core-holo-planet.core-holo-frost .world-holo-planet-surface{background:radial-gradient(circle at 32% 25%,#fff 0 2%,#b9f6ff 8%,#3dabc8 27%,#163b68 57%,#08101f 79%)!important}
+#modal.core-hologram-modal .core-holo-frost .fx-ice-cube{width:45%;height:45%;left:27.5%;top:27.5%;transform:rotate(30deg) skewY(-5deg);border:1px solid #e7feff;border-radius:5px;background:linear-gradient(135deg,#ecffff66,#49c6f244 52%,#1a6ea766);box-shadow:inset 0 0 17px #d6ffff88,0 0 18px #59e8ff88;animation:coreIceFloat 4.8s ease-in-out infinite}
+#modal.core-hologram-modal .core-holo-frost .fx-ice-cube:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,transparent 47%,#e6ffffbb 49%,transparent 52%),linear-gradient(45deg,transparent 47%,#bafaff99 49%,transparent 52%);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
+#modal.core-hologram-modal .core-holo-frost .fx-ice-cube b{height:100%;width:1px;left:50%;top:0;background:#dffeffb0;transform:rotate(30deg)}
+#modal.core-hologram-modal .core-holo-frost .fx-ice-cube b:nth-child(2){transform:rotate(-30deg)}
+#modal.core-hologram-modal .core-holo-frost .fx-ice-cube b:nth-child(3){height:1px;width:100%;left:0;top:50%;transform:none}
+#modal.core-hologram-modal .core-holo-frost .fx-ice-cube b:nth-child(4){height:70%;left:19%;top:15%;transform:rotate(60deg);opacity:.7}
+#modal.core-hologram-modal .core-holo-frost .fx-ice-glint{left:26%;top:20%;width:11%;height:11%;border-top:2px solid #fff;border-left:2px solid #fff;filter:drop-shadow(0 0 5px #fff);transform:rotate(15deg);animation:coreGlint 3.2s ease-in-out infinite}
+#modal.core-hologram-modal .core-holo-planet.core-holo-flash .world-holo-planet-surface{background:radial-gradient(circle at 50% 50%,#ffeeb0 0 4%,#e5b83b 12%,#584a24 34%,#10172b 67%)!important}
+#modal.core-hologram-modal .core-holo-flash .fx-lightning-orb{inset:18%;border:1px solid #ffe994aa;border-radius:50%;box-shadow:inset 0 0 20px #ffe87522,0 0 18px #ffe87533;animation:coreLightningPulse 2.8s ease-in-out infinite}
+#modal.core-hologram-modal .core-holo-flash .fx-bolt{left:28%;top:8%;width:46%;height:84%;background:linear-gradient(90deg,#fff 0%,#fff9c4 30%,#ffdd55 65%,#f3a92d 100%);clip-path:polygon(56% 0,22% 43%,43% 43%,28% 100%,79% 37%,56% 37%);filter:drop-shadow(0 0 7px #fff4a0);animation:coreBoltFlicker 2.1s steps(1,end) infinite}
+#modal.core-hologram-modal .core-holo-flash .fx-bolt-b{left:48%;top:24%;width:29%;height:55%;opacity:.72;transform:rotate(18deg) scale(.62);animation-delay:-.7s}
+#modal.core-hologram-modal .core-holo-flash .fx-static{left:12%;top:20%;width:76%;height:60%;border:1px dashed #ffe87588;border-radius:50%;animation:coreOrbitSpin 16s linear infinite}
+#modal.core-hologram-modal .core-holo-planet.core-holo-nature .world-holo-planet-surface{background:radial-gradient(circle at 34% 28%,#b5d79a 0 3%,#69785b 15%,#394c3b 39%,#18271f 68%,#08110e 82%)!important}
+#modal.core-hologram-modal .core-holo-nature .fx-stone{inset:23%;clip-path:polygon(24% 5%,65% 0,94% 24%,83% 60%,60% 94%,23% 88%,4% 55%,9% 22%);background:linear-gradient(135deg,#d5dfbd 0%,#879982 18%,#4a6252 50%,#25352c 80%);border:1px solid #bed4ac;filter:drop-shadow(0 0 10px #70e58a66);animation:coreStoneHover 5s ease-in-out infinite}
+#modal.core-hologram-modal .core-holo-nature .fx-stone:after{content:"";position:absolute;inset:12%;background:linear-gradient(120deg,transparent 0 39%,#162c2399 40% 44%,transparent 45%),linear-gradient(40deg,transparent 0 64%,#d5dfbd88 65% 67%,transparent 68%);clip-path:polygon(24% 5%,65% 0,94% 24%,83% 60%,60% 94%,23% 88%,4% 55%,9% 22%)}
+#modal.core-hologram-modal .core-holo-nature .fx-vine{left:18%;top:20%;width:64%;height:60%;border:2px solid #70e58a;border-color:transparent transparent #70e58a #70e58a;border-radius:48%;transform:rotate(28deg);filter:drop-shadow(0 0 4px #70e58aaa);animation:coreVineGrow 5s ease-in-out infinite alternate}
+#modal.core-hologram-modal .core-holo-nature .fx-vine-b{left:24%;top:17%;width:57%;height:66%;transform:rotate(-42deg);border-color:#70e58a transparent transparent #70e58a;animation-delay:-2.4s}
+#modal.core-hologram-modal .core-holo-nature .fx-leaf{width:11%;height:6%;background:linear-gradient(135deg,#baf58c,#3cbd6c);border-radius:100% 0 100% 0;box-shadow:0 0 6px #70e58a55;transform:rotate(28deg)}
+#modal.core-hologram-modal .core-holo-nature .fx-leaf-a{left:20%;top:31%;transform:rotate(14deg)}
+#modal.core-hologram-modal .core-holo-nature .fx-leaf-b{left:70%;top:42%;transform:rotate(96deg)}
+#modal.core-hologram-modal .core-holo-nature .fx-leaf-c{left:35%;top:72%;transform:rotate(48deg)}
+#modal.core-hologram-modal .core-holo-planet.core-holo-elemental .world-holo-planet-surface{background:radial-gradient(circle at 32% 24%,#fff 0 2%,#f6d3fa 9%,#765db5 27%,#27365d 58%,#08101c 80%)!important}
+#modal.core-hologram-modal .core-holo-elemental .fx-prism{width:40%;height:48%;left:30%;top:25%;filter:drop-shadow(0 0 12px #8cecff66);animation:corePrismFloat 5s ease-in-out infinite}
+#modal.core-hologram-modal .core-holo-elemental .fx-prism:before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,#fff 0%,#adf5ff 18%,#9f7cff 42%,#fff0ae 64%,#ff9bde 82%,#68ffdd 100%);clip-path:polygon(50% 0,100% 87%,0 87%);border:1px solid #fff}
+#modal.core-hologram-modal .core-holo-elemental .fx-prism:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,#fdfcff88,#81dfff55 48%,#ffbfef77);clip-path:polygon(50% 0,50% 87%,0 87%);border-right:1px solid #fff9}
+#modal.core-hologram-modal .core-holo-elemental .fx-prism b{left:10%;top:15%;width:80%;height:69%;background:linear-gradient(145deg,#fff8,#a6e5ff44);clip-path:polygon(50% 0,100% 100%,0 100%);border:1px solid #fff8}
+#modal.core-hologram-modal .core-holo-elemental .fx-prism b:nth-child(2){opacity:.72;transform:translate(-18%,10%) scale(.54);filter:hue-rotate(55deg)}
+#modal.core-hologram-modal .core-holo-elemental .fx-prism b:nth-child(3){opacity:.7;transform:translate(18%,10%) scale(.54);filter:hue-rotate(170deg)}
+#modal.core-hologram-modal .core-holo-elemental .fx-prism-sweep{width:60%;height:2px;left:20%;top:45%;background:linear-gradient(90deg,transparent,#fff,transparent);box-shadow:0 0 12px #a9f5ff;transform:rotate(-28deg);animation:corePrismSweep 3.4s ease-in-out infinite}
+#modal.core-hologram-modal .core-holo-planet.core-holo-vengeance .world-holo-planet-surface{background:radial-gradient(circle at 38% 30%,#ffb4c0 0 2%,#e63252 12%,#751a36 37%,#2b0d27 63%,#080914 82%)!important}
+#modal.core-hologram-modal .core-holo-vengeance .fx-blood-orb{inset:25%;border-radius:50%;background:radial-gradient(circle at 32% 25%,#ffdde6 0 2%,#ff6684 7%,#ad173f 28%,#590d2a 54%,#160a1b 76%);box-shadow:inset -12px -9px 15px #07061199,0 0 18px #ff304f66;animation:coreBloodPulse 3.2s ease-in-out infinite}
+#modal.core-hologram-modal .core-holo-vengeance .fx-blood-ring{inset:16% 10%;border:1px solid #ff6c89a0;border-radius:50%;transform:rotate(-32deg) scaleY(.66);box-shadow:0 0 12px #ff304f55;animation:coreOrbitSpin 18s linear infinite}
+#modal.core-hologram-modal .core-holo-vengeance .fx-blood-drop{left:72%;top:18%;width:8%;height:12%;border-radius:80% 20% 70% 35%;background:linear-gradient(135deg,#ffacbc,#bd123f);transform:rotate(24deg);box-shadow:0 0 8px #ff304f88;animation:coreDropBob 3.4s ease-in-out infinite}
+#modal.core-hologram-modal .core-holo-planet.core-holo-remielle .world-holo-planet-surface{background:radial-gradient(circle at 33% 26%,#fff 0 4%,#fff1fa 10%,#ff9ed8 26%,#ac6ee0 44%,#24254d 72%)!important}
+#modal.core-hologram-modal .core-holo-remielle .fx-light-crystal{width:17%;height:45%;top:25%;left:41.5%;clip-path:polygon(50% 0,92% 22%,80% 78%,50% 100%,20% 78%,8% 22%);background:linear-gradient(145deg,#fff,#ffe7fb 22%,#ff9ed8 55%,#8cecff 100%);filter:drop-shadow(0 0 8px #fff8) drop-shadow(0 0 14px #ff9ed866);transform-origin:50% 80%;animation:coreCrystalFloat 4.6s ease-in-out infinite}
+#modal.core-hologram-modal .core-holo-remielle .fx-crystal-b{left:22%;top:32%;height:31%;width:12%;transform:rotate(-28deg) scale(.85);animation-delay:-1.1s}
+#modal.core-hologram-modal .core-holo-remielle .fx-crystal-c{left:66%;top:31%;height:34%;width:11%;transform:rotate(24deg) scale(.8);animation-delay:-2.1s}
+#modal.core-hologram-modal .core-holo-remielle .fx-light-flare{inset:9%;border:1px solid #ffefff44;border-radius:50%;box-shadow:0 0 25px #ffb4f044,inset 0 0 18px #ffb4f022;animation:coreFlareBreathe 3s ease-in-out infinite}
+#modal.core-hologram-modal .core-holo-planet.core-holo-nova .world-holo-planet-surface{background:radial-gradient(circle at 50% 50%,#000 0 24%,#08080d 29%,#fff0a6 32%,#f2b94b 35%,#5b351d 39%,#090b17 52%,#04050b 78%)!important}
+#modal.core-hologram-modal .core-holo-nova .fx-aether-ring{left:12%;top:33%;width:76%;height:34%;border:2px solid #fff1bc;border-radius:50%;transform:rotate(-18deg) scaleY(.56);box-shadow:0 0 8px #fff0a688,0 0 20px #edb84b55;animation:aetherHoloSpin 7s linear infinite}
+#modal.core-hologram-modal .core-holo-nova .fx-aether-disc{inset:37% 16%;border-radius:50%;background:linear-gradient(180deg,#ffdf7a,#99601f 35%,#05050a 49%,#05050a 58%,#ffcf5b 75%,#5a2d10);transform:rotate(-16deg) scaleY(.22);box-shadow:0 0 16px #ffc954aa;animation:aetherHoloPulse 2.5s ease-in-out infinite}
+#modal.core-hologram-modal .core-holo-nova .fx-aether-lens{inset:14%;border:1px solid #ffe69c77;border-radius:50%;box-shadow:inset 0 0 18px #ffda6a22,0 0 18px #ffca4c22;animation:aetherHoloPulse 3.4s ease-in-out infinite reverse}
+#modal.core-hologram-modal .core-holo-nova .fx-aether-particle{width:6px;height:6px;left:23%;top:26%;border-radius:50%;background:#fff1ad;box-shadow:0 0 10px #fff0a6;animation:coreEmberRise 4.5s linear infinite}
+@keyframes coreFlameDance{from{transform:rotate(-3deg) scale(.96)}to{transform:rotate(3deg) scale(1.04)}}
+@keyframes coreEmberRise{0%{translate:0 18px;opacity:0}18%{opacity:1}100%{translate:12px -44px;opacity:0}}
+@keyframes coreIceFloat{0%,100%{transform:rotate(30deg) translateY(0)}50%{transform:rotate(35deg) translateY(-7px)}}
+@keyframes coreGlint{0%,100%{opacity:.2;transform:translate(0,0) rotate(15deg)}50%{opacity:1;transform:translate(6px,-4px) rotate(15deg)}}
+@keyframes coreLightningPulse{0%,100%{opacity:.5;transform:scale(.96)}50%{opacity:1;transform:scale(1.03)}}
+@keyframes coreBoltFlicker{0%,72%,76%,100%{opacity:1}73%,75%{opacity:.25}}
+@keyframes coreOrbitSpin{to{rotate:360deg}}
+@keyframes coreStoneHover{0%,100%{translate:0 0;rotate:-2deg}50%{translate:0 -4px;rotate:2deg}}
+@keyframes coreVineGrow{from{scale:.94;opacity:.72}to{scale:1.04;opacity:1}}
+@keyframes corePrismFloat{0%,100%{translate:0 0;rotate:-2deg}50%{translate:0 -5px;rotate:2deg}}
+@keyframes corePrismSweep{0%,100%{opacity:0;translate:-12px 0}50%{opacity:1;translate:12px 0}}
+@keyframes coreBloodPulse{0%,100%{transform:scale(.96);filter:saturate(.9)}50%{transform:scale(1.04);filter:saturate(1.2)}}
+@keyframes coreDropBob{0%,100%{translate:0 0}50%{translate:0 -7px}}
+@keyframes coreCrystalFloat{0%,100%{translate:0 0;rotate:-3deg}50%{translate:0 -5px;rotate:3deg}}
+@keyframes coreFlareBreathe{0%,100%{opacity:.35;scale:.96}50%{opacity:.9;scale:1.04}}
+@keyframes aetherHoloSpin{to{rotate:342deg}}
+@keyframes aetherHoloPulse{0%,100%{filter:brightness(.86)}50%{filter:brightness(1.2)}}
+@media(prefers-reduced-motion:reduce){
+ #modal.core-hologram-modal .core-holo-fx *{animation:none!important;transition:none!important}
+}
+@media(max-width:760px){
+ #modal.core-hologram-modal .core-holo-planet #coreHoloGlyph{font-size:clamp(48px,12vw,70px)}
+ #modal.core-hologram-modal .core-holo-nature .fx-stone{inset:26%}
+}
