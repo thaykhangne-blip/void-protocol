@@ -1321,8 +1321,8 @@ function updateCoreSkill(dt){if(!player||!core)return;clampVengeanceShields();if
    const capturedCount=Math.min(20,fx.capturedEnemies.size),collapseMultiplier=Math.min(2.5,1+capturedCount*.075);
    burst(fx.x,fx.y,'#fff7cf',64);burst(fx.x,fx.y,'#fff0a6',48);burst(fx.x,fx.y,'#08070a',34);burst(fx.x,fx.y,'#ffffff',28);
    skillFx.push({type:'aetherCollapse',x:fx.x,y:fx.y,life:.78,max:.78,radius:fx.radius,color:'#fff7cf',ultimate:true});skillFx.push({type:'aetherShockwave',x:fx.x,y:fx.y,life:.62,max:.62,radius:fx.radius,color:'#fff0a6'});
-   for(const e of enemies){if(e.hp<=0||dist(e,fx)>fx.radius*1.08)continue;const boss=e.isMiniBoss||e.isFinalBoss||e.role==='boss'||e.role==='miniboss'||e.role==='warden';applyDamage(e,fx.collapseDamage*collapseMultiplier*(boss?2:1),'#fff7cf',true,'AETHER BLACK SUN COLLAPSE');}
-   if(blackHole&&!blackHole.inactive&&blackHole.hp>0&&dist(fx,blackHole)<=fx.radius+(blackHole.r||0))applyDamage(blackHole,fx.collapseDamage*collapseMultiplier*2,'#fff7cf',true,'AETHER BLACK SUN COLLAPSE');
+   for(const e of enemies){if(e.hp<=0||dist(e,fx)>fx.radius*1.08)continue;const boss=e.isMiniBoss||e.isFinalBoss||e.role==='boss'||e.role==='miniboss'||e.role==='warden';applyDamage(e,Math.min(player.damage*12,fx.collapseDamage*collapseMultiplier*(boss?2:1)),'#fff7cf',true,'AETHER BLACK SUN COLLAPSE');}
+   if(blackHole&&!blackHole.inactive&&blackHole.hp>0&&dist(fx,blackHole)<=fx.radius+(blackHole.r||0))applyDamage(blackHole,Math.min(player.damage*16,fx.collapseDamage*collapseMultiplier*2),'#fff7cf',true,'AETHER BLACK SUN COLLAPSE');
    notify('BLACK SUN COLLAPSE · '+capturedCount+' ENEMIES CONSUMED · '+Math.round((collapseMultiplier-1)*100)+'% BONUS DAMAGE',2);
   }
  }
