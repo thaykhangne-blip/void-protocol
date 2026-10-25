@@ -114,9 +114,9 @@ export function getOwnedVoidWeapons(saveData) {
       return {
         ...weapon,
         stats: {
-          atkPct: weapon.stats.atkPct + (weapon.stats.atkPct > 0 ? refinementBonus : 0),
+          atkPct: weapon.stats.atkPct + refinementBonus,
           hpPct: weapon.stats.hpPct + (weapon.stats.hpPct > 0 ? refinementBonus : 0) + (weapon.passive?.statKey === 'hpPct' ? passiveStatBonus : 0),
-          armorPct: weapon.stats.armorPct + (weapon.stats.armorPct > 0 ? refinementBonus : 0),
+          armorPct: weapon.stats.armorPct + refinementBonus,
           critChance: weapon.passive?.statKey === 'critChance' ? passiveStatBonus : 0,
           critDamage: weapon.passive?.statKey === 'critDamage' ? passiveStatBonus : 0,
           fireRate: weapon.passive?.statKey === 'fireRate' ? passiveStatBonus : 0,
@@ -200,9 +200,9 @@ export function getVoidWeaponBonuses(saveData, coreId) {
   return {
     weapon,
     stats: {
-      atkPct: weapon.stats.atkPct + (weapon.stats.atkPct > 0 ? refinementBonus : 0),
-      hpPct: weapon.stats.hpPct + (weapon.stats.hpPct > 0 ? refinementBonus : 0) + (passive?.statKey === 'hpPct' ? passiveStatBonus : 0),
-      armorPct: weapon.stats.armorPct + (weapon.stats.armorPct > 0 ? refinementBonus : 0),
+      atkPct: weapon.stats.atkPct + refinementBonus,
+      hpPct: weapon.stats.hpPct + refinementBonus + (passive?.statKey === 'hpPct' ? passiveStatBonus : 0),
+      armorPct: weapon.stats.armorPct + refinementBonus,
       critChance: passive?.statKey === 'critChance' ? passiveStatBonus : 0,
       critDamage: passive?.statKey === 'critDamage' ? passiveStatBonus : 0,
       fireRate: passive?.statKey === 'fireRate' ? passiveStatBonus : 0,
