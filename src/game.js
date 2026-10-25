@@ -1211,6 +1211,8 @@ function shoot(){
  player.voidWeaponOnPrimaryAttack=null;
  if(player?.voidWeaponPassive==='eventide-array'&&player.voidWeaponChargedAttack&&core?.id==='nova'){
   const rank=Math.max(1,Math.min(5,player.voidWeaponRank||1));const target=player.voidWeaponChargedTarget&&player.voidWeaponChargedTarget.hp>0?player.voidWeaponChargedTarget:enemies.filter(e=>e.hp>0).sort((a,b)=>dist(player,a)-dist(player,b))[0];const x=target?target.x:mouse.x,y=target?target.y:mouse.y;const radius=[118,132,148,164,184][rank-1]*(1+(player.aetherWellRadiusBonus||0));const damage=[2,2.25,2.5,2.75,3][rank-1];const duration=2.1+rank*.12;
+  // Eventide Array may maintain only one Void Weapon singularity at a time.
+  for(let i=skillFx.length-1;i>=0;i--){const fx=skillFx[i];if(fx.type==='aetherWell'&&fx.weaponEnhanced)skillFx.splice(i,1);}
   skillFx.push({type:'aetherWell',x:Math.max(24,Math.min(W-24,x)),y:Math.max(24,Math.min(H-24,y)),life:duration,max:duration,radius,color:'#fff0a6',damage:player.damage*.18,collapseDamage:player.damage*damage*(player.aetherCollapseMult||1),tickTimer:.15,weaponEnhanced:true});burst(x,y,'#fff0a6',22);notify(`EVENTIDE ARRAY · SINGULARITY ${rank}/5`);player.voidWeaponChargedAttack=false;player.voidWeaponChargedTarget=null;
  }else if(player?.voidWeaponPassive==='thunderclap-protocol'&&player.voidWeaponChargedAttack&&core?.id==='flash'){
   const first=player.voidWeaponChargedTarget||getPrimaryAttackTarget();const rank=Math.max(1,Math.min(5,player.voidWeaponRank||1));
