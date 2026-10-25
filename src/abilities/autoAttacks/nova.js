@@ -29,10 +29,10 @@ export function fireNovaAutoAttack(context, locals) {
   player.novaOverclockCount = 0;
   for (const enemy of enemies) if (enemy.hp > 0 && dist(player, enemy) <= radius) applyDamage(enemy, pulseDamage * .35, '#ffffff', false, 'AETHER GRAVITY OVERDRIVE');
  } else if (!player.novaOverclock) player.novaOverclockCount = 0;
- // Side Cannons add a short outer pressure pulse instead of side projectiles.
+ // Side Cannons amplify the pulse inside the visible ring boundary; they do not extend its range.
  if (player.sideCannons) {
-  const edgeRadius = radius + 20, extra = pulseDamage * .18 * Math.min(2, player.sideCannons);
-  for (const enemy of enemies) if (enemy.hp > 0 && dist(player, enemy) > radius && dist(player, enemy) <= edgeRadius) {
+  const extra = pulseDamage * .18 * Math.min(2, player.sideCannons);
+  for (const enemy of enemies) if (enemy.hp > 0 && dist(player, enemy) <= radius + (enemy.r || 0)) {
    applyDamage(enemy, extra, color, false, 'AETHER GRAVITY SIDECANNON');
   }
  }
