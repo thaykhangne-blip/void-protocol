@@ -15,7 +15,7 @@ export const voidWeapons = [
       effectId: 'cinder-oath',
       statKey: 'critChance',
       values: [0.12, 0.14, 0.16, 0.18, 0.20],
-      description: 'Critical Rate: +12% / 14% / 16% / 18% / 20%. Ashen Verdict: Burning enemies take 25% / 30% / 35% / 40% / 45% more damage. Infernal Barrage: Auto-attacks spawn 1 / 1 / 2 / 2 / 2 additional smaller homing fireballs. Each fireball damages nearby enemies and applies Burn. Fireballs inherit player damage bonuses but cannot spawn more fireballs.'
+      description: 'Crit Chance: +12% / 14% / 16% / 18% / 20%. Ashen Verdict: Burning enemies take 25% / 30% / 35% / 40% / 45% more damage. Infernal Barrage: Auto-attacks spawn 1 / 1 / 2 / 2 / 2 additional smaller homing fireballs. Each fireball damages nearby enemies and applies Burn. Fireballs inherit player damage bonuses but cannot spawn more fireballs.'
     }
   },
   {
@@ -33,7 +33,7 @@ export const voidWeapons = [
       effectId: 'stillpoint',
       statKey: 'critChance',
       values: [0.08, 0.10, 0.12, 0.14, 0.16],
-      description: 'Critical Rate: +8% / 10% / 12% / 14% / 16%. Absolute Zero: Frozen enemies take 25% / 30% / 35% / 40% / 45% more damage. Glacial Shatter: Auto-attacking a frozen enemy triggers an explosion for 100% / 125% / 150% / 175% / 200% ATK as bonus damage, damaging nearby enemies and applying 1 / 1 / 2 / 2 / 3 Chill stacks.'
+      description: 'Crit Chance: +8% / 10% / 12% / 14% / 16%. Absolute Zero: Frozen enemies take 25% / 30% / 35% / 40% / 45% more damage. Glacial Shatter: Auto-attacking a frozen enemy triggers an explosion for 100% / 125% / 150% / 175% / 200% ATK as bonus damage, damaging nearby enemies and applying 1 / 1 / 2 / 2 / 3 Chill stacks.'
     }
   },
   {
@@ -69,7 +69,7 @@ export const voidWeapons = [
       effectId: 'verdant-covenant',
       statKey: 'critDamage',
       values: [0.20, 0.24, 0.28, 0.32, 0.36],
-      description: 'Critical Damage: +20% / 24% / 28% / 32% / 36%. Symbiotic Engine: Each active summoned drone increases all damage dealt by 5% / 6% / 7% / 8% / 9%, stacking up to five times. Predatory Bloom: Every 5 / 4 / 4 / 3 / 3 seconds, each active drone launches a homing seed dealing 80% / 100% / 120% / 140% / 160% ATK. With at least three drones, seeds explode on impact for 50% of their damage to nearby enemies.'
+      description: 'Crit Damage: +20% / 24% / 28% / 32% / 36%. Symbiotic Engine: Each active summoned drone increases all damage dealt by 5% / 6% / 7% / 8% / 9%, stacking up to five times. Predatory Bloom: Every 5 / 4 / 4 / 3 / 3 seconds, each active drone launches a homing seed dealing 80% / 100% / 120% / 140% / 160% ATK. With at least three drones, seeds explode on impact for 50% of their damage to nearby enemies.'
     }
   },
   {
@@ -87,7 +87,7 @@ export const voidWeapons = [
       effectId: 'prism-paradox',
       statKey: 'critDamage',
       values: [0.20, 0.25, 0.30, 0.35, 0.40],
-      description: 'Critical Damage: +20% / 25% / 30% / 35% / 40%. Spectrum Collapse: Each distinct elemental effect on a target increases damage dealt to it by 8% / 10% / 12% / 14% / 16%, up to three effects. Prismatic Detonation: Hitting a target with 3 / 3 / 2 / 2 / 2 distinct effects triggers a burst for 150% / 175% / 200% / 225% / 250% ATK. The burst spreads the triggering effects to nearby enemies.'
+      description: 'Crit Damage: +20% / 25% / 30% / 35% / 40%. Spectrum Collapse: Each distinct elemental effect on a target increases damage dealt to it by 8% / 10% / 12% / 14% / 16%, up to three effects. Prismatic Detonation: Hitting a target with 3 / 3 / 2 / 2 / 2 distinct effects triggers a burst for 150% / 175% / 200% / 225% / 250% ATK. The burst spreads the triggering effects to nearby enemies.'
     }
   },
   {
@@ -98,7 +98,7 @@ export const voidWeapons = [
     rarity: 'legendary',
     color: '#ff304f',
     glyph: '⟡',
-    description: 'CRIMSON · RISK AND REPRISAL',
+    description: 'CRIMSON · BLOOD AND REPRISAL',
     stats: { atkPct: 0.11, hpPct: 0.14, armorPct: 0.13 },
     passive: {
       name: 'Blood Dividend',
@@ -123,7 +123,7 @@ export const voidWeapons = [
       effectId: 'last-light-first-dawn',
       statKey: 'critChance',
       values: [0.10, 0.12, 0.14, 0.16, 0.18],
-      description: 'Critical Rate: +10% / 12% / 14% / 16% / 18%. Luminous Afterimage: Each Light Crystal increases Void Burst damage by 8% / 10% / 12% / 14% / 16%, up to five stacks. Dawn’s Echo: Triggering Lumox at four stacks launches 2 / 3 / 4 / 5 / 6 luminous feathers. Each feather deals 75% / 90% / 105% / 120% / 135% ATK and pierces one additional enemy per refinement rank. Each activation has a 25% / 30% / 35% / 40% / 45% chance to generate one Light Crystal.'
+      description: 'Crit Chance: +10% / 12% / 14% / 16% / 18%. Luminous Afterimage: Each Light Crystal increases Void Burst damage by 8% / 10% / 12% / 14% / 16%, up to five stacks. Dawn’s Echo: Triggering Lumox at four stacks launches 2 / 3 / 4 / 5 / 6 luminous feathers. Each feather deals 75% / 90% / 105% / 120% / 135% ATK and pierces one additional enemy per refinement rank. Each activation has a 25% / 30% / 35% / 40% / 45% chance to generate one Light Crystal.'
     }
   },
   {
@@ -190,7 +190,7 @@ export const voidWeapons = [
     glyph: '✥',
     description: 'GENERAL · CRITICAL DAMAGE',
     stats: { atkPct: 0.1, hpPct: 0.09, armorPct: 0.08 },
-    passive: { name: 'Critical Mass', effectId: 'general-parallax-crown', statKey: 'critDamage', values: [0.16, 0.19, 0.22, 0.25, 0.28], description: 'Critical Damage: +16% / 19% / 22% / 25% / 28%.' }
+    passive: { name: 'Critical Mass', effectId: 'general-parallax-crown', statKey: 'critDamage', values: [0.16, 0.19, 0.22, 0.25, 0.28], description: 'Crit Damage: +16% / 19% / 22% / 25% / 28%.' }
   },
   {
     id: 'chrono-spindle',
@@ -239,7 +239,7 @@ export const voidWeapons = [
     glyph: '✧',
     description: 'GENERAL · CRITICAL DAMAGE',
     stats: { atkPct: 0.07, hpPct: 0.06, armorPct: 0.06 },
-    passive: { name: 'Shatterpoint', effectId: 'general-glass-comet', statKey: 'critDamage', values: [0.1, 0.12, 0.14, 0.16, 0.18], description: 'Critical Damage: +10% / 12% / 14% / 16% / 18%.' }
+    passive: { name: 'Shatterpoint', effectId: 'general-glass-comet', statKey: 'critDamage', values: [0.1, 0.12, 0.14, 0.16, 0.18], description: 'Crit Damage: +10% / 12% / 14% / 16% / 18%.' }
   },
   {
     id: 'iron-psalm',
@@ -275,7 +275,7 @@ export const voidWeapons = [
     glyph: '◉',
     description: 'GENERAL · CRITICAL RATE',
     stats: { atkPct: 0.06, hpPct: 0.09, armorPct: 0.05 },
-    passive: { name: 'Focused Aperture', effectId: 'general-blue-shift-lens', statKey: 'critChance', values: [0.04, 0.05, 0.06, 0.07, 0.08], description: 'Critical Rate: +4% / 5% / 6% / 7% / 8%.' }
+    passive: { name: 'Focused Aperture', effectId: 'general-blue-shift-lens', statKey: 'critChance', values: [0.04, 0.05, 0.06, 0.07, 0.08], description: 'Crit Chance: +4% / 5% / 6% / 7% / 8%.' }
   },
   {
     id: 'deepwell-plating',
@@ -371,7 +371,7 @@ export const voidWeapons = [
     glyph: '✦',
     description: 'GENERAL · CRITICAL RATE',
     stats: { atkPct: 0.09, hpPct: 0.12, armorPct: 0.07 },
-    passive: { name: 'Starfall Focus', effectId: 'general-starfall-mandrel', statKey: 'critChance', values: [0.08, 0.1, 0.12, 0.14, 0.16], description: 'Critical Rate: +8% / 10% / 12% / 14% / 16%.' }
+    passive: { name: 'Starfall Focus', effectId: 'general-starfall-mandrel', statKey: 'critChance', values: [0.08, 0.1, 0.12, 0.14, 0.16], description: 'Crit Chance: +8% / 10% / 12% / 14% / 16%.' }
   },
   {
     id: 'event-horizon-shell',
@@ -407,7 +407,7 @@ export const voidWeapons = [
     glyph: '✥',
     description: 'GENERAL · CRITICAL DAMAGE',
     stats: { atkPct: 0.08, hpPct: 0.11, armorPct: 0.1 },
-    passive: { name: 'Fractured Impact', effectId: 'general-fractured-crown', statKey: 'critDamage', values: [0.22, 0.25, 0.28, 0.31, 0.34], description: 'Critical Damage: +22% / 25% / 28% / 31% / 34%.' }
+    passive: { name: 'Fractured Impact', effectId: 'general-fractured-crown', statKey: 'critDamage', values: [0.22, 0.25, 0.28, 0.31, 0.34], description: 'Crit Damage: +22% / 25% / 28% / 31% / 34%.' }
   },
   {
     id: 'omega-spindle',
