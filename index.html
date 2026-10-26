@@ -56,6 +56,17 @@ html,body{margin:0!important;width:100%;height:100%;overflow:hidden!important;ba
 @keyframes storyFrameIn{from{opacity:0;transform:translateY(8px) scale(.992);filter:blur(2px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
 @keyframes storyLineIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){.story-frame-entering,.narrative-frame-entering,.story-line-entering{animation:none!important}.narrative-progress-fill{transition:none!important}}
+
+/* Per-world campaign difficulty switch */
+.world-holo-name-row{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0}
+.world-holo-name-row h3{min-width:0;margin:0}
+.world-difficulty-toggle{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;padding:7px 10px;border:1px solid rgba(114,246,255,.35);border-radius:999px;background:rgba(6,18,35,.88);color:#9eb2d2;font:700 11px 'Rajdhani',sans-serif;letter-spacing:.12em;cursor:pointer;transition:border-color .18s,background .18s,color .18s}
+.world-difficulty-toggle:disabled{opacity:.48;cursor:not-allowed}
+.difficulty-toggle-track{width:30px;height:16px;border-radius:99px;border:1px solid #58708d;background:#17243b;display:inline-flex;align-items:center;padding:2px;box-sizing:border-box}
+.difficulty-toggle-track i{width:10px;height:10px;border-radius:50%;background:#7f92ac;display:block;transition:transform .18s,background .18s}
+.world-difficulty-toggle.is-hard{color:#ffe38a;border-color:#ff9b65;background:rgba(69,25,22,.72)}
+.world-difficulty-toggle.is-hard .difficulty-toggle-track{border-color:#ff9b65;background:#542b2b}
+.world-difficulty-toggle.is-hard .difficulty-toggle-track i{transform:translateX(12px);background:#ffe38a}
 </style>
 
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -191,6 +202,6 @@ html,body{margin:0!important;width:100%;height:100%;overflow:hidden!important;ba
  preload();
 })();
 </script>
-<script type="module" src="src/game.js?v=433"></script>
+<script type="module" src="src/game.js?v=434"></script>
 
 </body></html>
