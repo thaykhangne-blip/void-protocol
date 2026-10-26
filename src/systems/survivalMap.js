@@ -1,6 +1,16 @@
 /* Semi-open Survival Trial map and first-pass horde combat runtime. */
 const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
 const distance=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+const CORE_KITS={
+ ember:{damage:25,fireRate:.72,speed:235,maxHp:108,trait:'burn'},
+ frost:{damage:15,fireRate:.56,speed:260,maxHp:92,trait:'chill'},
+ flash:{damage:12,fireRate:.34,speed:315,maxHp:72,trait:'chain'},
+ nature:{damage:16,fireRate:.58,speed:270,maxHp:98,trait:'drone'},
+ elemental:{damage:17,fireRate:.52,speed:280,maxHp:94,trait:'prism'},
+ vengeance:{damage:18,fireRate:.62,speed:265,maxHp:104,trait:'bleed'},
+ remielle:{damage:16,fireRate:.48,speed:292,maxHp:90,trait:'crystal'},
+ nova:{damage:17,fireRate:.39,speed:330,maxHp:84,trait:'pierce'}
+};
 export function createSurvivalMapRuntime(config){
  if(!config?.world||!config?.coreId)throw new TypeError('A selected Survival Trial world and core are required.');
  const width=config.map?.width||2600,height=config.map?.height||1800,seed=Math.max(0,Number(config.world.id)||0);
@@ -16,9 +26,10 @@ export function createSurvivalMapRuntime(config){
   {id:'rift',x:width*.79,y:height*.72,label:'VOID RIFT',type:'rift'},
   {id:'cache',x:width*.20,y:height*.78,label:'SUPPLY CACHE',type:'cache'}
  ];
- return {world:{...config.world},coreId:config.coreId,width,height,obstacles,landmarks,elapsed:0,
-  player:{x:width/2,y:height/2,radius:12,speed:260,hp:100,maxHp:100,damage:18,fireRate:.55,attackCooldown:.2,invulnerable:0},
-  camera:{x:width/2,y:height/2},enemies:[],projectiles:[],xpDrops:[],xp:0,xpToNext:5,level:1,upgradeChoices:null,kills:0,nextEnemyId:1,spawnTimer:.7,ready:true,gameOver:false};
+ const kit=CORE_KITS[config.coreId]||{damage:18,fireRate:.55,speed:260,maxHp:100,trait:'standard'};
+ return {world:{...config.world},coreId:config.coreId,coreTrait:kit.trait,width,height,obstacles,landmarks,elapsed:0,
+  player:{x:width/2,y:height/2,radius:12,speed:kit.speed,hp:kit.maxHp,maxHp:kit.maxHp,damage:kit.damage,fireRate:kit.fireRate,attackCooldown:.2,invulnerable:0,shotsFired:0,droneTimer:2.5,prismCycle:0},
+  camera:{x:width/2,y:height/2},enemies:[],projectiles:[],xpDrops:[],crystals:[],xp:0,xpToNext:5,level:1,upgradeChoices:null,kills:0,nextEnemyId:1,spawnTimer:.7,ready:true,gameOver:false};
 }
 export function getSurvivalCamera(runtime,viewportWidth,viewportHeight){
  const halfW=Math.max(1,viewportWidth)/2,halfH=Math.max(1,viewportHeight)/2;
