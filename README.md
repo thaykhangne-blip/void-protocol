@@ -5,7 +5,7 @@
 **A little light, a lot of things trying to kill it, and a company that would rather cut the budget than admit it was wrong.**
 
 [![Beta](https://img.shields.io/badge/status-beta-orange?style=for-the-badge)](https://github.com/thaykhangne-blip/void-protocol)
-[![Version](https://img.shields.io/badge/version-v0.7-blue?style=for-the-badge)](https://github.com/thaykhangne-blip/void-protocol/commits/main)
+[![Version](https://img.shields.io/badge/version-v0.7.2-blue?style=for-the-badge)](https://github.com/thaykhangne-blip/void-protocol/commits/main)
 [![JavaScript](https://img.shields.io/badge/JavaScript-ES6%2B-yellow?style=for-the-badge&logo=javascript&logoColor=111111)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![HTML5](https://img.shields.io/badge/HTML5-e34f26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
 [![CSS3](https://img.shields.io/badge/CSS3-1572b6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
