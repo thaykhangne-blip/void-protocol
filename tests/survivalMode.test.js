@@ -140,3 +140,33 @@ test('Survival Trial signature attacks attach their core effect to projectiles',
   assert.equal(map.projectiles[0].trait, 'burn');
   assert.ok(map.projectiles[0].damage >= 25);
 });
+
+
+test('Survival Trial spawns a miniboss at each 150-kill milestone and awards score', () => {
+  const map = createSurvivalMapRuntime(createSurvivalTrialConfig({ world: worlds[0], coreId: 'frost' }));
+  map.kills = 150;
+  stepSurvivalMapRuntime(map, { viewportWidth: 800, viewportHeight: 600 }, 0.016);
+  const boss = map.enemies.find(enemy => enemy.bossType === 'mini');
+  assert.ok(boss, 'a miniboss should spawn once the 150-kill milestone is reached');
+  assert.equal(map.nextBossAt, 300);
+  assert.equal(map.score, 0, 'spawning a boss should not award kill score');
+});
+
+test('Survival Trial spawns the big boss at 1,000 kills', () => {
+  const map = createSurvivalMapRuntime(createSurvivalTrialConfig({ world: worlds[0], coreId: 'ember' }));
+  map.kills = 1000;
+  stepSurvivalMapRuntime(map, { viewportWidth: 800, viewportHeight: 600 }, 0.016);
+  const boss = map.enemies.find(enemy => enemy.bossType === 'big');
+  assert.ok(boss, 'the 1,000-kill milestone should spawn the big boss');
+  assert.ok(boss.maxHp > 4000);
+  assert.equal(map.bigBossSpawned, true);
+});
+
+test('Survival Trial run score increases when enemies are defeated', () => {
+  const map = createSurvivalMapRuntime(createSurvivalTrialConfig({ world: worlds[0], coreId: 'frost' }));
+  map.player.attackCooldown = 0;
+  map.enemies.push({ id: 777, x: map.player.x+105, y: map.player.y, radius: 10, hp: 1, maxHp: 1, speed: 0, damage: 0, attackCooldown: 10, elite: false, hitFlash: 0 });
+  for (let i=0; i<18 && map.kills===0; i++) stepSurvivalMapRuntime(map, { viewportWidth: 800, viewportHeight: 600, coreColor: '#8cecff' }, 0.05);
+  assert.equal(map.kills, 1);
+  assert.equal(map.score, 10);
+});
