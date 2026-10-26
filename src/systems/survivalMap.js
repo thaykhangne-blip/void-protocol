@@ -1,4 +1,4 @@
-/* Semi-open Survival Trial map and first-pass horde combat runtime. */
+/* Semi-open Survival Trial map, horde combat, boss milestones, and run scoring. */
 const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
 const distance=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
 const CORE_KITS={
@@ -11,6 +11,24 @@ const CORE_KITS={
  remielle:{damage:16,fireRate:.48,speed:292,maxHp:90,trait:'crystal'},
  nova:{damage:17,fireRate:.39,speed:330,maxHp:84,trait:'pierce'}
 };
+function registerSurvivalKill(runtime,enemy){
+ runtime.kills++;
+ runtime.score+=(enemy.bossType==='big'?2500:enemy.bossType==='mini'?500:enemy.elite?35:10);
+ runtime.xpDrops.push({x:enemy.x,y:enemy.y,r:enemy.bossType?9:5,value:enemy.bossType==='big'?12:enemy.bossType==='mini'?6:enemy.elite?3:1,life:30});
+}
+function spawnSurvivalBoss(runtime){
+ if(runtime.enemies.some(enemy=>enemy.bossType))return false;
+ const big=runtime.kills>=1000,angle=Math.random()*Math.PI*2,distanceFromPlayer=big?420:340;
+ const x=clamp(runtime.player.x+Math.cos(angle)*distanceFromPlayer,60,runtime.width-60);
+ const y=clamp(runtime.player.y+Math.sin(angle)*distanceFromPlayer,60,runtime.height-60);
+ const scale=1+runtime.elapsed/600;
+ const hp=(big?4200:720)*scale;
+ runtime.enemies.push({id:runtime.nextEnemyId++,x,y,radius:big?32:22,hp,maxHp:hp,speed:big?34:43,damage:big?24:16,attackCooldown:.7,elite:true,bossType:big?'big':'mini',hitFlash:0,scoreValue:big?2500:500});
+ runtime.bossAnnouncement={type:big?'big':'mini',timer:3};
+ if(big)runtime.bigBossSpawned=true;
+ else runtime.nextBossAt+=150;
+ return true;
+}
 export function createSurvivalMapRuntime(config){
  if(!config?.world||!config?.coreId)throw new TypeError('A selected Survival Trial world and core are required.');
  const width=config.map?.width||2600,height=config.map?.height||1800,seed=Math.max(0,Number(config.world.id)||0);
@@ -29,7 +47,7 @@ export function createSurvivalMapRuntime(config){
  const kit=CORE_KITS[config.coreId]||{damage:18,fireRate:.55,speed:260,maxHp:100,trait:'standard'};
  return {world:{...config.world},coreId:config.coreId,coreTrait:kit.trait,width,height,obstacles,landmarks,elapsed:0,
   player:{x:width/2,y:height/2,radius:12,speed:kit.speed,hp:kit.maxHp,maxHp:kit.maxHp,damage:kit.damage,fireRate:kit.fireRate,attackCooldown:.2,invulnerable:0,shotsFired:0,droneTimer:2.5,prismCycle:0},
-  camera:{x:width/2,y:height/2},enemies:[],projectiles:[],xpDrops:[],crystals:[],xp:0,xpToNext:5,level:1,upgradeChoices:null,kills:0,nextEnemyId:1,spawnTimer:.7,ready:true,gameOver:false};
+  camera:{x:width/2,y:height/2},enemies:[],projectiles:[],xpDrops:[],crystals:[],xp:0,xpToNext:5,level:1,upgradeChoices:null,kills:0,score:0,nextBossAt:150,bigBossSpawned:false,bossAnnouncement:null,nextEnemyId:1,spawnTimer:.7,ready:true,gameOver:false};
 }
 export function getSurvivalCamera(runtime,viewportWidth,viewportHeight){
  const halfW=Math.max(1,viewportWidth)/2,halfH=Math.max(1,viewportHeight)/2;
@@ -61,7 +79,7 @@ function spawnEnemy(runtime,viewportWidth,viewportHeight){
 }
 export function stepSurvivalMapRuntime(runtime,input={},dt=1/60){
  if(!runtime?.ready||runtime.gameOver||runtime.upgradeChoices)return runtime;
- const step=Math.min(.05,Math.max(0,Number(dt)||0));runtime.elapsed+=step;
+ const step=Math.min(.05,Math.max(0,Number(dt)||0));runtime.elapsed+=step;if(runtime.bossAnnouncement){runtime.bossAnnouncement.timer-=step;if(runtime.bossAnnouncement.timer<=0)runtime.bossAnnouncement=null;}
  const p=runtime.player;p.invulnerable=Math.max(0,p.invulnerable-step);
  const dx0=(input.right?1:0)-(input.left?1:0),dy0=(input.down?1:0)-(input.up?1:0);
  let dx=dx0,dy=dy0;
@@ -94,7 +112,7 @@ export function stepSurvivalMapRuntime(runtime,input={},dt=1/60){
   enemy.hitFlash=Math.max(0,enemy.hitFlash-step);enemy.attackCooldown-=step;
   if(enemy.burnTime>0){enemy.burnTime=Math.max(0,enemy.burnTime-step);enemy.burnTick=(enemy.burnTick||0)-step;if(enemy.burnTick<=0&&enemy.burnTime>0){enemy.hp-=Math.max(2,p.damage*.12);enemy.burnTick=.5;}}
   if(enemy.bleedTime>0){enemy.bleedTime=Math.max(0,enemy.bleedTime-step);enemy.bleedTick=(enemy.bleedTick||0)-step;if(enemy.bleedTick<=0&&enemy.bleedTime>0){enemy.hp-=Math.max(1,p.damage*.08);enemy.bleedTick=.65;}}
-  if(enemy.hp<=0){enemy.dead=true;runtime.kills++;runtime.xpDrops.push({x:enemy.x,y:enemy.y,r:5,value:enemy.elite?3:1,life:30});continue;}
+  if(enemy.hp<=0){enemy.dead=true;registerSurvivalKill(runtime,enemy);continue;}
   const d=Math.max(1,distance(p,enemy));
   if(d>p.radius+enemy.radius+3){
    let ex=(p.x-enemy.x)/d,ey=(p.y-enemy.y)/d;
@@ -124,7 +142,7 @@ export function stepSurvivalMapRuntime(runtime,input={},dt=1/60){
  }
  runtime.projectiles=runtime.projectiles.filter(s=>!s.dead);
  runtime.enemies=runtime.enemies.filter(e=>!e.dead);
- if(runtime.coreTrait==='drone'){p.droneTimer-=step;if(p.droneTimer<=0&&runtime.enemies.length){const target=runtime.enemies.slice().sort((a,b)=>distance(p,a)-distance(p,b))[0];target.hp-=p.damage*.7;target.hitFlash=.12;p.droneTimer=1.8;if(target.hp<=0){target.dead=true;runtime.kills++;runtime.xpDrops.push({x:target.x,y:target.y,r:5,value:target.elite?3:1,life:30});runtime.enemies=runtime.enemies.filter(e=>!e.dead);}}}
+ if(runtime.coreTrait==='drone'){p.droneTimer-=step;if(p.droneTimer<=0&&runtime.enemies.length){const target=runtime.enemies.slice().sort((a,b)=>distance(p,a)-distance(p,b))[0];target.hp-=p.damage*.7;target.hitFlash=.12;p.droneTimer=1.8;if(target.hp<=0){target.dead=true;registerSurvivalKill(runtime,target);runtime.enemies=runtime.enemies.filter(e=>!e.dead);}}}
  if(runtime.coreTrait==='crystal'&&runtime.crystals.length){for(const crystal of runtime.crystals){crystal.timer-=step;crystal.life-=step;if(crystal.timer<=0){const target=runtime.enemies.filter(e=>e.hp>0&&distance(crystal,e)<210).sort((a,b)=>distance(crystal,a)-distance(crystal,b))[0];if(target){target.hp-=p.damage*1.25;target.hitFlash=.18;crystal.life=0;if(target.hp<=0){target.dead=true;runtime.kills++;runtime.xpDrops.push({x:target.x,y:target.y,r:5,value:target.elite?3:1,life:30});}}}}runtime.crystals=runtime.crystals.filter(c=>c.life>0&&c.timer>0);runtime.enemies=runtime.enemies.filter(e=>!e.dead);}
  for(const orb of runtime.xpDrops){
   const d=distance(p,orb),magnet=90+(runtime.magnet||0);
@@ -133,6 +151,8 @@ export function stepSurvivalMapRuntime(runtime,input={},dt=1/60){
   orb.life-=step;
  }
  runtime.xpDrops=runtime.xpDrops.filter(o=>!o.collected&&o.life>0);
+ if(!runtime.bigBossSpawned&&runtime.kills>=1000&&!runtime.enemies.some(enemy=>enemy.bossType))spawnSurvivalBoss(runtime);
+ else if(runtime.kills>=runtime.nextBossAt&&!runtime.enemies.some(enemy=>enemy.bossType))spawnSurvivalBoss(runtime);
  if(runtime.xp>=runtime.xpToNext){
   runtime.xp-=runtime.xpToNext;runtime.level++;runtime.xpToNext=Math.round(5+runtime.level*2.4);
   const pool=[
