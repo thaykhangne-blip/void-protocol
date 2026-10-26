@@ -18,7 +18,7 @@ export function createSurvivalMapRuntime(config){
  ];
  return {world:{...config.world},coreId:config.coreId,width,height,obstacles,landmarks,elapsed:0,
   player:{x:width/2,y:height/2,radius:12,speed:260,hp:100,maxHp:100,damage:18,fireRate:.55,attackCooldown:.2,invulnerable:0},
-  camera:{x:width/2,y:height/2},enemies:[],projectiles:[],kills:0,spawnTimer:.7,ready:true,gameOver:false};
+  camera:{x:width/2,y:height/2},enemies:[],projectiles:[],kills:0,nextEnemyId:1,spawnTimer:.7,ready:true,gameOver:false};
 }
 export function getSurvivalCamera(runtime,viewportWidth,viewportHeight){
  const halfW=Math.max(1,viewportWidth)/2,halfH=Math.max(1,viewportHeight)/2;
