@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { worlds } from '../src/data/worlds.js';
 import { createSurvivalTrialConfig, getSurvivalDifficulty, SURVIVAL_TRIAL_DEFAULTS } from '../src/systems/survivalMode.js';
+import { createSurvivalMapRuntime, stepSurvivalMapRuntime } from '../src/systems/survivalMap.js';
 
 test('creates a separate Survival Trial config for a selected world and core', () => {
   const config = createSurvivalTrialConfig({ world: worlds[0], coreId: 'ember' });
@@ -75,7 +76,7 @@ test('prototype movement advances the player and clamps camera at map edges', ()
   assert.ok(map.camera.x >= 400 && map.camera.x <= map.width - 400);
 });
 
-import { createSurvivalMapRuntime, stepSurvivalMapRuntime } from '../src/systems/survivalMap.js';
+
 
 test('Survival Trial runtime spawns enemies outside the player and advances the horde', () => {
   const config = createSurvivalTrialConfig({ world: worlds[0], coreId: 'ember' });
@@ -98,7 +99,7 @@ test('Survival Trial auto-attack damages nearby enemies and records kills', () =
 });
 
 
-import { createSurvivalMapRuntime, stepSurvivalMapRuntime } from '../src/systems/survivalMap.js';
+
 
 test('Survival Trial XP pickup triggers a three-choice level-up', () => {
   const map = createSurvivalMapRuntime(createSurvivalTrialConfig({ world: worlds[0], coreId: 'ember' }));
