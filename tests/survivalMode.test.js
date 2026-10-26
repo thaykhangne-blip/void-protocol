@@ -65,7 +65,7 @@ test('world and screen coordinate transforms round-trip', () => {
   assert.ok(Math.abs(world.y - point.y) < 1e-9);
 });
 
-test('prototype movement advances the player and clamps camera at map edges', () => {
+test('Survival Trial map movement advances the player and clamps camera at map edges', () => {
   const config = createSurvivalTrialConfig({ world: worlds[0], coreId: 'frost' });
   const map = createSurvivalMapRuntime(config);
   const startX = map.player.x;
@@ -104,7 +104,7 @@ test('Survival Trial map director spawns and moves enemies while Campaign owns c
   assert.ok(map.enemies.length > 0);
   const enemy = map.enemies[0], start = { x: enemy.x, y: enemy.y };
   stepSurvivalMapRuntime(map, { viewportWidth: 800, viewportHeight: 600 }, 0.05);
-  assert.ok(Math.hypot(enemy.x-start.x, enemy.y-start.y) >= 0);
+  assert.ok(Math.hypot(enemy.x-start.x, enemy.y-start.y) > 0);
   assert.ok(map.enemies.every(item => Number.isFinite(item.r) && item.hp > 0));
 });
 
