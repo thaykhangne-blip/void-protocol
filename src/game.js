@@ -2211,26 +2211,20 @@ if(skillFx.some(fx=>fx.type==='aetherBlackSun'&&fx.life>0)){
  ctx.globalAlpha=1;for(let i=0;i<2;i++){const a=t*.72+i*Math.PI,x=Math.cos(a)*sep,y=Math.sin(a)*sep*.4;ctx.fillStyle='#000';ctx.beginPath();ctx.arc(x,y,br,0,Math.PI*2);ctx.fill();ctx.strokeStyle=i===0?'#ffffff':'#fff0a6';ctx.lineWidth=1.25;ctx.beginPath();ctx.arc(x,y,br+.65,0,Math.PI*2);ctx.stroke();}ctx.restore();
 }
 }else if(core?.id==='ember'){
-// Ember in-run overhaul: a white-hot cinder enclosed by layered flame petals.
-const t=performance.now()*.001, evo=Math.max(0,player.evoTier||0), heat=.5+.5*Math.sin(t*5.2);
+// Minimal Ember visual: one clean, warm glowing circle, no flame or leaf shapes.
+const pulse=.5+.5*Math.sin(performance.now()*.004);
 ctx.save();ctx.globalCompositeOperation='lighter';
-// Soft, compact corona keeps the player readable without a huge glow cloud.
-const corona=ctx.createRadialGradient(0,0,orbSize*.18,0,0,orbSize*2.7);
-corona.addColorStop(0,'rgba(255,246,190,.9)');corona.addColorStop(.24,'rgba(255,165,63,.55)');corona.addColorStop(.68,'rgba(255,83,31,.16)');corona.addColorStop(1,'rgba(255,65,25,0)');
-ctx.fillStyle=corona;ctx.beginPath();ctx.arc(0,0,orbSize*2.7,0,Math.PI*2);ctx.fill();
-// Three tapered, rotating flame tongues create a recognizable ember silhouette.
-for(let i=0;i<3;i++){
- const a=t*(i%2?-.42:.58)+i*Math.PI*2/3, inner=orbSize*.48, outer=orbSize*(1.55+heat*.16+(evo*.06));
- ctx.save();ctx.rotate(a);ctx.globalAlpha=.76+heat*.2;ctx.fillStyle=i===0?'#fff0a3':i===1?'#ff9c3d':'#ff572e';
- ctx.beginPath();ctx.moveTo(0,-inner);ctx.quadraticCurveTo(orbSize*.92,-outer*.62,0,-outer*1.12);ctx.quadraticCurveTo(-orbSize*.7,-outer*.55,0,-inner);ctx.fill();
- ctx.strokeStyle='#ffd77b';ctx.lineWidth=.8;ctx.globalAlpha=.7;ctx.beginPath();ctx.moveTo(0,-inner*.7);ctx.quadraticCurveTo(orbSize*.28,-outer*.5,0,-outer*.8);ctx.stroke();ctx.restore();
-}
-// Dense molten core with a clean bright center.
-ctx.globalAlpha=1;ctx.shadowBlur=0;ctx.fillStyle='#ff7a2d';ctx.beginPath();ctx.arc(0,0,orbSize*.92,0,Math.PI*2);ctx.fill();
-ctx.fillStyle='#ffd36b';ctx.beginPath();ctx.arc(-orbSize*.12,-orbSize*.12,orbSize*.65,0,Math.PI*2);ctx.fill();
-ctx.fillStyle='#fff9d8';ctx.beginPath();ctx.arc(-orbSize*.12,-orbSize*.12,orbSize*.34,0,Math.PI*2);ctx.fill();
-// Small orbiting cinders, kept to six for predictable frame cost.
-for(let i=0;i<6;i++){const a=-t*(.8+(i%3)*.14)+i*Math.PI/3,rr=orbSize*(1.75+(i%2)*.35),x=Math.cos(a)*rr,y=Math.sin(a)*rr*.82,size=i%3===0?1.8:1.15;ctx.globalAlpha=.52+.42*(.5+.5*Math.sin(t*7+i));ctx.fillStyle=i%2?'#ffb34b':'#fff0ad';ctx.fillRect(x-size/2,y-size/2,size,size);}
+const glow=ctx.createRadialGradient(0,0,orbSize*.12,0,0,orbSize*2.15);
+glow.addColorStop(0,'rgba(255,255,220,1)');
+glow.addColorStop(.22,'rgba(255,194,91,.78)');
+glow.addColorStop(.52,'rgba(255,126,43,.28)');
+glow.addColorStop(1,'rgba(255,90,24,0)');
+ctx.fillStyle=glow;ctx.beginPath();ctx.arc(0,0,orbSize*2.15,0,Math.PI*2);ctx.fill();
+ctx.globalAlpha=.75+pulse*.2;ctx.strokeStyle='#ff9c65';ctx.lineWidth=1.5;
+ctx.beginPath();ctx.arc(0,0,orbSize*(1.22+pulse*.04),0,Math.PI*2);ctx.stroke();
+ctx.globalAlpha=1;ctx.fillStyle='#ff9c65';ctx.beginPath();ctx.arc(0,0,orbSize,0,Math.PI*2);ctx.fill();
+ctx.fillStyle='#ffe2a0';ctx.beginPath();ctx.arc(-orbSize*.12,-orbSize*.12,orbSize*.72,0,Math.PI*2);ctx.fill();
+ctx.fillStyle='#fffdf0';ctx.beginPath();ctx.arc(-orbSize*.16,-orbSize*.16,orbSize*.4,0,Math.PI*2);ctx.fill();
 ctx.restore();}if(player.evoTier>0){ctx.strokeStyle=core?.color||'#fff';ctx.lineWidth=1.5;ctx.globalAlpha=.8;ctx.beginPath();ctx.arc(0,0,orbSize+4+(player.evoTier%2),0,Math.PI*2);ctx.stroke();ctx.globalAlpha=1;ctx.fillStyle='#fff';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('+'+player.evoTier,0,-orbSize-7);}const aimStarColor=core?.id==='ember'?'#ffcf78':core?.id==='frost'?'#aaf3ff':core?.id==='nova'?'#ffb477':core?.id==='nature'?'#a7ffb4':core?.id==='elemental'?'#ffffff':core?.id==='vengeance'?'#ff9aaa':core?.id==='flash'?'#fff2a8':'#ffbde9';const tip=orbSize+5,p=.8+.2*Math.sin(performance.now()*.012);ctx.save();ctx.translate(tip,0);ctx.rotate(performance.now()*.003);ctx.globalAlpha=.85+.15*p;ctx.fillStyle='#fff';ctx.strokeStyle=aimStarColor;ctx.lineWidth=.8;ctx.shadowColor=aimStarColor;ctx.shadowBlur=10;ctx.beginPath();ctx.moveTo(0,-3.8*p);ctx.lineTo(1.25,0);ctx.lineTo(0,3.8*p);ctx.lineTo(-1.25,0);ctx.closePath();ctx.fill();ctx.stroke();ctx.beginPath();ctx.moveTo(-2.5,0);ctx.lineTo(2.5,0);ctx.moveTo(0,-2.5);ctx.lineTo(0,2.5);ctx.stroke();ctx.restore();ctx.shadowBlur=0;ctx.restore();ctx.strokeStyle=(core?.color||'#5ce9ff')+'77';ctx.beginPath();ctx.arc(player.x,player.y,player.r+5,0,Math.PI*2);ctx.stroke();
 // Compact health/shield bars float above the player; no numbers and no circular health indicator.
 const barW=34,barH=4,barX=Math.round(player.x-barW/2),barY=Math.round(player.y-player.r-15);
