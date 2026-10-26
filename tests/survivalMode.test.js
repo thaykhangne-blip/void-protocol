@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { worlds } from '../src/data/worlds.js';
 import { createSurvivalTrialConfig, getSurvivalDifficulty, SURVIVAL_TRIAL_DEFAULTS } from '../src/systems/survivalMode.js';
-import { createSurvivalMapRuntime, stepSurvivalMapRuntime } from '../src/systems/survivalMap.js';
+
 
 test('creates a separate Survival Trial config for a selected world and core', () => {
   const config = createSurvivalTrialConfig({ world: worlds[0], coreId: 'ember' });
