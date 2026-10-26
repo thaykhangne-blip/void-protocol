@@ -880,6 +880,8 @@ function stepSurvivalCampaignAbilities(dt){
  if(!player)return;
  player.skillCooldown=Math.max(0,(player.skillCooldown||0)-dt);player.skillActive=Math.max(0,(player.skillActive||0)-dt);
  player.elementalEmpowerTimer=Math.max(0,(player.elementalEmpowerTimer||0)-dt);player.skillShield=Math.max(0,(player.skillShield||0)-dt);
+ if((player.dashCharges||0)<dashChargeCapacity()){dashCooldown=Math.max(0,dashCooldown-dt);if(dashCooldown<=0){player.dashCharges=Math.min(dashChargeCapacity(),(player.dashCharges||0)+1);dashCooldown=player.dashCharges<dashChargeCapacity()?dashCooldownDuration():0;}}
+ if(core?.id==='nature'&&(player.natureDroneCharges||0)<Math.min(2,player.natureDroneCap||2)){player.natureDroneChargeTimer=Math.max(0,(player.natureDroneChargeTimer||12)-dt);if(player.natureDroneChargeTimer<=0){player.natureDroneCharges++;player.natureDroneChargeTimer=player.natureDroneCharges<Math.min(2,player.natureDroneCap||2)?12:0;}}
  if(player.skillShield<=0)player.skillShieldHp=0;
  const tickingTypes=new Set(['fireRing','frostField','aetherWell','aetherBlackSun','flashStormField','lightField','snowstorm','prismConvergence']);
  for(const fx of skillFx){
@@ -900,6 +902,11 @@ function stepSurvivalCampaignAbilities(dt){
  }
  skillFx=skillFx.filter(fx=>fx.life>0);
  for(const fx of ultFx)fx.life-=dt;ultFx=ultFx.filter(fx=>fx.life>0);
+ for(const e of enemies){
+  if(e.hp<=0)continue;
+  if((e.bleedDuration||0)>0){e.bleedDuration=Math.max(0,e.bleedDuration-dt);e.bleedTick=(e.bleedTick||.5)-dt;if(e.bleedTick<=0&&e.bleedDuration>0){applyDamage(e,(e.bleedDps||0)*.5,'#ff526b',false,'CRIMSON REAVER BLEED');e.bleedTick=.5;}}
+  if((e.voidflareDotTimer||0)>0){e.voidflareDotTimer=Math.max(0,e.voidflareDotTimer-dt);e.voidflareDotTick=(e.voidflareDotTick||.5)-dt;if(e.voidflareDotTick<=0&&e.voidflareDotTimer>0){applyDamage(e,(e.voidflareDotDps||0)*.5,'#ff9ed8',false,'RADIANT FINALE DOT');e.voidflareDotTick=.5;}}
+ }
  for(const drone of natureDrones){
   if(drone.hp<=0)continue;drone.attackTimer=(drone.attackTimer??1.4)-dt;
   if(drone.attackTimer<=0){const target=enemies.filter(e=>e.hp>0).sort((a,b)=>dist(drone,a)-dist(drone,b))[0];if(target&&dist(drone,target)<CORE_TARGET_RANGE){applyDamage(target,drone.type==='support'?player.damage*.22:player.damage*.58,core?.color||'#70e58a',true,'NATURE DRONE');drone.attackTimer=drone.type==='support'?2.4:1.35;}}
