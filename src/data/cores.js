@@ -1,6 +1,6 @@
 /* Playable cores and elemental definitions. */
 export const cores=[
-{id:'ember',name:'EMBER CORE',glyph:'●',color:'#ff9c65',desc:'Heavy shots ignite enemies. Critical hits deal extra damage to burning targets.',perk:'Heavy hits · Burn · Slow fire rate',dmg:1.35,speed:.90,fireRate:.84,r:11,maxHp:100},
+{id:'ember',name:'EMBER CORE',glyph:'●',color:'#ff9c65',desc:'Heavy shots ignite enemies. Critical hits deal extra damage to burning targets.',perk:'Heavy hits · Burn · Slow ATK Speed',dmg:1.35,speed:.90,fireRate:.84,r:11,maxHp:100},
 {id:'frost',name:'FROST CORE',glyph:'❄',color:'#8cecff',desc:'Deal more damage while your shield is active. The bonus grows with your level.',perk:'1 Ice Bolt · DEF +18 · Crit 28% · Chill',dmg:.80,speed:1,fireRate:1,shots:1,r:6.5,maxHp:82,armor:18,critChance:.28},
 {id:'flash',name:'FLASH CORE',glyph:'ϟ',color:'#ffe875',desc:'Chain lightning makes enemies take more ultimate damage for 6 seconds.',perk:'Chain Lightning · Static Shock · Thunderfield · High Crit · Very Fast · Low HP',dmg:.62,speed:1.42,fireRate:1.38,shots:1,r:6,maxHp:62,armor:0,critChance:.38},
 {id:'nature',name:'NATURE CORE',glyph:'❧',color:'#70e58a',desc:'Each active drone increases your damage. Press E to summon attack and support drones.',perk:'Vine Bind · Support Drone · DPS Drone',dmg:0.92,speed:1.05,fireRate:1.0,shots:1,r:7,maxHp:90,critChance:.12},
