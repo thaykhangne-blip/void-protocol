@@ -166,7 +166,7 @@ export const voidWeapons = [
     glyph: '◌',
     description: 'GENERAL · CRITICAL CHANCE',
     stats: { atkPct: 0.05, hpPct: 0.08, armorPct: 0.08 },
-    passive: { name: 'Deadeye Alignment', effectId: 'general-pale-orbit', statKey: 'critChance', values: [0.06, 0.08, 0.10, 0.12, 0.14], description: 'Critical Rate: +6% / 8% / 10% / 12% / 14%.' }
+    passive: { name: 'Deadeye Alignment', effectId: 'general-pale-orbit', statKey: 'critChance', values: [0.06, 0.08, 0.10, 0.12, 0.14], description: 'Crit Chance: +6% / 8% / 10% / 12% / 14%.' }
   },
   {
     id: 'bastion-weave',
