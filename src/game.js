@@ -174,14 +174,14 @@ function showVoidWeaponCodex(){
      '<p class="void-weapon-codex-description">'+weapon.description+'</p>'+
      '<div class="void-weapon-codex-stats">'+(()=>{const refinementBonus=Math.max(0,Math.min(5,rank||0))*0.02;return '<span>ATK <b>+'+Math.round((weapon.stats.atkPct+refinementBonus)*100)+'%</b></span><span>MAX HP <b>+'+Math.round((weapon.stats.hpPct+refinementBonus)*100)+'%</b></span><span>DEF <b>+'+Math.round((weapon.stats.armorPct+refinementBonus)*100)+'%</b></span>'})()+'</div>'+
      '<div class="void-weapon-codex-passive"><small>'+weapon.passive.name+'</small><p>'+highlightVoidWeaponNumbers(weapon.passive.description)+'</p></div>'+
-     '<div class="void-weapon-codex-footer"><span>OWNED ×'+owned.copies+'</span><span>'+(rank>=MAX_VOID_WEAPON_REFINEMENT?'MAX REFINEMENT':(MAX_VOID_WEAPON_REFINEMENT-rank)+' RANKS TO MAX')+'</span></div>'+
+     '<div class="void-weapon-codex-footer"><span>OWNED ×'+owned.copies+'</span><span>'+(rank>=MAX_VOID_WEAPON_REFINEMENT?'MAX RANK':'RANK '+rank+' · '+(MAX_VOID_WEAPON_REFINEMENT-rank)+' TO MAX')+'</span></div>'+
      '<div class="void-weapon-codex-equipment">'+(equippedCores.length?'EQUIPPED · '+equippedCores.join(', '):'NOT CURRENTLY EQUIPPED')+'</div>')+
     '</article>';
   }).join('');
   modal.className='modal void-weapon-codex-modal';
   modal.innerHTML=
    '<div class="eyebrow">ARCHIVE / WEAPON REGISTRY</div><h2>VOID WEAPON CODEX</h2>'+
-   '<p>Recovered weapons reveal their identity, signature passive, and refinement record. Duplicate copies are consumed to refine a weapon, up to Rank V.</p>'+
+   '<p>Recovered weapons reveal their stats and passive effects. Refinement raises a weapon to Rank V, improving its listed stats and rank-scaled passive.</p>'+
    '<div class="void-weapon-codex-summary"><div><b>'+ownedCount+' / '+voidWeapons.length+'</b><small>WEAPONS DISCOVERED</small></div><div><b>'+refinedCount+'</b><small>WEAPONS REFINED</small></div><div><b>'+Object.keys(saveData.voidWeaponRefinements||{}).filter(id=>(saveData.voidWeaponRefinements[id]||0)>=MAX_VOID_WEAPON_REFINEMENT).length+'</b><small>MAX RANK</small></div></div>'+
    '<div class="void-weapon-codex-filters"><button type="button" data-weapon-category="all" class="'+(category==='all'?'active':'')+'">ALL CATEGORIES</button><button type="button" data-weapon-category="general" class="'+(category==='general'?'active':'')+'">GENERAL · '+voidWeapons.filter(w=>w.category==='general').length+'</button><button type="button" data-weapon-category="signature" class="'+(category==='signature'?'active':'')+'">SIGNATURE · '+voidWeapons.filter(w=>w.category!=='general').length+'</button></div>'+
    '<div class="void-weapon-codex-grid">'+(cards||'<div class="void-weapon-empty">NO ENTRIES IN THIS FILTER.</div>')+'</div>'+
