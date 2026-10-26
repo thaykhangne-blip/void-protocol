@@ -5,7 +5,7 @@
   "description": "Void Protocol, a cosmic action roguelike",
   "scripts": {
     "test": "node --test tests/voidWeapons.test.js tests/survivalMode.test.js",
-    "check": "node --check src/game.js && node --check src/abilities/autoAttacks/execute.js && node --check src/abilities/autoAttacks/flash.js && node --check src/abilities/autoAttacks/elemental.js && node --check src/abilities/autoAttacks/nature.js && node --check src/abilities/autoAttacks/nova.js && node --check src/abilities/autoAttacks/projectile.js && node --check src/data/story.js && node --check src/systems/narrative.js && node --check src/data/worlds.js && node --check src/data/cores.js && node --check src/data/perks.js && node --check src/data/voidWeapons.js && node --check src/systems/voidWeapons.js && node --check src/utils/geometry.js && node --check src/systems/ricochet.js && node --check src/systems/survivalMode.js",
+    "check": "node --check src/game.js && node --check src/abilities/autoAttacks/execute.js && node --check src/abilities/autoAttacks/flash.js && node --check src/abilities/autoAttacks/elemental.js && node --check src/abilities/autoAttacks/nature.js && node --check src/abilities/autoAttacks/nova.js && node --check src/abilities/autoAttacks/projectile.js && node --check src/data/story.js && node --check src/systems/narrative.js && node --check src/data/worlds.js && node --check src/data/cores.js && node --check src/data/perks.js && node --check src/data/voidWeapons.js && node --check src/systems/voidWeapons.js && node --check src/utils/geometry.js && node --check src/systems/ricochet.js && node --check src/systems/survivalMode.js && node --check src/systems/survivalMap.js",
     "serve": "python3 -m http.server 8000"
   },
   "type": "module"
