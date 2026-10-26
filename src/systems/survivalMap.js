@@ -152,7 +152,7 @@ export function stepSurvivalMapRuntime(runtime,input={},dt=1/60){
  }
  runtime.xpDrops=runtime.xpDrops.filter(o=>!o.collected&&o.life>0);
  if(!runtime.bigBossSpawned&&runtime.kills>=1000&&!runtime.enemies.some(enemy=>enemy.bossType))spawnSurvivalBoss(runtime);
- else if(runtime.kills>=runtime.nextBossAt&&!runtime.enemies.some(enemy=>enemy.bossType))spawnSurvivalBoss(runtime);
+ else if(!runtime.bigBossSpawned&&runtime.kills>=runtime.nextBossAt&&!runtime.enemies.some(enemy=>enemy.bossType))spawnSurvivalBoss(runtime);
  if(runtime.xp>=runtime.xpToNext){
   runtime.xp-=runtime.xpToNext;runtime.level++;runtime.xpToNext=Math.round(5+runtime.level*2.4);
   const pool=[
