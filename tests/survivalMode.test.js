@@ -88,59 +88,33 @@ test('Survival Trial runtime spawns enemies outside the player and advances the 
   assert.ok(map.enemies.every(enemy => Math.hypot(enemy.x-map.player.x, enemy.y-map.player.y) > 100));
 });
 
-test('Survival Trial auto-attack damages nearby enemies and records kills', () => {
-  const config = createSurvivalTrialConfig({ world: worlds[0], coreId: 'frost' });
-  const map = createSurvivalMapRuntime(config);
-  map.player.attackCooldown = 0;
-  map.enemies.push({ id: 999, x: map.player.x+105, y: map.player.y, radius: 10, hp: 1, maxHp: 1, speed: 0, damage: 0, attackCooldown: 1, elite: false, hitFlash: 0 });
-  for (let i=0; i<18 && map.kills===0; i++) stepSurvivalMapRuntime(map, { viewportWidth: 800, viewportHeight: 600, coreColor: '#8cecff' }, 0.05);
-  assert.equal(map.kills, 1);
-  assert.equal(map.enemies.some(enemy => enemy.id===999), false);
-});
-
-
-
-
-test('Survival Trial XP pickup triggers a three-choice level-up', () => {
+test('Survival Trial map runtime no longer owns combat or upgrade progression', () => {
   const map = createSurvivalMapRuntime(createSurvivalTrialConfig({ world: worlds[0], coreId: 'ember' }));
-  map.xp = map.xpToNext - 1;
-  map.xpDrops.push({ x: map.player.x, y: map.player.y, r: 5, value: 1, life: 10 });
-  stepSurvivalMapRuntime(map, { viewportWidth: 800, viewportHeight: 600 }, 0.05);
-  assert.equal(map.level, 2);
-  assert.equal(map.upgradeChoices.length, 3);
-  assert.ok(map.xpToNext > 5);
+  assert.equal('coreTrait' in map, false);
+  assert.equal('projectiles' in map, false);
+  assert.equal('upgradeChoices' in map, false);
+  assert.equal('attackCooldown' in map.player, false);
+  assert.equal(map.player.damage, undefined);
 });
 
-test('Survival Trial pauses combat while a level-up choice is pending', () => {
+test('Survival Trial map director spawns and moves enemies while Campaign owns combat', () => {
   const map = createSurvivalMapRuntime(createSurvivalTrialConfig({ world: worlds[0], coreId: 'frost' }));
-  map.upgradeChoices = [{ id: 'damage' }, { id: 'speed' }, { id: 'hull' }];
-  const before = map.elapsed;
-  stepSurvivalMapRuntime(map, { right: true, viewportWidth: 800, viewportHeight: 600 }, 0.05);
-  assert.equal(map.elapsed, before);
-  assert.equal(map.player.x, 1300);
+  map.spawnTimer = 0;
+  stepSurvivalMapRuntime(map, { viewportWidth: 800, viewportHeight: 600 }, 0.05);
+  assert.ok(map.enemies.length > 0);
+  const enemy = map.enemies[0], start = { x: enemy.x, y: enemy.y };
+  stepSurvivalMapRuntime(map, { viewportWidth: 800, viewportHeight: 600 }, 0.05);
+  assert.ok(Math.hypot(enemy.x-start.x, enemy.y-start.y) >= 0);
+  assert.ok(map.enemies.every(item => Number.isFinite(item.r) && item.hp > 0));
 });
 
-
-test('Survival Trial cores start with distinct signature combat profiles', () => {
-  const profiles = ['ember','frost','flash','nature','elemental','vengeance','remielle','nova']
-    .map(coreId => createSurvivalMapRuntime(createSurvivalTrialConfig({ world: worlds[0], coreId })));
-  assert.equal(new Set(profiles.map(map => map.coreTrait)).size, 8);
-  assert.ok(profiles.find(map => map.coreId === 'ember').player.damage > profiles.find(map => map.coreId === 'flash').player.damage);
-  assert.ok(profiles.find(map => map.coreId === 'flash').player.fireRate < profiles.find(map => map.coreId === 'ember').player.fireRate);
-  assert.ok(profiles.find(map => map.coreId === 'nova').player.speed > profiles.find(map => map.coreId === 'frost').player.speed);
-  assert.ok(profiles.find(map => map.coreId === 'frost').player.maxHp > profiles.find(map => map.coreId === 'flash').player.maxHp);
+test('Survival Trial XP collection is handed off to Campaign progression', () => {
+  const map = createSurvivalMapRuntime(createSurvivalTrialConfig({ world: worlds[0], coreId: 'ember' }));
+  map.xpDrops.push({ x: map.player.x, y: map.player.y, r: 5, value: 4, life: 10 });
+  stepSurvivalMapRuntime(map, { viewportWidth: 800, viewportHeight: 600 }, 0.05);
+  assert.equal(map.xpCollected, 4);
+  assert.equal(map.xpDrops.length, 0);
 });
-
-test('Survival Trial signature attacks attach their core effect to projectiles', () => {
-  const config = createSurvivalTrialConfig({ world: worlds[0], coreId: 'ember' });
-  const map = createSurvivalMapRuntime(config);
-  map.player.attackCooldown = 0;
-  map.enemies.push({ id: 998, x: map.player.x + 120, y: map.player.y, radius: 10, hp: 200, maxHp: 200, speed: 0, damage: 0, attackCooldown: 10, elite: false, hitFlash: 0 });
-  stepSurvivalMapRuntime(map, { viewportWidth: 800, viewportHeight: 600, coreColor: '#ff9c65' }, 0.05);
-  assert.equal(map.projectiles[0].trait, 'burn');
-  assert.ok(map.projectiles[0].damage >= 25);
-});
-
 
 test('Survival Trial spawns a miniboss at each 150-kill milestone and awards score', () => {
   const map = createSurvivalMapRuntime(createSurvivalTrialConfig({ world: worlds[0], coreId: 'frost' }));
@@ -162,11 +136,9 @@ test('Survival Trial spawns the big boss at 1,000 kills', () => {
   assert.equal(map.bigBossSpawned, true);
 });
 
-test('Survival Trial run score increases when enemies are defeated', () => {
+test('Survival Trial score is owned by the shared combat bridge, not the map simulator', () => {
   const map = createSurvivalMapRuntime(createSurvivalTrialConfig({ world: worlds[0], coreId: 'frost' }));
-  map.player.attackCooldown = 0;
-  map.enemies.push({ id: 777, x: map.player.x+105, y: map.player.y, radius: 10, hp: 1, maxHp: 1, speed: 0, damage: 0, attackCooldown: 10, elite: false, hitFlash: 0 });
-  for (let i=0; i<18 && map.kills===0; i++) stepSurvivalMapRuntime(map, { viewportWidth: 800, viewportHeight: 600, coreColor: '#8cecff' }, 0.05);
-  assert.equal(map.kills, 1);
-  assert.equal(map.score, 10);
+  assert.equal(map.score, 0);
+  assert.equal(map.kills, 0);
 });
+
