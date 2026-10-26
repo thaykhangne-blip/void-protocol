@@ -96,3 +96,25 @@ test('Survival Trial auto-attack damages nearby enemies and records kills', () =
   assert.equal(map.kills, 1);
   assert.equal(map.enemies.some(enemy => enemy.id===999), false);
 });
+
+
+import { createSurvivalMapRuntime, stepSurvivalMapRuntime } from '../src/systems/survivalMap.js';
+
+test('Survival Trial XP pickup triggers a three-choice level-up', () => {
+  const map = createSurvivalMapRuntime(createSurvivalTrialConfig({ world: worlds[0], coreId: 'ember' }));
+  map.xp = map.xpToNext - 1;
+  map.xpDrops.push({ x: map.player.x, y: map.player.y, r: 5, value: 1, life: 10 });
+  stepSurvivalMapRuntime(map, { viewportWidth: 800, viewportHeight: 600 }, 0.05);
+  assert.equal(map.level, 2);
+  assert.equal(map.upgradeChoices.length, 3);
+  assert.ok(map.xpToNext > 5);
+});
+
+test('Survival Trial pauses combat while a level-up choice is pending', () => {
+  const map = createSurvivalMapRuntime(createSurvivalTrialConfig({ world: worlds[0], coreId: 'frost' }));
+  map.upgradeChoices = [{ id: 'damage' }, { id: 'speed' }, { id: 'hull' }];
+  const before = map.elapsed;
+  stepSurvivalMapRuntime(map, { right: true, viewportWidth: 800, viewportHeight: 600 }, 0.05);
+  assert.equal(map.elapsed, before);
+  assert.equal(map.player.x, 1300);
+});
