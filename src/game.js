@@ -876,8 +876,37 @@ function startSurvivalMapPrototype(){
  survivalMapRuntime.player=player;enemies=survivalMapRuntime.enemies;survivalMapRuntime.lastXpCollected=0;currentWorld=selection.worldIndex;roomType='horde';roomObjective={target:Infinity,kills:0};roomTime=0;shootCd=0;dash=0;dashCooldown=0;
  hideModal();state='survivalmap';$('phase').textContent='SURVIVAL TRIAL';keys={};last=performance.now();updateUI();
 }
+function stepSurvivalCampaignAbilities(dt){
+ if(!player)return;
+ player.skillCooldown=Math.max(0,(player.skillCooldown||0)-dt);player.skillActive=Math.max(0,(player.skillActive||0)-dt);
+ player.elementalEmpowerTimer=Math.max(0,(player.elementalEmpowerTimer||0)-dt);player.skillShield=Math.max(0,(player.skillShield||0)-dt);
+ if(player.skillShield<=0)player.skillShieldHp=0;
+ const tickingTypes=new Set(['fireRing','frostField','aetherWell','aetherBlackSun','flashStormField','lightField','snowstorm','prismConvergence']);
+ for(const fx of skillFx){
+  fx.life=(fx.life??0)-dt;
+  if(!tickingTypes.has(fx.type)||fx.life<=0)continue;
+  fx.tickTimer=(fx.tickTimer??0)-dt;
+  if(fx.tickTimer>0)continue;
+  fx.tickTimer=fx.type==='fireRing'?.3:fx.type==='frostField'?.45:fx.type==='aetherWell'?.25:fx.type==='aetherBlackSun'?.35:fx.type==='flashStormField'?.28:fx.type==='lightField'?.3:fx.type==='snowstorm'?.5:.6;
+  const center=fx.type==='fireRing'||fx.type==='frostField'||fx.type==='flashStormField'||fx.type==='lightField'||fx.type==='snowstorm'||fx.type==='prismConvergence'?player:fx;
+  const radius=fx.radius||90;
+  for(const e of enemies){
+   if(e.hp<=0||dist(center,e)>radius+(e.r||0))continue;
+   if(fx.type==='frostField'||fx.type==='snowstorm'){e.slow=Math.max(e.slow||0,1.2);if(fx.type==='snowstorm'&&fx.life<.55)e.frozen=Math.max(e.frozen||0,1.25);}
+   if(fx.type==='aetherWell'||fx.type==='aetherBlackSun'){const d=Math.max(1,dist(center,e));e.x+=(center.x-e.x)/d*Math.min(150,d*1.8)*dt;e.y+=(center.y-e.y)/d*Math.min(150,d*1.8)*dt;}
+   const mult=fx.type==='fireRing'?.42:fx.type==='frostField'?.22:fx.type==='aetherWell'?.28:fx.type==='aetherBlackSun'?.38:fx.type==='flashStormField'?.32:fx.type==='lightField'?.24:fx.type==='snowstorm'?.34:.28;
+   applyDamage(e,fx.damage||player.damage*mult,fx.color||core?.color||'#8cecff',true,fx.type==='aetherWell'||fx.type==='aetherBlackSun'?'AETHER':fx.type==='fireRing'?'RING OF FIRE':fx.type==='snowstorm'?'SNOWSTORM':'CORE SKILL');
+  }
+ }
+ skillFx=skillFx.filter(fx=>fx.life>0);
+ for(const fx of ultFx)fx.life-=dt;ultFx=ultFx.filter(fx=>fx.life>0);
+ for(const drone of natureDrones){
+  if(drone.hp<=0)continue;drone.attackTimer=(drone.attackTimer??1.4)-dt;
+  if(drone.attackTimer<=0){const target=enemies.filter(e=>e.hp>0).sort((a,b)=>dist(drone,a)-dist(drone,b))[0];if(target&&dist(drone,target)<CORE_TARGET_RANGE){applyDamage(target,drone.type==='support'?player.damage*.22:player.damage*.58,core?.color||'#70e58a',true,'NATURE DRONE');drone.attackTimer=drone.type==='support'?2.4:1.35;}}
+ }
+}
 function stepSurvivalCampaignCombat(dt){
- const map=survivalMapRuntime;if(!map||!player)return;shootCd=Math.max(0,shootCd-dt);const screenMouse={x:mouse.x,y:mouse.y},aim=screenToWorld(screenMouse,map.camera,W,H);mouse.x=aim.x;mouse.y=aim.y;
+ const map=survivalMapRuntime;if(!map||!player)return;stepSurvivalCampaignAbilities(dt);shootCd=Math.max(0,shootCd-dt);const screenMouse={x:mouse.x,y:mouse.y},aim=screenToWorld(screenMouse,map.camera,W,H);mouse.x=aim.x;mouse.y=aim.y;
  if(autoShoot&&shootCd<=0&&enemies.some(e=>e.hp>0))shoot();
  for(const b of bullets){if(b.life<=0)continue;if(Number.isFinite(b.rangeLeft)){const speed=Math.hypot(b.vx,b.vy)||1,step=Math.min(dt,Math.max(0,b.rangeLeft)/speed);b.x+=b.vx*step;b.y+=b.vy*step;b.rangeLeft=Math.max(0,b.rangeLeft-speed*step);}else{b.x+=b.vx*dt;b.y+=b.vy*dt;}b.life-=dt;
   for(const e of enemies){if(e.hp<=0||(b.hitEnemies||[]).includes(e)||Math.hypot(b.x-e.x,b.y-e.y)>(e.r||e.radius||10)+(b.r||3))continue;(b.hitEnemies||(b.hitEnemies=[])).push(e);const before=e.hp;
@@ -1382,7 +1411,7 @@ skillFx=skillFx.filter(f=>f.life>0);
  for(const m of skillMissiles){m.life-=dt;let target=m.targetCore&&blackHole&&!blackHole.inactive&&blackHole.hp>0?blackHole:(m.targetRef&&m.targetRef.hp>0?m.targetRef:(m.targetId!=null?enemies.find(e=>e.hp>0&&e.id===m.targetId):null));if(!target&&!m.targetCore){target=enemies.filter(e=>e.hp>0).sort((a,b)=>dist(m,a)-dist(m,b))[0];if(target){m.targetId=target.id??null;m.targetRef=target;}}if(!target&&blackHole&&!blackHole.inactive&&blackHole.hp>0)target=blackHole;if(target){const dx=target.x-m.x,dy=target.y-m.y,d=Math.hypot(dx,dy)||1,turn=Math.min(1,dt*6.5);const tx=dx/d*m.speed,ty=dy/d*m.speed;m.vx+=(tx-m.vx)*turn;m.vy+=(ty-m.vy)*turn;m.x+=m.vx*dt;m.y+=m.vy*dt;if(d<target.r+m.r+5){const crit=!m.voidWeaponSeed&&!m.lightFeather&&Math.random()<(m.critChance??0.25);const missileDamage=m.damage*(crit?Math.max(1.8,player.critDamage||1.8):1);applyDamage(target,missileDamage,m.color||'#ffb84d',false,crit?(m.elementalMissile?'ELEMENTAL NOVA CRIT':m.lightFeather?'DAWN FEATHER CRIT':'HOMING CRIT'):(m.elementalMissile?'ELEMENTAL NOVA':m.lightFeather?'DAWN FEATHER':m.voidWeaponSeed?'PREDATORY BLOOM':'HOMING'));burst(m.x,m.y,crit?'#fff0a8':(m.color||'#ffb84d'),crit?12:7);if(m.voidWeaponSeed&&m.voidWeaponSeedSplash){for(const nearby of enemies){if(nearby!==target&&nearby.hp>0&&dist(nearby,target)<=76){applyDamage(nearby,missileDamage*.5,'#70e58a',false,'PREDATORY BLOOM SPLASH');burst(nearby.x,nearby.y,'#aaffb2',5);}}if(blackHole&&!blackHole.inactive&&blackHole.hp>0&&target!==blackHole&&dist(blackHole,target)<=76)applyDamage(blackHole,missileDamage*.5,'#70e58a',false,'PREDATORY BLOOM SPLASH');}if(m.lightFeather&&(m.extraPierce||0)>0){m.hitTargets=m.hitTargets||[];m.hitTargets.push(target===blackHole?'core':(target.id??target));const next=enemies.filter(e=>e.hp>0&&!m.hitTargets.includes(e.id)&&e!==target&&dist(e,m)<220).sort((a,b)=>dist(a,m)-dist(b,m))[0];if(next){m.targetRef=next;m.targetId=next.id??null;m.targetCore=next===blackHole;m.x=target.x;m.y=target.y;m.life=Math.max(m.life,.1);m.extraPierce--;continue;}}m.life=0;}}else{m.x+=m.vx*dt;m.y+=m.vy*dt;}}
  skillMissiles=skillMissiles.filter(m=>m.life>0&&m.x>-20&&m.x<W+20&&m.y>-20&&m.y<H+20);if(core.id==='frost'||core.id==='remielle')updateUI();}
 function castUltimate(){
- if(state!=='playing'||!player||!core)return;
+ if(!['playing','survivalmap'].includes(state)||!player||!core)return;
  const minimum=100;
  if(energy<minimum){notify(`ULTIMATE REQUIRES 100 ENERGY · ${energy}% CHARGED`);return;}
  sfx('ultimate');const spent=energy;energy=Math.min(100,(player.afterglowCapacitor||0)*8);const lv=ultLevel,energyPower=(.65+spent/100)*(1+lv*.18),center={x:player.x,y:player.y},ultRange=Math.min(520,Math.max(340,Math.min(W,H)*.55));const inUltRange=target=>!!target&&dist(center,target)<=ultRange+(target.r||0);ultCastFlash=.55;
