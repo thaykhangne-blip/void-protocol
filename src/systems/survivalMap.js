@@ -136,14 +136,14 @@ export function stepSurvivalMapRuntime(runtime,input={},dt=1/60){
    if(shot.trait==='chain'){let chained=0;for(const other of runtime.enemies){if(other!==enemy&&other.hp>0&&distance(enemy,other)<145&&chained<2){other.hp-=shot.damage*.55;other.hitFlash=.12;chained++;}}}
    if(shot.trait==='crystal'){runtime.crystals.push({x:enemy.x,y:enemy.y,life:3.2,timer:3.2});}
    if(shot.trait==='pierce'&&shot.pierce>0){shot.pierce--;shot.damage*=.65;}else shot.dead=true;
-   if(enemy.hp<=0){enemy.dead=true;runtime.kills++;runtime.xpDrops.push({x:enemy.x,y:enemy.y,r:5,value:enemy.elite?3:1,life:30});}
+   if(enemy.hp<=0){enemy.dead=true;registerSurvivalKill(runtime,enemy);}
    break;
   }}
  }
  runtime.projectiles=runtime.projectiles.filter(s=>!s.dead);
  runtime.enemies=runtime.enemies.filter(e=>!e.dead);
  if(runtime.coreTrait==='drone'){p.droneTimer-=step;if(p.droneTimer<=0&&runtime.enemies.length){const target=runtime.enemies.slice().sort((a,b)=>distance(p,a)-distance(p,b))[0];target.hp-=p.damage*.7;target.hitFlash=.12;p.droneTimer=1.8;if(target.hp<=0){target.dead=true;registerSurvivalKill(runtime,target);runtime.enemies=runtime.enemies.filter(e=>!e.dead);}}}
- if(runtime.coreTrait==='crystal'&&runtime.crystals.length){for(const crystal of runtime.crystals){crystal.timer-=step;crystal.life-=step;if(crystal.timer<=0){const target=runtime.enemies.filter(e=>e.hp>0&&distance(crystal,e)<210).sort((a,b)=>distance(crystal,a)-distance(crystal,b))[0];if(target){target.hp-=p.damage*1.25;target.hitFlash=.18;crystal.life=0;if(target.hp<=0){target.dead=true;runtime.kills++;runtime.xpDrops.push({x:target.x,y:target.y,r:5,value:target.elite?3:1,life:30});}}}}runtime.crystals=runtime.crystals.filter(c=>c.life>0&&c.timer>0);runtime.enemies=runtime.enemies.filter(e=>!e.dead);}
+ if(runtime.coreTrait==='crystal'&&runtime.crystals.length){for(const crystal of runtime.crystals){crystal.timer-=step;crystal.life-=step;if(crystal.timer<=0){const target=runtime.enemies.filter(e=>e.hp>0&&distance(crystal,e)<210).sort((a,b)=>distance(crystal,a)-distance(crystal,b))[0];if(target){target.hp-=p.damage*1.25;target.hitFlash=.18;crystal.life=0;if(target.hp<=0){target.dead=true;registerSurvivalKill(runtime,target);}}}}runtime.crystals=runtime.crystals.filter(c=>c.life>0&&c.timer>0);runtime.enemies=runtime.enemies.filter(e=>!e.dead);}
  for(const orb of runtime.xpDrops){
   const d=distance(p,orb),magnet=90+(runtime.magnet||0);
   if(d<magnet&&d>1){orb.x+=(p.x-orb.x)/d*Math.min(420,d*5)*step;orb.y+=(p.y-orb.y)/d*Math.min(420,d*5)*step;}
