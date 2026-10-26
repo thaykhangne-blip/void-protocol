@@ -4,13 +4,13 @@
 
 **A little light, a lot of things trying to kill it, and a company that would rather cut the budget than admit it was wrong.**
 
-[![Beta](https://img.shields.io/badge/status-beta-orange?style=for-the-badge)](https://github.com/thaykhangne-blip/void-explorer)
-[![Version](https://img.shields.io/badge/version-v0.7-blue?style=for-the-badge)](https://github.com/thaykhangne-blip/void-explorer/commits/main)
+[![Beta](https://img.shields.io/badge/status-beta-orange?style=for-the-badge)](https://github.com/thaykhangne-blip/void-protocol)
+[![Version](https://img.shields.io/badge/version-v0.7-blue?style=for-the-badge)](https://github.com/thaykhangne-blip/void-protocol/commits/main)
 [![JavaScript](https://img.shields.io/badge/JavaScript-ES6%2B-yellow?style=for-the-badge&logo=javascript&logoColor=111111)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![HTML5](https://img.shields.io/badge/HTML5-e34f26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
 [![CSS3](https://img.shields.io/badge/CSS3-1572b6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
 
-[Source code](https://github.com/thaykhangne-blip/void-explorer) · [Report a bug](https://github.com/thaykhangne-blip/void-explorer/issues) · [Recent changes](https://github.com/thaykhangne-blip/void-explorer/commits/main)
+[Source code](https://github.com/thaykhangne-blip/void-protocol) · [Report a bug](https://github.com/thaykhangne-blip/void-protocol/issues) · [Recent changes](https://github.com/thaykhangne-blip/void-protocol/commits/main)
 
 </div>
 
@@ -24,9 +24,9 @@ Void Protocol is a browser-based action roguelike built around quick combat, dis
 
 The game is still in beta. Things will break, balance will change, and some ideas will turn out to be less clever once they meet actual gameplay. That’s part of making a game.
 
-> **Current version:** Beta v0.7, build 700. This is an active work in progress, not a finished release.
+> **Current version:** Beta v0.7.2. This is an active work in progress, not a finished release.
 
-## Latest changes in v0.6
+## Recent changes
 
 ## v0.6 — Void Weapon balance and combat update
 
@@ -75,7 +75,7 @@ You’ll need a browser and a local web server. The game uses JavaScript modules
 Clone the repository:
 
 ```bash
-git clone https://github.com/thaykhangne-blip/void-explorer.git
+git clone https://github.com/thaykhangne-blip/void-protocol.git
 cd void-explorer
 ```
 
@@ -99,12 +99,12 @@ The code is split into separate files rather than packed into one enormous HTML 
 
 ## Where development stands
 
-The current beta is **v0.6 (build 600)**. Combat, enemy behaviour, room objectives, core balance, visuals, progression, and story are all still being worked on. Expect rough edges. If something is broken, unfair, confusing, or unexpectedly hilarious, a clear bug report with steps to reproduce it is useful.
+The current beta is **v0.7.2**. Combat, enemy behaviour, room objectives, core balance, visuals, progression, and story are all still being worked on. Expect rough edges. If something is broken, unfair, confusing, or unexpectedly hilarious, a clear bug report with steps to reproduce it is useful.
 
-- [Report a bug or suggest a feature](https://github.com/thaykhangne-blip/void-explorer/issues)
-- [Browse the source](https://github.com/thaykhangne-blip/void-explorer)
-- [See recent changes](https://github.com/thaykhangne-blip/void-explorer/commits/main)
-- [GitHub releases](https://github.com/thaykhangne-blip/void-explorer/releases) · [Tags](https://github.com/thaykhangne-blip/void-explorer/tags)
+- [Report a bug or suggest a feature](https://github.com/thaykhangne-blip/void-protocol/issues)
+- [Browse the source](https://github.com/thaykhangne-blip/void-protocol)
+- [See recent changes](https://github.com/thaykhangne-blip/void-protocol/commits/main)
+- [GitHub releases](https://github.com/thaykhangne-blip/void-protocol/releases) · [Tags](https://github.com/thaykhangne-blip/void-protocol/tags)
 
 ---
 
