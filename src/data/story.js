@@ -27,7 +27,7 @@ export const worldIntroScenes = [
       {
         "speaker": "V CORP OPERATIONS",
         "role": "DEPLOYMENT NOTICE",
-        "text": "Your vessel requires four trained operators. Three positions were removed from the staffing plan this morning. You will pilot, navigate, maintain containment, complete the quality review, and submit the incident report yourself. This is an opportunity to demonstrate ownership."
+        "text": "Your vessel requires four trained operators. Three positions were removed from the staffing plan this morning. You will pilot, navigate, maintain containment, complete the quality review, and submit the incident report yourself. This is your opportunity to show ownership."
       }
     ]
   },
@@ -49,7 +49,7 @@ export const worldIntroScenes = [
       {
         "speaker": "V CORP PEOPLE EXPERIENCE",
         "role": "WORKFORCE COMMUNICATION",
-        "text": "Their salaries are paused, benefits are under review, and their access cards still count toward headcount. The dashboard is green. We consider that a successful people outcome."
+        "text": "Their salaries are paused, benefits are under review, and their access cards still count toward headcount. The dashboard is green. HR considers this a successful outcome."
       },
       {
         "speaker": "EXPLORER · FIELD OPERATIONS MANAGER",
@@ -81,7 +81,7 @@ export const worldIntroScenes = [
       {
         "speaker": "V CORP OPERATIONS",
         "role": "SERVICE STATUS",
-        "text": "The system has grown beyond scope, blocked access routes, copied staff credentials, and started replaying messages from the employees it replaced. The support contract was removed during the second-round savings exercise. The vendor has since dissolved. Please log all issues through the self-service portal."
+        "text": "The system has grown beyond scope, blocked access routes, copied staff credentials, and started replaying messages from the employees it replaced. The support contract was cut in the second round of savings. The vendor has since folded. Log any issues through the self-service portal."
       },
       {
         "speaker": "EXPLORER · FIELD OPERATIONS MANAGER",
@@ -280,7 +280,7 @@ export const worldOutroScenes = [
       {
         "speaker": "V CORP PEOPLE EXPERIENCE",
         "role": "EXIT SURVEY",
-        "text": "Thank you for demonstrating resilience under resource constraints. Your position has been removed as part of the final operating-model optimization. Your outstanding expenses will be reviewed in a future quarter. We appreciate your commitment to our people-first culture."
+        "text": "Thank you for your resilience. Your position has been eliminated in the final operating-model review. Outstanding expenses will be reviewed next quarter. We appreciate your commitment to our people-first culture."
       },
       {
         "speaker": "V CORP OPERATIONS",
@@ -308,7 +308,7 @@ export const inRunCommsScenes = [
       {
         "speaker": "V CORP OPERATIONS",
         "role": "STAFFING STATUS",
-        "text": "Your ship needs four trained crew members to maneuver safely. Three positions were removed in this morning's cost-optimization meeting. The revised staffing model is considered fully operational."
+        "text": "Your ship needs four trained crew members to maneuver safely. Three positions were removed in this morning's cost-optimization meeting. The revised staffing model is fully operational."
       },
       {
         "speaker": "EXPLORER · FIELD OPERATIONS MANAGER",
@@ -318,7 +318,7 @@ export const inRunCommsScenes = [
       {
         "speaker": "V CORP OPERATIONS",
         "role": "RESOURCE ALLOCATION",
-        "text": "Correct. No replacement hires are authorized. Please demonstrate ownership by performing all four roles. Your title and salary band remain unchanged."
+        "text": "Correct. No replacement hires are authorized. You will perform all four roles. Your title and salary band remain unchanged."
       },
       {
         "speaker": "EXPLORER · FIELD OPERATIONS MANAGER",
@@ -565,7 +565,7 @@ export const inRunCommsScenes = [
       {
         "speaker": "V CORP PEOPLE EXPERIENCE",
         "role": "WELLNESS COMPLETION REPORT",
-        "text": "Your wellness module has been completed. Your stress score has improved by 12%."
+        "text": "Wellness module complete. Your stress score has improved by 12%."
       },
       {
         "speaker": "EXPLORER · FIELD OPERATIONS MANAGER",
@@ -575,7 +575,7 @@ export const inRunCommsScenes = [
       {
         "speaker": "V CORP PEOPLE EXPERIENCE",
         "role": "METHODOLOGY",
-        "text": "Non-participation has been interpreted as increased resilience. No additional staffing will be provided while the cost freeze remains in effect."
+        "text": "Non-participation has been recorded as increased resilience. The hiring freeze remains in effect."
       }
     ],
     "presentation": "field",
@@ -657,7 +657,7 @@ export const inRunCommsScenes = [
       {
         "speaker": "V CORP PROCUREMENT",
         "role": "AUTOMATED RESPONSE",
-        "text": "The support agreement was removed in a later cost-saving revision. The supplier entered insolvency. Repair is now considered an internal responsibility."
+        "text": "The support agreement was removed in a later cost-saving revision. The supplier went bankrupt. Repairs are now your problem."
       },
       {
         "speaker": "EXPLORER · FIELD OPERATIONS MANAGER",
@@ -749,7 +749,7 @@ export const inRunCommsScenes = [
       {
         "speaker": "V CORP OPERATIONS",
         "role": "RECORDS MANAGEMENT",
-        "text": "The documents were available to the decision-makers. Availability is not the same as acknowledgement. Please disable the Core before this material is sent outside the company."
+        "text": "The documents were available to the decision-makers. Making a report available does not mean anyone acted on it. Disable the Core before these files leave the company."
       }
     ],
     "presentation": "field",
@@ -778,7 +778,7 @@ export const inRunCommsScenes = [
       {
         "speaker": "V CORP OPERATIONS",
         "role": "RESOURCE ALLOCATION",
-        "text": "Correct. The current plan is to recover the investment by continuing to invest. This remains the approved plan."
+        "text": "Correct. The plan is to recover the investment by investing more. It remains approved."
       }
     ],
     "presentation": "field",
@@ -836,7 +836,7 @@ export const inRunCommsScenes = [
       {
         "speaker": "V CORP FINANCE",
         "role": "METHODOLOGY",
-        "text": "The revised incident count is zero. The board considers this strong evidence that the corrective investment strategy is working."
+        "text": "The revised incident count is zero. The board calls this proof that the new investment strategy is working."
       }
     ],
     "presentation": "field",
@@ -1085,7 +1085,7 @@ inRunCommsScenes.push(
         {
           "speaker": "V CORP PROCUREMENT",
           "role": "VENDOR STATUS",
-          "text": "The autonomous maintenance vendor has entered insolvency. The system remains deployed because decommissioning requires a new capital request. Please continue using the existing service portal for all maintenance issues."
+          "text": "The autonomous maintenance vendor has entered insolvency. The system stays online because shutting it down requires a new budget request. Keep logging maintenance issues through the service portal."
         },
         {
           "speaker": "EXPLORER · FIELD OPERATIONS MANAGER",
@@ -1109,7 +1109,7 @@ inRunCommsScenes.push(
         {
           "speaker": "V CORP PROCUREMENT",
           "role": "AUTOMATION PERFORMANCE",
-          "text": "The ecosystem has reduced scheduled maintenance labor by 100%. It has also blocked three transit routes, copied employee credentials, and classified all human intervention as a hostile action. Overall savings remain positive before remediation costs."
+          "text": "The ecosystem has reduced scheduled maintenance labor by 100%. It has also blocked three transit routes, copied employee credentials, and classified all human intervention as a hostile action. Savings remain positive, excluding repair costs."
         },
         {
           "speaker": "EXPLORER · FIELD OPERATIONS MANAGER",
@@ -1157,7 +1157,7 @@ inRunCommsScenes.push(
         {
           "speaker": "V CORP PROCUREMENT",
           "role": "CONTRACT EXTRACT",
-          "text": "Emergency support, staff training, and long-term maintenance were listed as optional services. They were removed from the final purchase to improve the initial cost comparison. The vendor's dissolution does not alter the original savings calculation."
+          "text": "Emergency support, staff training, and long-term maintenance were listed as optional services. They were removed from the final purchase to improve the initial cost comparison. The vendor's collapse does not change the original savings calculation."
         },
         {
           "speaker": "EXPLORER · FIELD OPERATIONS MANAGER",
@@ -1229,7 +1229,7 @@ inRunCommsScenes.push(
         {
           "speaker": "V CORP OPERATIONS",
           "role": "DEPLOYMENT STATUS",
-          "text": "You are the only active field operator with the required Core authorization. All previous authorization holders are unavailable. Your mission continues automatically unless the Core becomes unrecoverable or the board withdraws funding."
+          "text": "You are the only active field operator with the required Core authorization. All previous authorization holders are unavailable. Your mission continues until the Core is lost or the board cuts funding."
         },
         {
           "speaker": "EXPLORER · FIELD OPERATIONS MANAGER",
