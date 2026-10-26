@@ -74,3 +74,25 @@ test('prototype movement advances the player and clamps camera at map edges', ()
   assert.ok(map.player.x >= map.player.radius);
   assert.ok(map.camera.x >= 400 && map.camera.x <= map.width - 400);
 });
+
+import { createSurvivalMapRuntime, stepSurvivalMapRuntime } from '../src/systems/survivalMap.js';
+
+test('Survival Trial runtime spawns enemies outside the player and advances the horde', () => {
+  const config = createSurvivalTrialConfig({ world: worlds[0], coreId: 'ember' });
+  const map = createSurvivalMapRuntime(config);
+  map.spawnTimer = 0;
+  stepSurvivalMapRuntime(map, { viewportWidth: 800, viewportHeight: 600, coreColor: '#ff9c65' }, 0.05);
+  assert.ok(map.enemies.length > 0);
+  assert.ok(map.enemies.every(enemy => Number.isFinite(enemy.id) && enemy.hp > 0));
+  assert.ok(map.enemies.every(enemy => Math.hypot(enemy.x-map.player.x, enemy.y-map.player.y) > 100));
+});
+
+test('Survival Trial auto-attack damages nearby enemies and records kills', () => {
+  const config = createSurvivalTrialConfig({ world: worlds[0], coreId: 'frost' });
+  const map = createSurvivalMapRuntime(config);
+  map.player.attackCooldown = 0;
+  map.enemies.push({ id: 999, x: map.player.x+105, y: map.player.y, radius: 10, hp: 1, maxHp: 1, speed: 0, damage: 0, attackCooldown: 1, elite: false, hitFlash: 0 });
+  for (let i=0; i<18 && map.kills===0; i++) stepSurvivalMapRuntime(map, { viewportWidth: 800, viewportHeight: 600, coreColor: '#8cecff' }, 0.05);
+  assert.equal(map.kills, 1);
+  assert.equal(map.enemies.some(enemy => enemy.id===999), false);
+});
