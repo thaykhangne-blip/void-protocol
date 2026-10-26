@@ -119,3 +119,24 @@ test('Survival Trial pauses combat while a level-up choice is pending', () => {
   assert.equal(map.elapsed, before);
   assert.equal(map.player.x, 1300);
 });
+
+
+test('Survival Trial cores start with distinct signature combat profiles', () => {
+  const profiles = ['ember','frost','flash','nature','elemental','vengeance','remielle','nova']
+    .map(coreId => createSurvivalMapRuntime(createSurvivalTrialConfig({ world: worlds[0], coreId })));
+  assert.equal(new Set(profiles.map(map => map.coreTrait)).size, 8);
+  assert.ok(profiles.find(map => map.coreId === 'ember').player.damage > profiles.find(map => map.coreId === 'flash').player.damage);
+  assert.ok(profiles.find(map => map.coreId === 'flash').player.fireRate < profiles.find(map => map.coreId === 'ember').player.fireRate);
+  assert.ok(profiles.find(map => map.coreId === 'nova').player.speed > profiles.find(map => map.coreId === 'frost').player.speed);
+  assert.ok(profiles.find(map => map.coreId === 'frost').player.maxHp > profiles.find(map => map.coreId === 'flash').player.maxHp);
+});
+
+test('Survival Trial signature attacks attach their core effect to projectiles', () => {
+  const config = createSurvivalTrialConfig({ world: worlds[0], coreId: 'ember' });
+  const map = createSurvivalMapRuntime(config);
+  map.player.attackCooldown = 0;
+  map.enemies.push({ id: 998, x: map.player.x + 120, y: map.player.y, radius: 10, hp: 200, maxHp: 200, speed: 0, damage: 0, attackCooldown: 10, elite: false, hitFlash: 0 });
+  stepSurvivalMapRuntime(map, { viewportWidth: 800, viewportHeight: 600, coreColor: '#ff9c65' }, 0.05);
+  assert.equal(map.projectiles[0].trait, 'burn');
+  assert.ok(map.projectiles[0].damage >= 25);
+});
