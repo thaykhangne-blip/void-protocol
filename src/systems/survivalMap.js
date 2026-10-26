@@ -18,7 +18,7 @@ export function createSurvivalMapRuntime(config){
  ];
  return {world:{...config.world},coreId:config.coreId,width,height,obstacles,landmarks,elapsed:0,
   player:{x:width/2,y:height/2,radius:12,speed:260,hp:100,maxHp:100,damage:18,fireRate:.55,attackCooldown:.2,invulnerable:0},
-  camera:{x:width/2,y:height/2},enemies:[],projectiles:[],kills:0,nextEnemyId:1,spawnTimer:.7,ready:true,gameOver:false};
+  camera:{x:width/2,y:height/2},enemies:[],projectiles:[],xpDrops:[],xp:0,xpToNext:5,level:1,upgradeChoices:null,kills:0,nextEnemyId:1,spawnTimer:.7,ready:true,gameOver:false};
 }
 export function getSurvivalCamera(runtime,viewportWidth,viewportHeight){
  const halfW=Math.max(1,viewportWidth)/2,halfH=Math.max(1,viewportHeight)/2;
@@ -49,7 +49,7 @@ function spawnEnemy(runtime,viewportWidth,viewportHeight){
  return false;
 }
 export function stepSurvivalMapRuntime(runtime,input={},dt=1/60){
- if(!runtime?.ready||runtime.gameOver)return runtime;
+ if(!runtime?.ready||runtime.gameOver||runtime.upgradeChoices)return runtime;
  const step=Math.min(.05,Math.max(0,Number(dt)||0));runtime.elapsed+=step;
  const p=runtime.player;p.invulnerable=Math.max(0,p.invulnerable-step);
  const dx0=(input.right?1:0)-(input.left?1:0),dy0=(input.down?1:0)-(input.up?1:0);
@@ -93,9 +93,27 @@ export function stepSurvivalMapRuntime(runtime,input={},dt=1/60){
  for(const shot of runtime.projectiles){
   shot.x+=shot.vx*step;shot.y+=shot.vy*step;shot.life-=step;
   if(shot.life<=0||shot.x<0||shot.y<0||shot.x>runtime.width||shot.y>runtime.height)shot.dead=true;
-  for(const enemy of runtime.enemies){if(enemy.hp>0&&distance(shot,enemy)<shot.r+enemy.radius){enemy.hp-=shot.damage;enemy.hitFlash=.12;shot.dead=true;if(enemy.hp<=0){enemy.dead=true;runtime.kills++;}break;}}
+  for(const enemy of runtime.enemies){if(enemy.hp>0&&distance(shot,enemy)<shot.r+enemy.radius){enemy.hp-=shot.damage;enemy.hitFlash=.12;shot.dead=true;if(enemy.hp<=0){enemy.dead=true;runtime.kills++;runtime.xpDrops.push({x:enemy.x,y:enemy.y,r:5,value:enemy.elite?3:1,life:30});}break;}}
  }
  runtime.projectiles=runtime.projectiles.filter(s=>!s.dead);
  runtime.enemies=runtime.enemies.filter(e=>!e.dead);
+ for(const orb of runtime.xpDrops){
+  const d=distance(p,orb),magnet=90+(runtime.magnet||0);
+  if(d<magnet&&d>1){orb.x+=(p.x-orb.x)/d*Math.min(420,d*5)*step;orb.y+=(p.y-orb.y)/d*Math.min(420,d*5)*step;}
+  if(d<p.radius+orb.r+5){orb.collected=true;runtime.xp+=orb.value;}
+  orb.life-=step;
+ }
+ runtime.xpDrops=runtime.xpDrops.filter(o=>!o.collected&&o.life>0);
+ if(runtime.xp>=runtime.xpToNext){
+  runtime.xp-=runtime.xpToNext;runtime.level++;runtime.xpToNext=Math.round(5+runtime.level*2.4);
+  const pool=[
+   {id:'damage',title:'OVERCHARGED SHOTS',desc:'Attack damage +20%',color:'#ffe38a'},
+   {id:'fireRate',title:'ACCELERATED CYCLE',desc:'Attack speed +15%',color:'#c29aff'},
+   {id:'speed',title:'KINETIC DRIVE',desc:'Movement speed +12%',color:'#ff8fcb'},
+   {id:'hull',title:'REACTIVE PLATING',desc:'Max hull +20 and restore 20 HP',color:'#83ffc5'},
+   {id:'magnet',title:'MAGNETAR FIELD',desc:'Collect XP from farther away',color:'#72f6ff'}
+  ];
+  runtime.upgradeChoices=pool.sort(()=>Math.random()-.5).slice(0,3);
+ }
  return runtime;
 }
