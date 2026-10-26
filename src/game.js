@@ -235,7 +235,7 @@ function showWorldSelect(){
      <p class="world-holo-description" id="worldHoloDescription" aria-live="polite"></p>
      <div class="world-holo-readouts"><div><small>ROOMS</small><b id="worldHoloRooms">20</b></div><div><small>BEST CLEAR</small><b id="worldHoloBest">0 / 20</b></div><div><small>THREAT</small><b id="worldHoloThreat">MODERATE</b></div></div>
      <div class="world-holo-lock" id="worldHoloLock"></div>
-     <button class="world-holo-deploy" id="worldHoloDeploy">DEPLOY TO WORLD <span>↗</span></button>
+     <button class="world-holo-deploy" id="worldHoloDeploy">${selectedGameMode==='survival'?'SELECT BATTLEFIELD':'DEPLOY TO WORLD'} <span>↗</span></button>
    </div>
  </div>
  <div class="world-holo-navigation"><button type="button" class="world-holo-step" id="worldHoloPrev" aria-label="Previous world">←</button><div class="world-holo-track" id="worldHoloTrack">${worlds.map((w,i)=>`<button type="button" class="world-holo-node" data-holo-world="${i}" style="--world-accent:${w.accent}" aria-label="Select ${w.name}"><span>${String(i+1).padStart(2,'0')}</span><b>${w.name}</b><i></i></button>`).join('')}</div><button type="button" class="world-holo-step" id="worldHoloNext" aria-label="Next world">→</button></div>
