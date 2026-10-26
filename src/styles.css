@@ -2480,3 +2480,28 @@ button.global-back-button { transition: opacity .18s ease; }
 
 /* The hologram motifs are the focal point; hide the legacy center glyph for every core. */
 #modal.core-hologram-modal #coreHoloGlyph{display:none!important}
+
+
+/* Survival Trial menu foundation */
+.survival-menu-button{display:flex!important;align-items:center;gap:10px;position:relative;border-color:#7f72d8!important;background:linear-gradient(100deg,rgba(83,67,158,.24),rgba(9,13,30,.78))!important}
+.survival-menu-button .menu-icon{color:#c5b7ff;text-shadow:0 0 12px #9887ff88}
+.survival-menu-button small{margin-left:auto;color:#a99de0;font-size:9px;letter-spacing:.12em;font-weight:700}
+.survival-menu-button:hover{border-color:#b4a7ff!important;box-shadow:0 0 22px #7868e52b}
+.survival-ready-modal{width:min(780px,94vw)!important;max-height:min(88vh,850px);overflow:auto}
+.survival-ready-modal h2{margin-bottom:8px}
+.survival-ready-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:22px 0}
+.survival-ready-world,.survival-ready-core{min-width:0;padding:18px;border:1px solid color-mix(in srgb,var(--world-accent) 48%,transparent);background:linear-gradient(145deg,color-mix(in srgb,var(--world-accent) 9%,#080b18),rgba(5,8,18,.88));border-radius:4px}
+.survival-ready-world>span,.survival-ready-core>span{display:block;color:var(--world-accent);font-size:32px;text-shadow:0 0 20px color-mix(in srgb,var(--world-accent) 35%,transparent);margin-bottom:12px}
+.survival-ready-world>small,.survival-ready-core>small{display:block;color:#8795b5;font-size:9px;letter-spacing:.18em;margin-bottom:6px}
+.survival-ready-world>b,.survival-ready-core>b{display:block;color:#edf1ff;font-size:17px;letter-spacing:.08em}
+.survival-ready-world>p,.survival-ready-core>p{font-size:12px;line-height:1.55;color:#9aa7c4;margin:8px 0 0}
+.survival-foundation-list{display:grid;gap:8px;margin:18px 0 22px}
+.survival-foundation-list>div{display:flex;align-items:center;gap:12px;padding:11px 13px;border:1px solid #252d48;background:#080c1a}
+.survival-foundation-list>div>i{font-style:normal;color:#8c82ff;font-size:12px;font-weight:800}
+.survival-foundation-list>div>span{display:grid;gap:3px;min-width:0}
+.survival-foundation-list b{font-size:11px;letter-spacing:.1em;color:#dce4ff}
+.survival-foundation-list small{font-size:11px;color:#7f8baa}
+.survival-foundation-list em{font-style:normal;font-size:9px;letter-spacing:.12em;color:#9a90d8;margin-left:auto}
+.survival-ready-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+.survival-ready-actions .world-holo-deploy{flex:1 1 220px;opacity:.55;cursor:not-allowed}
+@media(max-width:600px){.survival-menu-button{flex-wrap:wrap}.survival-menu-button small{width:100%;margin-left:31px}.survival-ready-summary{grid-template-columns:1fr}.survival-ready-actions>*{flex:1 1 100%}.survival-foundation-list>div{align-items:flex-start}.survival-foundation-list em{font-size:8px}}
