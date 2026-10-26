@@ -2225,6 +2225,22 @@ ctx.beginPath();ctx.arc(0,0,orbSize*(1.22+pulse*.04),0,Math.PI*2);ctx.stroke();
 ctx.globalAlpha=1;ctx.fillStyle='#ff9c65';ctx.beginPath();ctx.arc(0,0,orbSize,0,Math.PI*2);ctx.fill();
 ctx.fillStyle='#ffe2a0';ctx.beginPath();ctx.arc(-orbSize*.12,-orbSize*.12,orbSize*.72,0,Math.PI*2);ctx.fill();
 ctx.fillStyle='#fffdf0';ctx.beginPath();ctx.arc(-orbSize*.16,-orbSize*.16,orbSize*.4,0,Math.PI*2);ctx.fill();
+// Tiny glowing cinders drift and orbit around the circle.
+const emberTime=performance.now()*.001;
+for(let i=0;i<12;i++){
+ const seed=i*2.399963;
+ const drift=(emberTime*(.18+(i%4)*.045)+i*.173)%1;
+ const angle=seed+emberTime*(i%2?.22:-.16);
+ const radius=orbSize*(1.28+drift*1.18);
+ const px=Math.cos(angle)*radius;
+ const py=Math.sin(angle)*radius*.82-drift*orbSize*.45;
+ const size=(i%4===0?1.8:1.05)*(1-drift*.35);
+ ctx.globalAlpha=(.68*(1-drift))*(.72+.28*Math.sin(emberTime*8+i));
+ ctx.fillStyle=i%3===0?'#fff0ad':i%3===1?'#ffb34b':'#ff7433';
+ ctx.shadowColor=ctx.fillStyle;ctx.shadowBlur=3;
+ ctx.beginPath();ctx.arc(px,py,size,0,Math.PI*2);ctx.fill();
+}
+ctx.shadowBlur=0;ctx.globalAlpha=1;
 ctx.restore();}if(player.evoTier>0){ctx.strokeStyle=core?.color||'#fff';ctx.lineWidth=1.5;ctx.globalAlpha=.8;ctx.beginPath();ctx.arc(0,0,orbSize+4+(player.evoTier%2),0,Math.PI*2);ctx.stroke();ctx.globalAlpha=1;ctx.fillStyle='#fff';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('+'+player.evoTier,0,-orbSize-7);}const aimStarColor=core?.id==='ember'?'#ffcf78':core?.id==='frost'?'#aaf3ff':core?.id==='nova'?'#ffb477':core?.id==='nature'?'#a7ffb4':core?.id==='elemental'?'#ffffff':core?.id==='vengeance'?'#ff9aaa':core?.id==='flash'?'#fff2a8':'#ffbde9';const tip=orbSize+5,p=.8+.2*Math.sin(performance.now()*.012);ctx.save();ctx.translate(tip,0);ctx.rotate(performance.now()*.003);ctx.globalAlpha=.85+.15*p;ctx.fillStyle='#fff';ctx.strokeStyle=aimStarColor;ctx.lineWidth=.8;ctx.shadowColor=aimStarColor;ctx.shadowBlur=10;ctx.beginPath();ctx.moveTo(0,-3.8*p);ctx.lineTo(1.25,0);ctx.lineTo(0,3.8*p);ctx.lineTo(-1.25,0);ctx.closePath();ctx.fill();ctx.stroke();ctx.beginPath();ctx.moveTo(-2.5,0);ctx.lineTo(2.5,0);ctx.moveTo(0,-2.5);ctx.lineTo(0,2.5);ctx.stroke();ctx.restore();ctx.shadowBlur=0;ctx.restore();ctx.strokeStyle=(core?.color||'#5ce9ff')+'77';ctx.beginPath();ctx.arc(player.x,player.y,player.r+5,0,Math.PI*2);ctx.stroke();
 // Compact health/shield bars float above the player; no numbers and no circular health indicator.
 const barW=34,barH=4,barX=Math.round(player.x-barW/2),barY=Math.round(player.y-player.r-15);
