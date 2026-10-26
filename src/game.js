@@ -1671,7 +1671,7 @@ function perkRankMarkup(){
   ['Glass Cannon',buildCount('GLASS CANNON'),'⚔','ATK +35%, but Max HP -12 per rank.'],
   ['Core Resonance',perkRank('CORE RESONANCE'),'✹','Enhances core-related combat effects.'],
   ['Pyre Cascade',player.pyreCascade||0,'♨','Ember exclusive: burn potency +18% per rank.'],
-  ['Crystal Resonance',player.crystalResonance||0,'❄','Frost exclusive: armor and critical chance increased per rank.'],
+  ['Crystal Resonance',player.crystalResonance||0,'❄','Frost exclusive: DEF and Crit Chance increase per rank.'],
   ['Gravitational Lens',player.prismaticOverdrive||0,'◉','Aether exclusive: black-hole radius and collapse damage increase per rank.']
  ];
  const active=rows.filter(([,rank])=>Number(rank)>0);
