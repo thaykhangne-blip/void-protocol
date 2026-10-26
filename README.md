@@ -76,7 +76,7 @@ Clone the repository:
 
 ```bash
 git clone https://github.com/thaykhangne-blip/void-protocol.git
-cd void-explorer
+cd void-protocol
 ```
 
 Start a local server. If Python is installed, this works:
