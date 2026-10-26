@@ -222,7 +222,7 @@ function showWorldSelect(){
  modal.className='modal world-hologram-modal';
  modal.innerHTML=`<button type="button" class="world-holo-back" id="worldHoloBack" aria-label="Back to main menu" title="Back to main menu">←</button><div class="world-holo-topline"><span class="eyebrow">CAMPAIGN SELECT / PLANETARY DATABASE</span><span class="world-holo-signal"><i></i> HOLO LINK STABLE</span></div>
  <h2>CHOOSE YOUR WORLD</h2>
- <p class="world-holo-subtitle">Select a destination. Every world tells a different story.</p>
+ <p class="world-holo-subtitle">Choose a destination. Each world brings new threats.</p>
  <div class="world-holo-stage">
    <div class="world-holo-scanline"></div>
    <div class="world-holo-planet-wrap"><div class="world-holo-orbit world-holo-orbit-a"></div><div class="world-holo-orbit world-holo-orbit-b"></div><div class="world-holo-planet" id="worldHoloPlanet"><div class="world-holo-planet-surface"></div><div class="world-holo-atmosphere"></div><div class="world-holo-planet-ring"></div></div><div class="world-holo-planet-shadow"></div><div class="world-holo-coordinate" id="worldHoloCoords">SECTOR 01 / 04</div></div>
@@ -297,10 +297,10 @@ function completeWorld(){
  const showWorldResult=()=>{
   if(completedIndex<3){
    const next=worlds[completedIndex+1];state='worldcomplete';
-   showModal('WORLD CLEARED',w.name+' CONQUERED','All '+w.rooms+' rooms cleared. '+next.name+' unlocked. Your build resets in each world.',[{glyph:next.symbol,color:next.accent,title:'ENTER '+next.name,desc:'Begin a new run in '+next.name+' · '+next.rooms+' rooms.',action:()=>{currentWorld=completedIndex+1;saveData.lastWorld=currentWorld;persist();run++;start()}},{glyph:'⌂',color:'#72f6ff',title:'CAMPAIGN MAP',desc:'Return to world select.',action:showWorldSelect}]);
+   showModal('WORLD CLEARED',w.name+' CONQUERED','All '+w.rooms+' rooms cleared. '+next.name+' unlocked. Your build resets when you enter a new world.',[{glyph:next.symbol,color:next.accent,title:'ENTER '+next.name,desc:'Start '+next.name+' · '+next.rooms+' rooms.',action:()=>{currentWorld=completedIndex+1;saveData.lastWorld=currentWorld;persist();run++;start()}},{glyph:'⌂',color:'#72f6ff',title:'CAMPAIGN MAP',desc:'Return to world select.',action:showWorldSelect}]);
   }else{
    state='worldcomplete';
-   showModal('CAMPAIGN COMPLETE','THE VOID IS QUIET','Campaign complete. V Corp has scheduled a follow-up meeting to celebrate its incident response.',[{glyph:'↻',color:'#72f6ff',title:'PLAY AGAIN',desc:'Return to the world map and choose a fresh run.',action:showWorldSelect},{glyph:'⌂',color:'#ffe38a',title:'MAIN MENU',desc:'Return to the title screen.',action:showMainMenu}]);
+   showModal('CAMPAIGN COMPLETE','THE VOID IS QUIET','Campaign complete. V Corp has scheduled a meeting to congratulate itself on the incident response.',[{glyph:'↻',color:'#72f6ff',title:'PLAY AGAIN',desc:'Choose a world and start a new run.',action:showWorldSelect},{glyph:'⌂',color:'#ffe38a',title:'MAIN MENU',desc:'Return to the title screen.',action:showMainMenu}]);
   }
  };
  const outro=worldOutroScenes[completedIndex];
