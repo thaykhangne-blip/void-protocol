@@ -63,7 +63,7 @@ html,body{margin:0!important;width:100%;height:100%;overflow:hidden!important;ba
 </head><body><div id="voidLoader" role="status" aria-live="polite" aria-label="Loading Void Protocol">
  <div class="void-loader-content">
   <div class="void-loader-mark">VOID PROTOCOL</div>
-  <div class="void-loader-subtitle">CONTAINMENT BOOT SEQUENCE</div>
+  <div class="void-loader-subtitle">INITIALIZING</div>
   <div class="void-loader-orbit" aria-hidden="true">
    <svg viewBox="0 0 180 180">
     <circle cx="90" cy="90" r="70" fill="none" stroke="#20243d" stroke-width="1.5"/>
@@ -74,16 +74,16 @@ html,body{margin:0!important;width:100%;height:100%;overflow:hidden!important;ba
    <div class="void-loader-event-horizon"></div>
   </div>
   <div class="void-loader-progress"><span id="voidLoaderPercent">0</span><span class="void-loader-percent">%</span></div>
-  <div id="voidLoaderPhase" class="void-loader-phase">PREPARING THE VOID</div>
-  <div id="voidLoaderDetails" class="void-loader-details">WAITING FOR LOCAL SYSTEMS</div>
+  <div id="voidLoaderPhase" class="void-loader-phase">LOADING GAME</div>
+  <div id="voidLoaderDetails" class="void-loader-details">CHECKING GAME FILES</div>
   <div id="voidLoaderManifest" class="void-loader-manifest" aria-label="Loading components"></div>
   <div class="void-loader-track" aria-hidden="true"><div id="voidLoaderBar"></div></div>
-  <button type="button" id="voidLoaderRetry" class="void-loader-retry">RETRY INITIALIZATION</button>
+  <button type="button" id="voidLoaderRetry" class="void-loader-retry">TRY AGAIN</button>
  </div>
 </div>
 <div class="wrap">
-<header><div><h1>VOID PROTOCOL</h1><p>A tiny cosmic action roguelike. Consume the void. Become the void.</p></div><div class="chip" id="phase">RUN 01 · ROOM 01</div></header>
-<main><section class="screen"><canvas id="game" width="1600" height="1120" aria-label="Void Protocol game arena"></canvas><button class="skill-hud" id="skillHud" title="Core skill · E" aria-label="Use core skill"><span class="skill-core"><b>E</b><small id="skillStatus">READY</small></span></button><button class="dash-hud" id="dashHud" title="Dash · Space" aria-label="Dash toward mouse"><span class="dash-core"><b>SPACE</b><small id="dashStatus">READY</small></span></button><div class="status-hud" id="statusHud" aria-label="Active buffs and debuffs"></div><div class="tutorial-tip" id="tutorialTip" hidden role="status"><b id="tutorialTipTitle"></b><p id="tutorialTipBody"></p><button id="tutorialTipDismiss">GOT IT · CONTINUE</button></div><button class="ultimate-hud" id="ultimateHud" title="Ultimate · Q · consumes all stored energy" aria-label="Cast ultimate"><span class="ult-core"><b>Q</b><small id="ultimatePct">0%</small></span></button><div class="toast" id="toast"></div><div class="overlay" id="overlay"><div class="modal" id="modal"></div></div><button type="button" class="combat-stats-toggle" id="combatStatsToggle" aria-expanded="false" aria-controls="combatStatsPanel" title="Open room combat statistics" aria-label="Open room combat statistics"><span aria-hidden="true">T</span></button><section class="combat-stats-panel" id="combatStatsPanel" aria-label="Room combat statistics" hidden><div class="combat-stats-heading"><b>ROOM STATISTICS</b><span>LIVE</span></div><div class="combat-metric" data-metric="damageDealt"><div class="combat-metric-label"><span>DAMAGE DEALT</span><b id="damageDealtValue">0</b></div><div class="combat-metric-track"><i id="damageDealtBar"></i></div></div><div class="combat-metric" data-metric="healingReceived"><div class="combat-metric-label"><span>HEALING RECEIVED</span><b id="healingReceivedValue">0</b></div><div class="combat-metric-track"><i id="healingReceivedBar"></i></div></div><div class="combat-metric" data-metric="damageReceived"><div class="combat-metric-label"><span>DAMAGE RECEIVED</span><b id="damageReceivedValue">0</b></div><div class="combat-metric-track"><i id="damageReceivedBar"></i></div></div><p>Totals reset when you enter the next room.</p></section><section class="panel particle-panel" id="particlePanel"><h3>PARTICLE STATUS</h3><div class="stat shard-stat"><span>VOID SHARDS</span><b><span class="shard-glyph">⬡</span> <span id="shardCountHud">0</span></b></div><div class="stat"><span>HULL</span><b id="hptext">100 / 100</b></div><div class="bar health-bar" id="healthTrack"><i id="hpbar"></i></div><div class="bar shield-track" id="shieldTrack" aria-label="Shield remaining" title="Shield remaining" style="display:none;background:#252b3d"><i id="shieldbar" style="background:linear-gradient(90deg,#f4f7ff,#ffffff);box-shadow:0 0 7px #ffffff88;width:0%"></i></div><div class="stat"><span>ORB LEVEL</span><b id="levelText">LV 1 · 0 / 30 XP</b></div><div class="bar"><i id="xpbar" style="background:linear-gradient(90deg,#ff79b8,#ffd0e7)"></i></div></section></section>
+<header><div><h1>VOID PROTOCOL</h1><p>A cosmic roguelike. Consume the void. Become the void.</p></div><div class="chip" id="phase">RUN 01 · ROOM 01</div></header>
+<main><section class="screen"><canvas id="game" width="1600" height="1120" aria-label="Void Protocol game arena"></canvas><button class="skill-hud" id="skillHud" title="Core skill · E" aria-label="Use core skill"><span class="skill-core"><b>E</b><small id="skillStatus">READY</small></span></button><button class="dash-hud" id="dashHud" title="Dash · Space" aria-label="Dash toward mouse"><span class="dash-core"><b>SPACE</b><small id="dashStatus">READY</small></span></button><div class="status-hud" id="statusHud" aria-label="Active buffs and debuffs"></div><div class="tutorial-tip" id="tutorialTip" hidden role="status"><b id="tutorialTipTitle"></b><p id="tutorialTipBody"></p><button id="tutorialTipDismiss">CONTINUE</button></div><button class="ultimate-hud" id="ultimateHud" title="Ultimate · Q · consumes all stored energy" aria-label="Cast ultimate"><span class="ult-core"><b>Q</b><small id="ultimatePct">0%</small></span></button><div class="toast" id="toast"></div><div class="overlay" id="overlay"><div class="modal" id="modal"></div></div><button type="button" class="combat-stats-toggle" id="combatStatsToggle" aria-expanded="false" aria-controls="combatStatsPanel" title="Open room combat statistics" aria-label="Open room combat statistics"><span aria-hidden="true">T</span></button><section class="combat-stats-panel" id="combatStatsPanel" aria-label="Room combat statistics" hidden><div class="combat-stats-heading"><b>ROOM STATS</b><span>LIVE</span></div><div class="combat-metric" data-metric="damageDealt"><div class="combat-metric-label"><span>DAMAGE DEALT</span><b id="damageDealtValue">0</b></div><div class="combat-metric-track"><i id="damageDealtBar"></i></div></div><div class="combat-metric" data-metric="healingReceived"><div class="combat-metric-label"><span>HEALING RECEIVED</span><b id="healingReceivedValue">0</b></div><div class="combat-metric-track"><i id="healingReceivedBar"></i></div></div><div class="combat-metric" data-metric="damageReceived"><div class="combat-metric-label"><span>DAMAGE RECEIVED</span><b id="damageReceivedValue">0</b></div><div class="combat-metric-track"><i id="damageReceivedBar"></i></div></div><p>Resets each room.</p></section><section class="panel particle-panel" id="particlePanel"><h3>RUN STATUS</h3><div class="stat shard-stat"><span>VOID SHARDS</span><b><span class="shard-glyph">⬡</span> <span id="shardCountHud">0</span></b></div><div class="stat"><span>HP</span><b id="hptext">100 / 100</b></div><div class="bar health-bar" id="healthTrack"><i id="hpbar"></i></div><div class="bar shield-track" id="shieldTrack" aria-label="Shield remaining" title="Shield remaining" style="display:none;background:#252b3d"><i id="shieldbar" style="background:linear-gradient(90deg,#f4f7ff,#ffffff);box-shadow:0 0 7px #ffffff88;width:0%"></i></div><div class="stat"><span>CORE LEVEL</span><b id="levelText">LV 1 · 0 / 30 XP</b></div><div class="bar"><i id="xpbar" style="background:linear-gradient(90deg,#ff79b8,#ffd0e7)"></i></div></section></section>
 <aside class="side" aria-label="In-run panels"></aside></main>
 <div class="bottom"><div style="display:flex;gap:7px;flex-wrap:wrap"><button class="btn" id="pauseBtn">Ⅱ PAUSE / MENU</button></div></div></div>
 <script>
@@ -147,7 +147,7 @@ html,body{margin:0!important;width:100%;height:100%;overflow:hidden!important;ba
  async function preload(){
   loader.classList.remove('has-error');
   retry.disabled=true;
-  setProgress(0,'PRELOADING LOCAL SYSTEMS','VERIFYING GAME FILES');
+  setProgress(0,'LOADING GAME FILES','CHECKING FILES');
   const statuses=resources.map(()=> 'pending');
   renderManifest(statuses,0);
   let complete=0;
@@ -161,7 +161,7 @@ html,body{margin:0!important;width:100%;height:100%;overflow:hidden!important;ba
     statuses[index]='loaded';
     renderManifest(statuses,index);
     complete++;
-    setProgress(complete/resources.length*85,'PRELOADING LOCAL SYSTEMS',String(complete).padStart(2,'0')+' / '+resources.length+' FILES · '+label);
+    setProgress(complete/resources.length*85,'LOADING GAME FILES',String(complete).padStart(2,'0')+' / '+resources.length+' FILES · '+label);
     renderManifest(statuses);
    }catch(error){
     statuses[index]='failed';renderManifest(statuses,index);throw error;
@@ -172,18 +172,18 @@ html,body{margin:0!important;width:100%;height:100%;overflow:hidden!important;ba
   if(failed.length){
    loader.classList.add('has-error');
    setProgress(complete/resources.length*85,'LOAD FAILURE',failed.slice(0,2).join(' · '));
-   details.textContent='FAILED FILES ARE MARKED IN THE COMPONENT LIST';
+   details.textContent='FAILED FILES ARE MARKED ABOVE';
    return;
   }
-  setProgress(90,'INITIALIZING GAME ENGINE','FILES LOADED · WAITING FOR GAME INITIALIZATION');
+  setProgress(90,'INITIALIZING GAME ENGINE','FILES LOADED');
   try{if(document.fonts?.ready)await document.fonts.ready;}catch(e){}
   await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
   resolvePreload(true);
  }
  window.__voidRetryPreload=preload;
  window.__voidLoaderReady=function(){
-  setProgress(100,'SYSTEMS ONLINE','ALL COMPONENTS INITIALIZED · READY');
-  details.textContent='ALL COMPONENTS INITIALIZED · READY';
+  setProgress(100,'SYSTEMS ONLINE','READY');
+  details.textContent='READY';
   manifest.querySelectorAll('.void-loader-item').forEach(item=>item.classList.remove('is-loading','is-pending'));
   requestAnimationFrame(()=>{loader.classList.add('is-hiding');setTimeout(()=>loader.remove(),500);});
  };
