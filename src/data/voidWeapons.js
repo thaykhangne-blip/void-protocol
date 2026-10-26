@@ -8,7 +8,7 @@ export const voidWeapons = [
     rarity: 'legendary',
     color: '#ff9c65',
     glyph: '♨',
-    description: 'EMBER · BURNING CRITICAL STRIKES',
+    description: 'EMBER · CINDERS AND CRITICALS',
     stats: { atkPct: 0.1, hpPct: 0.13, armorPct: 0.12 },
     passive: {
       name: 'Cinder Oath',
@@ -80,7 +80,7 @@ export const voidWeapons = [
     rarity: 'legendary',
     color: '#ff71cd',
     glyph: '◈',
-    description: 'ELEMENTAL · REACTION CASCADES',
+    description: 'PRISM · ELEMENTAL REACTIONS',
     stats: { atkPct: 0.1, hpPct: 0.13, armorPct: 0.12 },
     passive: {
       name: 'Prism Paradox',
@@ -98,7 +98,7 @@ export const voidWeapons = [
     rarity: 'legendary',
     color: '#ff304f',
     glyph: '⟡',
-    description: 'VENGEANCE · RISK AND EXECUTION',
+    description: 'CRIMSON · RISK AND REPRISAL',
     stats: { atkPct: 0.11, hpPct: 0.14, armorPct: 0.13 },
     passive: {
       name: 'Blood Dividend',
@@ -116,7 +116,7 @@ export const voidWeapons = [
     rarity: 'legendary',
     color: '#ff9ed8',
     glyph: '✦',
-    description: 'REMIELLE · LIGHT CRYSTALS AND FEATHERS',
+    description: 'AURALIS · LIGHT CRYSTALS AND FEATHERS',
     stats: { atkPct: 0.12, hpPct: 0.15, armorPct: 0.1 },
     passive: {
       name: 'Last Light, First Dawn',
@@ -152,7 +152,7 @@ export const voidWeapons = [
     rarity: 'rare',
     color: '#72dfff',
     glyph: '⌁',
-    description: 'GENERAL · RAW DAMAGE',
+    description: 'GENERAL · DAMAGE',
     stats: { atkPct: 0.04, hpPct: 0.07, armorPct: 0.07 },
     passive: { name: 'Kinetic Overdrive', effectId: 'general-fracture-drive', statKey: 'damage', values: [0.08, 0.10, 0.12, 0.14, 0.16], description: 'Damage: +8% / 10% / 12% / 14% / 16%.' }
   },
@@ -164,7 +164,7 @@ export const voidWeapons = [
     rarity: 'rare',
     color: '#72dfff',
     glyph: '◌',
-    description: 'GENERAL · CRITICAL PRECISION',
+    description: 'GENERAL · CRITICAL CHANCE',
     stats: { atkPct: 0.05, hpPct: 0.08, armorPct: 0.08 },
     passive: { name: 'Deadeye Alignment', effectId: 'general-pale-orbit', statKey: 'critChance', values: [0.06, 0.08, 0.10, 0.12, 0.14], description: 'Critical Rate: +6% / 8% / 10% / 12% / 14%.' }
   },
@@ -176,7 +176,7 @@ export const voidWeapons = [
     rarity: 'rare',
     color: '#72dfff',
     glyph: '⬡',
-    description: 'GENERAL · MAX HP REINFORCEMENT',
+    description: 'GENERAL · MAX HP',
     stats: { atkPct: 0.06, hpPct: 0.09, armorPct: 0.05 },
     passive: { name: 'Layered Integrity', effectId: 'general-bastion-weave', statKey: 'hpPct', values: [0.12, 0.14, 0.16, 0.18, 0.20], description: 'Max HP: +12% / 14% / 16% / 18% / 20%.' }
   },
@@ -188,7 +188,7 @@ export const voidWeapons = [
     rarity: 'unique',
     color: '#c69aff',
     glyph: '✥',
-    description: 'GENERAL · CRITICAL AMPLIFICATION',
+    description: 'GENERAL · CRITICAL DAMAGE',
     stats: { atkPct: 0.1, hpPct: 0.09, armorPct: 0.08 },
     passive: { name: 'Critical Mass', effectId: 'general-parallax-crown', statKey: 'critDamage', values: [0.16, 0.19, 0.22, 0.25, 0.28], description: 'Critical Damage: +16% / 19% / 22% / 25% / 28%.' }
   },
@@ -200,7 +200,7 @@ export const voidWeapons = [
     rarity: 'unique',
     color: '#c69aff',
     glyph: '⧖',
-    description: 'GENERAL · ATTACK TEMPO',
+    description: 'GENERAL · ATTACK SPEED',
     stats: { atkPct: 0.07, hpPct: 0.1, armorPct: 0.09 },
     passive: { name: 'Accelerated Cycle', effectId: 'general-chrono-spindle', statKey: 'fireRate', values: [0.10, 0.12, 0.14, 0.16, 0.18], description: 'Attack Speed: +10% / 12% / 14% / 16% / 18%.' }
   },
