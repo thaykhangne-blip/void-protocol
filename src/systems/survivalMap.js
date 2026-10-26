@@ -1,16 +1,6 @@
 /* Semi-open Survival Trial map, horde combat, boss milestones, and run scoring. */
 const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
 const distance=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
-const CORE_KITS={
- ember:{damage:25,fireRate:.72,speed:235,maxHp:108,trait:'burn'},
- frost:{damage:15,fireRate:.56,speed:260,maxHp:92,trait:'chill'},
- flash:{damage:12,fireRate:.34,speed:315,maxHp:72,trait:'chain'},
- nature:{damage:16,fireRate:.58,speed:270,maxHp:98,trait:'drone'},
- elemental:{damage:17,fireRate:.52,speed:280,maxHp:94,trait:'prism'},
- vengeance:{damage:18,fireRate:.62,speed:265,maxHp:104,trait:'bleed'},
- remielle:{damage:16,fireRate:.48,speed:292,maxHp:90,trait:'crystal'},
- nova:{damage:17,fireRate:.39,speed:330,maxHp:84,trait:'pierce'}
-};
 function registerSurvivalKill(runtime,enemy){
  runtime.kills++;
  runtime.score+=(enemy.bossType==='big'?2500:enemy.bossType==='mini'?500:enemy.elite?35:10);
@@ -23,7 +13,7 @@ function spawnSurvivalBoss(runtime){
  const y=clamp(runtime.player.y+Math.sin(angle)*distanceFromPlayer,60,runtime.height-60);
  const scale=1+runtime.elapsed/600;
  const hp=(big?4200:720)*scale;
- runtime.enemies.push({id:runtime.nextEnemyId++,x,y,radius:big?32:22,hp,maxHp:hp,speed:big?34:43,damage:big?24:16,attackCooldown:.7,elite:true,bossType:big?'big':'mini',hitFlash:0,scoreValue:big?2500:500});
+ runtime.enemies.push({id:runtime.nextEnemyId++,x,y,r:big?32:22,radius:big?32:22,type:big?'singularity':'miniboss',color:big?'#ff4b65':'#ff9a52',hp,maxHp:hp,speed:big?34:43,damage:big?24:16,attackCooldown:.7,elite:true,bossType:big?'big':'mini',hitFlash:0,scoreValue:big?2500:500});
  runtime.bossAnnouncement={type:big?'big':'mini',timer:3};
  if(big)runtime.bigBossSpawned=true;
  else runtime.nextBossAt+=150;
@@ -44,10 +34,7 @@ export function createSurvivalMapRuntime(config){
   {id:'rift',x:width*.79,y:height*.72,label:'VOID RIFT',type:'rift'},
   {id:'cache',x:width*.20,y:height*.78,label:'SUPPLY CACHE',type:'cache'}
  ];
- const kit=CORE_KITS[config.coreId]||{damage:18,fireRate:.55,speed:260,maxHp:100,trait:'standard'};
- return {world:{...config.world},coreId:config.coreId,coreTrait:kit.trait,width,height,obstacles,landmarks,elapsed:0,
-  player:{x:width/2,y:height/2,radius:12,speed:kit.speed,hp:kit.maxHp,maxHp:kit.maxHp,damage:kit.damage,fireRate:kit.fireRate,attackCooldown:.2,invulnerable:0,shotsFired:0,droneTimer:2.5,prismCycle:0},
-  camera:{x:width/2,y:height/2},enemies:[],projectiles:[],xpDrops:[],crystals:[],xp:0,xpToNext:5,level:1,upgradeChoices:null,kills:0,score:0,nextBossAt:150,bigBossSpawned:false,bossAnnouncement:null,nextEnemyId:1,spawnTimer:.7,ready:true,gameOver:false};
+ return {world:{...config.world},coreId:config.coreId,width,height,obstacles,landmarks,elapsed:0,player:{x:width/2,y:height/2,radius:12,hp:100,maxHp:100,speed:190,inv:0,invulnerable:0},camera:{x:width/2,y:height/2},enemies:[],xpDrops:[],crystals:[],xpCollected:0,kills:0,score:0,nextBossAt:150,bigBossSpawned:false,bossAnnouncement:null,nextEnemyId:1,spawnTimer:.7,ready:true,gameOver:false};
 }
 export function getSurvivalCamera(runtime,viewportWidth,viewportHeight){
  const halfW=Math.max(1,viewportWidth)/2,halfH=Math.max(1,viewportHeight)/2;
@@ -72,15 +59,15 @@ function spawnEnemy(runtime,viewportWidth,viewportHeight){
   if(isSurvivalPositionBlocked(runtime,x,y,15))continue;
   const minute=runtime.elapsed/60,elite=runtime.elapsed>=300&&Math.random()<Math.min(.22,.035+minute*.008);
   const hpScale=1+minute*.12;
-  runtime.enemies.push({id:runtime.nextEnemyId++,x,y,radius:elite?15:10,hp:(elite?72:34)*hpScale,maxHp:(elite?72:34)*hpScale,speed:(elite?42:56)+Math.min(22,minute*1.2),damage:elite?12:7,attackCooldown:.4,elite,hitFlash:0});
+  runtime.enemies.push({id:runtime.nextEnemyId++,x,y,r:elite?15:10,radius:elite?15:10,type:elite?'elite':'drone',color:elite?'#ff4d87':'#9c5bce',hp:(elite?72:34)*hpScale,maxHp:(elite?72:34)*hpScale,speed:(elite?42:56)+Math.min(22,minute*1.2),damage:elite?12:7,attackCooldown:.4,elite,hitFlash:0});
   return true;
  }
  return false;
 }
 export function stepSurvivalMapRuntime(runtime,input={},dt=1/60){
- if(!runtime?.ready||runtime.gameOver||runtime.upgradeChoices)return runtime;
+ if(!runtime?.ready||runtime.gameOver)return runtime;
  const step=Math.min(.05,Math.max(0,Number(dt)||0));runtime.elapsed+=step;if(runtime.bossAnnouncement){runtime.bossAnnouncement.timer-=step;if(runtime.bossAnnouncement.timer<=0)runtime.bossAnnouncement=null;}
- const p=runtime.player;p.invulnerable=Math.max(0,p.invulnerable-step);
+ const p=runtime.player;p.invulnerable=Math.max(0,p.invulnerable-step);p.inv=Math.max(p.inv||0,p.invulnerable);
  const dx0=(input.right?1:0)-(input.left?1:0),dy0=(input.down?1:0)-(input.up?1:0);
  let dx=dx0,dy=dy0;
  if(dx||dy){const length=Math.hypot(dx,dy)||1;dx/=length;dy/=length;}
@@ -97,10 +84,7 @@ export function stepSurvivalMapRuntime(runtime,input={},dt=1/60){
  const spawnInterval=Math.max(.22,1.05-runtime.elapsed/260);
  const maxEnemies=Math.min(110,14+Math.floor(runtime.elapsed/8));
  if(runtime.spawnTimer<=0&&runtime.enemies.length<maxEnemies){spawnEnemy(runtime,input.viewportWidth||800,input.viewportHeight||600);runtime.spawnTimer=spawnInterval;}
- p.attackCooldown-=step;
- if(p.attackCooldown<=0&&runtime.enemies.length){
-  let target=null,best=520;
-  for(const enemy of runtime.enemies){const d=distance(p,enemy);if(d<best){best=d;target=enemy;}}
+ for(const enemy of runtime.enemies){const d=distance(p,enemy);if(d<best){best=d;target=enemy;}}
   if(target){const d=Math.max(1,distance(p,target)),speed=540;
    p.shotsFired++;
    const prismColors=['#ff9c65','#8cecff','#ffe875','#70e58a'];
@@ -125,44 +109,14 @@ export function stepSurvivalMapRuntime(runtime,input={},dt=1/60){
    if(p.hp<=0)runtime.gameOver=true;
   }
  }
- for(const shot of runtime.projectiles){
-  shot.x+=shot.vx*step;shot.y+=shot.vy*step;shot.life-=step;
-  if(shot.life<=0||shot.x<0||shot.y<0||shot.x>runtime.width||shot.y>runtime.height)shot.dead=true;
-  for(const enemy of runtime.enemies){if(enemy.hp>0&&distance(shot,enemy)<shot.r+enemy.radius){
-   enemy.hp-=shot.damage;enemy.hitFlash=.12;
-   if(shot.trait==='burn'){enemy.burnTime=3;enemy.burnTick=.1;}
-   if(shot.trait==='chill'){enemy.slowTime=2;enemy.slowMultiplier=.55;}
-   if(shot.trait==='bleed'&&runtime.player.shotsFired%2===0){enemy.bleedTime=3;enemy.bleedTick=.1;enemy.hp-=shot.damage*.45;}
-   if(shot.trait==='chain'){let chained=0;for(const other of runtime.enemies){if(other!==enemy&&other.hp>0&&distance(enemy,other)<145&&chained<2){other.hp-=shot.damage*.55;other.hitFlash=.12;chained++;}}}
-   if(shot.trait==='crystal'){runtime.crystals.push({x:enemy.x,y:enemy.y,life:3.2,timer:3.2});}
-   if(shot.trait==='pierce'&&shot.pierce>0){shot.pierce--;shot.damage*=.65;}else shot.dead=true;
-   if(enemy.hp<=0){enemy.dead=true;registerSurvivalKill(runtime,enemy);}
-   break;
-  }}
- }
- runtime.projectiles=runtime.projectiles.filter(s=>!s.dead);
- runtime.enemies=runtime.enemies.filter(e=>!e.dead);
- if(runtime.coreTrait==='drone'){p.droneTimer-=step;if(p.droneTimer<=0&&runtime.enemies.length){const target=runtime.enemies.slice().sort((a,b)=>distance(p,a)-distance(p,b))[0];target.hp-=p.damage*.7;target.hitFlash=.12;p.droneTimer=1.8;if(target.hp<=0){target.dead=true;registerSurvivalKill(runtime,target);runtime.enemies=runtime.enemies.filter(e=>!e.dead);}}}
- if(runtime.coreTrait==='crystal'&&runtime.crystals.length){for(const crystal of runtime.crystals){crystal.timer-=step;crystal.life-=step;if(crystal.timer<=0){const target=runtime.enemies.filter(e=>e.hp>0&&distance(crystal,e)<210).sort((a,b)=>distance(crystal,a)-distance(crystal,b))[0];if(target){target.hp-=p.damage*1.25;target.hitFlash=.18;crystal.life=0;if(target.hp<=0){target.dead=true;registerSurvivalKill(runtime,target);}}}}runtime.crystals=runtime.crystals.filter(c=>c.life>0&&c.timer>0);runtime.enemies=runtime.enemies.filter(e=>!e.dead);}
  for(const orb of runtime.xpDrops){
   const d=distance(p,orb),magnet=90+(runtime.magnet||0);
   if(d<magnet&&d>1){orb.x+=(p.x-orb.x)/d*Math.min(420,d*5)*step;orb.y+=(p.y-orb.y)/d*Math.min(420,d*5)*step;}
-  if(d<p.radius+orb.r+5){orb.collected=true;runtime.xp+=orb.value;}
+  if(d<p.r+orb.r+5){orb.collected=true;runtime.xpCollected=(runtime.xpCollected||0)+orb.value;}
   orb.life-=step;
  }
  runtime.xpDrops=runtime.xpDrops.filter(o=>!o.collected&&o.life>0);
  if(!runtime.bigBossSpawned&&runtime.kills>=1000&&!runtime.enemies.some(enemy=>enemy.bossType))spawnSurvivalBoss(runtime);
  else if(!runtime.bigBossSpawned&&runtime.kills>=runtime.nextBossAt&&!runtime.enemies.some(enemy=>enemy.bossType))spawnSurvivalBoss(runtime);
- if(runtime.xp>=runtime.xpToNext){
-  runtime.xp-=runtime.xpToNext;runtime.level++;runtime.xpToNext=Math.round(5+runtime.level*2.4);
-  const pool=[
-   {id:'damage',title:'OVERCHARGED SHOTS',desc:'Attack damage +20%',color:'#ffe38a'},
-   {id:'fireRate',title:'ACCELERATED CYCLE',desc:'Attack speed +15%',color:'#c29aff'},
-   {id:'speed',title:'KINETIC DRIVE',desc:'Movement speed +12%',color:'#ff8fcb'},
-   {id:'hull',title:'REACTIVE PLATING',desc:'Max hull +20 and restore 20 HP',color:'#83ffc5'},
-   {id:'magnet',title:'MAGNETAR FIELD',desc:'Collect XP from farther away',color:'#72f6ff'}
-  ];
-  runtime.upgradeChoices=pool.sort(()=>Math.random()-.5).slice(0,3);
- }
  return runtime;
 }
