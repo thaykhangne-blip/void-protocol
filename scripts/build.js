@@ -26,5 +26,13 @@ const fragments = [
 ];
 
 const sections = await Promise.all(fragments.map(read));
+const output = [
+  '// GENERATED FILE. Edit src/game-bootstrap.js and the files in src/systems/ or src/ui/ instead.',
+  prefix,
+  runtimePrelude,
+  ...sections,
+  '',
+].join('\n\n') + '\n})();\n';
+
 await writeFile(resolve(root, outputPath), output, 'utf8');
 console.log(`Built ${outputPath} from ${bootstrapPath} and ${fragments.length} source fragments.`);
