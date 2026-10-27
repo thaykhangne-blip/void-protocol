@@ -1,54 +1,30 @@
-// Aether primary attack: two gravitational rings alternate between attraction and rejection.
-// Hits use the shared damage pipeline so Rend and compatible weapon effects continue to work.
+// Aether primary attack: twin focused beams pierce along two parallel lanes.
+// Pulsing gravity rings are handled separately as Aether's passive.
 export function fireNovaAutoAttack(context, locals) {
- const { player, enemies, blackHole, applyDamage, skillFx, burst, dist } = context;
- const inward = (player.aetherRingPhase = ((player.aetherRingPhase || 0) + 1) % 2) === 1;
- const radius = (100 + Math.min(28, (player.evoTier || 0) * 7)) * (1 + Math.min(.75, player.aetherRingRangeBonus || 0));
- const innerRadius = Math.max(22, player.r + 10);
- const pulseDamage = player.damage * .62 * (player.laserDamageMult || 1);
- const color = '#fff0a6';
- let landedHit = false;
- for (const enemy of enemies) {
-  if (!enemy || enemy.hp <= 0) continue;
-  const dx = player.x - enemy.x, dy = player.y - enemy.y, d = Math.hypot(dx, dy) || 1;
-  // The damaging radius matches the outer edge of the visible pulsating rings.
-  if (d > radius + (enemy.r || 0)) continue;
-  const falloff = Math.max(.15, 1 - d / Math.max(1, radius));
-  const strength = (inward ? 42 : 19) * falloff;
-  enemy.x += (inward ? dx / d : -dx / d) * strength;
-  enemy.y += (inward ? dy / d : -dy / d) * strength;
-  applyDamage(enemy, pulseDamage, color, true, inward ? 'AETHER GRAVITY INFLUX' : 'AETHER GRAVITY REJECTION');
-  landedHit = true;
-  if (player.laserVulnerability) enemy.novaVuln = Math.max(enemy.novaVuln || 0, 1.5);
-  burst(enemy.x, enemy.y, color, 2);
- }
- // Aether passive: every sixth pulse that hits at least one enemy fires twin horizontal laser beams.
- if (landedHit) {
-  player.aetherSuccessfulPulses = (player.aetherSuccessfulPulses || 0) + 1;
-  if (player.aetherSuccessfulPulses >= 6) {
-   player.aetherSuccessfulPulses = 0;
-   const beamDamage = player.damage * .9 * (player.laserDamageMult || 1);
-   // Queue the upper beam first and the lower beam 0.3s later.
-   player.aetherBeamQueue = [
-    {delay:0, damage:beamDamage, used:new Set()},
-    {delay:.3, damage:beamDamage, used:new Set()}
-   ];
-  }
- }
- if (blackHole && blackHole.hp > 0 && !blackHole.inactive && dist(player, blackHole) <= radius + (blackHole.r || 0)) {
-  applyDamage(blackHole, pulseDamage, color, true, inward ? 'AETHER GRAVITY INFLUX' : 'AETHER GRAVITY REJECTION');
- }
- skillFx.push({ type:'aetherRingPulse', x:player.x, y:player.y, life:.36, max:.36, radius, innerRadius, inward, color, ringCount:2+Math.min(2,player.sideCannons||0) });
- // Orbital Overdrive is now an empowered inward pulse, not a projectile.
- if (inward && player.novaOverclock && ((player.novaOverclockCount = (player.novaOverclockCount || 0) + 1) >= 4)) {
-  player.novaOverclockCount = 0;
-  for (const enemy of enemies) if (enemy.hp > 0 && dist(player, enemy) <= radius) applyDamage(enemy, pulseDamage * .35, '#ffffff', false, 'AETHER GRAVITY OVERDRIVE');
- } else if (!player.novaOverclock) player.novaOverclockCount = 0;
- // Side Cannons amplify the pulse inside the visible ring boundary; they do not extend its range.
- if (player.sideCannons) {
-  const extra = pulseDamage * .18 * Math.min(2, player.sideCannons);
-  for (const enemy of enemies) if (enemy.hp > 0 && dist(player, enemy) <= radius + (enemy.r || 0)) {
-   applyDamage(enemy, extra, color, false, 'AETHER GRAVITY SIDECANNON');
+ const { player, enemies, blackHole, applyDamage, skillFx, burst } = context;
+ const target = locals?.target || enemies.filter(e => e && e.hp > 0)
+  .sort((a, b) => Math.hypot(player.x-a.x, player.y-a.y) - Math.hypot(player.x-b.x, player.y-b.y))[0] || blackHole;
+ if (!target || target.hp <= 0) return;
+ const baseAngle = Math.atan2(target.y-player.y, target.x-player.x);
+ const length = 700, width = 10;
+ const damage = player.damage * .72 * (player.laserDamageMult || 1);
+ const rank = Math.max(0, Math.min(2, player.sideCannons || 0));
+ const beamCount = 2 + rank; // Twin Cannon: +1 beam per rank (2 / 3 / 4).
+ const used = new Set();
+ for (let i=0; i<beamCount; i++) {
+  const angle = baseAngle + (i-(beamCount-1)/2)*.045;
+  const ux = Math.cos(angle), uy = Math.sin(angle);
+  skillFx.push({type:'aetherTwinBeam',x1:player.x,y1:player.y,x2:player.x+ux*length,y2:player.y+uy*length,life:.22,max:.22,color:'#ffe7a0',beamIndex:i,beamCount});
+  const candidates = [...(enemies || []).filter(e => e && e.hp > 0)];
+  if (blackHole && blackHole.hp > 0 && !blackHole.inactive) candidates.push(blackHole);
+  for (const entity of candidates) {
+   const dx=entity.x-player.x, dy=entity.y-player.y;
+   const along=dx*ux+dy*uy, side=Math.abs(dx*uy-dy*ux);
+   if (along<0 || along>length || side>(entity.r||10)+width || used.has(entity)) continue;
+   used.add(entity);
+   applyDamage(entity,damage,'#ffe7a0',true,'AETHER TWIN BEAM');
+   if(player.laserVulnerability)entity.novaVuln=Math.max(entity.novaVuln||0,1.5);
+   burst(entity.x,entity.y,'#ffe7a0',5);
   }
  }
 }
