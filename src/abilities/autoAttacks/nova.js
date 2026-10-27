@@ -9,12 +9,16 @@ export function fireNovaAutoAttack(context, locals) {
  const length = 700, width = 10;
  const damage = player.damage * .72 * (player.laserDamageMult || 1);
  const rank = Math.max(0, Math.min(2, player.sideCannons || 0));
- const beamCount = 2 + rank; // Twin Cannon: +1 beam per rank (2 / 3 / 4).
+ // Without Side Cannons, keep the focused twin-beam attack aimed at the target.
+ // With the perk, the extra emitters cover the cardinal directions around Aether.
+ const angles = rank > 0
+  ? [-Math.PI / 2, Math.PI / 2, 0, Math.PI].slice(0, 2 + rank)
+  : [baseAngle - .0225, baseAngle + .0225];
  const used = new Set();
- for (let i=0; i<beamCount; i++) {
-  const angle = baseAngle + (i-(beamCount-1)/2)*.045;
+ for (let i=0; i<angles.length; i++) {
+  const angle = angles[i];
   const ux = Math.cos(angle), uy = Math.sin(angle);
-  skillFx.push({type:'aetherTwinBeam',x1:player.x,y1:player.y,x2:player.x+ux*length,y2:player.y+uy*length,life:.22,max:.22,color:'#ffe7a0',beamIndex:i,beamCount});
+  skillFx.push({type:'aetherTwinBeam',x1:player.x,y1:player.y,x2:player.x+ux*length,y2:player.y+uy*length,life:.22,max:.22,color:'#ffe7a0',beamIndex:i,beamCount:angles.length});
   const candidates = [...(enemies || []).filter(e => e && e.hp > 0)];
   if (blackHole && blackHole.hp > 0 && !blackHole.inactive) candidates.push(blackHole);
   for (const entity of candidates) {

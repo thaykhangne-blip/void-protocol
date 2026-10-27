@@ -44,7 +44,7 @@ function getPriorityTarget(origin,maxRange=Infinity,excluded=[]){const usable=t=
 
 function nearestTarget(maxRange=Infinity){return getPriorityTarget(player,maxRange)}
 
-function getPrimaryAttackTarget(){const coreTargetRange=core?.id==='nova'?(104+Math.min(28,(player?.evoTier||0)*7)):CORE_TARGET_RANGE;return selectPrimaryAttackTarget({player,core,coreTargetRange,nearestTarget});}
+function getPrimaryAttackTarget(){const coreTargetRange=CORE_TARGET_RANGE;return selectPrimaryAttackTarget({player,core,coreTargetRange,nearestTarget});}
 
 function drawPrimaryTargetIndicator(target){if(!target)return;const pulse=.5+.5*Math.sin(performance.now()*.006),radius=(target.r||10)+14+pulse*1.2,elementalRainbow=core?.id==='elemental';ctx.save();ctx.translate(target.x,target.y);ctx.globalAlpha=.95;ctx.lineWidth=elementalRainbow?2.2:1.8;ctx.shadowBlur=10+pulse*5+(elementalRainbow?5:0);for(let i=0;i<4;i++){const a=i*Math.PI/2+.32,color=elementalRainbow?rainbowCoreColor(i*90+performance.now()*.04):(core?.color||'#72f6ff');ctx.strokeStyle=color;ctx.shadowColor=color;ctx.beginPath();ctx.arc(0,0,radius,a,(i+1)*Math.PI/2-.32);ctx.stroke();}ctx.shadowBlur=0;ctx.globalAlpha=.9;ctx.lineWidth=elementalRainbow?2:1.2;for(let i=0;i<4;i++){const a=i*Math.PI/2+Math.PI/4+performance.now()*.00012,x=Math.cos(a),y=Math.sin(a),color=elementalRainbow?rainbowCoreColor(i*90+45+performance.now()*.04):'#ffffff';ctx.strokeStyle=color;ctx.beginPath();ctx.moveTo(x*(radius+2),y*(radius+2));ctx.lineTo(x*(radius+(elementalRainbow?7:6)),y*(radius+(elementalRainbow?7:6)));ctx.stroke();}ctx.fillStyle=elementalRainbow?rainbowCoreColor(180+performance.now()*.04):(core?.color||'#72f6ff');ctx.globalAlpha=.95;ctx.beginPath();ctx.arc(0,0,elementalRainbow?2.2:1.8,0,Math.PI*2);ctx.fill();ctx.restore()}
 
