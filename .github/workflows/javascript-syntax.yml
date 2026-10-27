@@ -26,9 +26,6 @@ jobs:
       - name: Build modular game bundle
         run: npm run build
 
-      - name: Build modular game bundle
-        run: npm run build
-
       - name: Check all JavaScript modules
         run: |
           set -eu
