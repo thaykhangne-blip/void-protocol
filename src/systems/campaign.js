@@ -1,5 +1,5 @@
 // CAMPAIGN MODULE
-// Runtime functions extracted from game.js; behavior preserved.
+// Source fragment consumed by scripts/build.js. Do not import directly.
 
 function world(){return currentWorld===-1?tutorialWorld:(worlds[currentWorld]||worlds[0])}
 
