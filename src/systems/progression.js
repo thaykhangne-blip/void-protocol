@@ -1,5 +1,5 @@
 // PROGRESSION MODULE
-// These function declarations are concatenated into the game runtime to retain shared state.
+// Runtime functions extracted from game.js; behavior preserved.
 
 function clearToast(){toastTimer=0;toastPriority=0;const t=$('toast');if(t){t.classList.remove('show');t.textContent='';}}
 
