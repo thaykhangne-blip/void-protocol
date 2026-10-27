@@ -336,7 +336,34 @@ skillFx=skillFx.filter(f=>f.life>0);
  for(const m of skillMissiles){m.life-=dt;let target=m.targetCore&&blackHole&&!blackHole.inactive&&blackHole.hp>0?blackHole:(m.targetRef&&m.targetRef.hp>0?m.targetRef:(m.targetId!=null?enemies.find(e=>e.hp>0&&e.id===m.targetId):null));if(!target&&!m.targetCore){target=enemies.filter(e=>e.hp>0).sort((a,b)=>dist(m,a)-dist(m,b))[0];if(target){m.targetId=target.id??null;m.targetRef=target;}}if(!target&&blackHole&&!blackHole.inactive&&blackHole.hp>0)target=blackHole;if(target){const dx=target.x-m.x,dy=target.y-m.y,d=Math.hypot(dx,dy)||1,turn=Math.min(1,dt*6.5);const tx=dx/d*m.speed,ty=dy/d*m.speed;m.vx+=(tx-m.vx)*turn;m.vy+=(ty-m.vy)*turn;m.x+=m.vx*dt;m.y+=m.vy*dt;if(d<target.r+m.r+5){const crit=!m.voidWeaponSeed&&!m.lightFeather&&Math.random()<(m.critChance??0.25);const missileDamage=m.damage*(crit?Math.max(1.8,player.critDamage||1.8):1);applyDamage(target,missileDamage,m.color||'#ffb84d',false,crit?(m.elementalMissile?'ELEMENTAL NOVA CRIT':m.lightFeather?'DAWN FEATHER CRIT':'HOMING CRIT'):(m.elementalMissile?'ELEMENTAL NOVA':m.lightFeather?'DAWN FEATHER':m.voidWeaponSeed?'PREDATORY BLOOM':'HOMING'));burst(m.x,m.y,crit?'#fff0a8':(m.color||'#ffb84d'),crit?12:7);if(m.voidWeaponSeed&&m.voidWeaponSeedSplash){for(const nearby of enemies){if(nearby!==target&&nearby.hp>0&&dist(nearby,target)<=76){applyDamage(nearby,missileDamage*.5,'#70e58a',false,'PREDATORY BLOOM SPLASH');burst(nearby.x,nearby.y,'#aaffb2',5);}}if(blackHole&&!blackHole.inactive&&blackHole.hp>0&&target!==blackHole&&dist(blackHole,target)<=76)applyDamage(blackHole,missileDamage*.5,'#70e58a',false,'PREDATORY BLOOM SPLASH');}if(m.lightFeather&&(m.extraPierce||0)>0){m.hitTargets=m.hitTargets||[];m.hitTargets.push(target===blackHole?'core':(target.id??target));const next=enemies.filter(e=>e.hp>0&&!m.hitTargets.includes(e.id)&&e!==target&&dist(e,m)<220).sort((a,b)=>dist(a,m)-dist(b,m))[0];if(next){m.targetRef=next;m.targetId=next.id??null;m.targetCore=next===blackHole;m.x=target.x;m.y=target.y;m.life=Math.max(m.life,.1);m.extraPierce--;continue;}}m.life=0;}}else{m.x+=m.vx*dt;m.y+=m.vy*dt;}}
  skillMissiles=skillMissiles.filter(m=>m.life>0&&m.x>-20&&m.x<W+20&&m.y>-20&&m.y<H+20);if(core.id==='frost'||core.id==='remielle')updateUI();}
 
+let ultimateCinematic=null;
 function castUltimate(){
+ if(state!=='playing'||!player||!core)return;
+ if(energy<100){notify(`ULTIMATE REQUIRES 100 ENERGY · ${energy}% CHARGED`);return;}
+ if(ultimateCinematic)return;
+ const accent=({ember:'#ff9c65',frost:'#8cecff',aether:'#ffe45c',remielle:'#ff9ed8',auralis:'#ff9ed8',flash:'#83eaff',nature:'#8dff9a',prism:'#c7a5ff',crimson:'#ff496c',blood:'#ff496c'})[core.id]||'#c18aff';
+ ultimateCinematic={timer:1.7,color:accent};
+ if(c){
+  c.style.transition='transform 1.7s cubic-bezier(.16,.78,.22,1)';
+  c.style.transformOrigin=(player.x/Math.max(1,W)*100)+'% '+(player.y/Math.max(1,H)*100)+'%';
+  c.style.transform='scale(1.18)';
+ }
+ let overlay=$('ultimateCinematicOverlay');
+ if(!overlay){
+  overlay=document.createElement('div');overlay.id='ultimateCinematicOverlay';
+  Object.assign(overlay.style,{position:'fixed',inset:'0',zIndex:'9999',pointerEvents:'none',opacity:'0',transition:'opacity 1.7s ease',boxShadow:'inset 0 0 0 0 '+accent});
+  document.body.appendChild(overlay);
+ }
+ overlay.style.boxShadow='inset 0 0 90px 24px '+accent;
+ overlay.style.opacity='1';
+}
+function endUltimateCinematic(){
+ if(c){c.style.transform='';c.style.transformOrigin='';c.style.transition='';}
+ const overlay=$('ultimateCinematicOverlay');
+ if(overlay){overlay.style.opacity='0';overlay.style.boxShadow='inset 0 0 0 0 transparent';}
+ ultimateCinematic=null;
+}
+function resolveUltimateCast(){
  if(state!=='playing'||!player||!core)return;
  const minimum=100;
  if(energy<minimum){notify(`ULTIMATE REQUIRES 100 ENERGY · ${energy}% CHARGED`);return;}
@@ -2453,6 +2480,14 @@ const combatStatsToggle=$('combatStatsToggle'),combatStatsPanel=$('combatStatsPa
 // update() and frame() share the runtime lexical closure by design.
 
 function update(dt){
+ if(ultimateCinematic){
+  ultimateCinematic.timer-=dt;
+  if(ultimateCinematic.timer<=0){
+   endUltimateCinematic();
+   resolveUltimateCast();
+  }
+  return;
+ }
  // Keep short presentation-only effects alive while gameplay is paused for the level-up reveal.
  if(state==='levelupIntro'){
   for(const star of stars){star.y+=((star.s===1?24:46)+(star.p%2)*7)*dt;star.x-=(((star.s===1?24:46)+(star.p%2)*7)*.13)*dt;if(star.y>H+2){star.y=-2;star.x=Math.random()*W;}if(star.x<-2)star.x=W+2;}
