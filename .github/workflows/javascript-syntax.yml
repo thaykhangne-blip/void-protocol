@@ -23,6 +23,9 @@ jobs:
         with:
           node-version: 22
 
+      - name: Build modular game bundle
+        run: npm run build
+
       - name: Check all JavaScript modules
         run: |
           set -eu
