@@ -620,3 +620,16 @@ function showCoreDetails(id){
  modal.innerHTML=`<div class="eyebrow">${data.element} CORE</div><h2 style="color:${data.accent}">${cores.find(c=>c.id===id).glyph} ${name}</h2><div class="core-detail-scroll core-visual-layout"><section class="core-detail-block core-stats-block"><h3>CORE STATS</h3><div class="core-stat-grid">${statMarkup}</div></section><section class="core-detail-block core-visual-block"><h3>CORE PREVIEW</h3><div class="core-visual-stage orb-render-stage ${id}" aria-label="${name} orb render"><div class="orb-render ${id}"><i class="orb-aura"></i><i class="orb-wing wing-left"></i><i class="orb-wing wing-right"></i><i class="orb-core"></i><i class="orb-orbit orbit-one"></i><i class="orb-orbit orbit-two"></i><i class="orb-spark spark-one"></i><i class="orb-spark spark-two"></i></div></div></section><section class="core-detail-block core-abilities-block"><h3>ABILITIES</h3><div class="core-ability-grid">${abilityMarkup}</div></section><section class="core-detail-block core-evolutions-block"><h3>EVOLUTIONS</h3><div class="core-evo-grid">${evoMarkup}</div></section><section class="core-detail-block core-exclusive-block"><h3>EXCLUSIVE CORE PERKS</h3><div class="core-exclusive-icons">${exclusiveItems.map((u,i)=>`<span tabindex="0" role="button" data-tip-title="${u.name.replace(/&/g,'&amp;').replace(/"/g,'&quot;')}" data-tip-desc="${u.desc.replace(/&/g,'&amp;').replace(/"/g,'&quot;')}" aria-label="${u.name}: ${u.desc.replace(/&/g,'&amp;').replace(/"/g,'&quot;')}">${u.glyph}<small>${u.name}</small></span>`).join('')}</div></section></div><div class="menu-actions"><button class="btn" id="coreDetailsBack">← BACK TO ORB SELECTION</button></div>`;$('coreDetailsBack').onclick=showCoreSelection;
 }
 
+
+
+export function installProgressionModule(runtime) {
+  Object.assign(runtime, {
+    clearToast, notify, addEnergy, addShards, xpRequired, applyCoreEvolution, showCoreEvolution,
+    playCoreLevelUpEffect, gainXP, perkRank, perkMaxRank, perkAvailable, coreExclusiveWeight,
+    randomPerks, createGeneralPerks, showLevelUp, makeCoreExclusivePerk, cooldownFactor,
+    dashChargeCapacity, dashCooldownDuration, performDash, newPlayer, applyCoreDefaults,
+    coreUpgradeRank, coreUpgradeCost, showVoidWeaponTenPull, showCoreUpgradeSystem,
+    awardCoreCurrency, coreUnlockRequirement, isCoreUnlocked, coreUnlockMessage,
+    showVoidWeaponInventory, showCoreSelection, typeCoreText, selectCore, deployCore, showCoreDetails
+  });
+}
