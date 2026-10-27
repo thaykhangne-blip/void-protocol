@@ -16,7 +16,7 @@ if (placeholderIndex < 0) {
 }
 
 const prefix = bootstrap.slice(0, placeholderIndex).trimEnd();
-const runtimePrelude = String.raw`const narrative=createNarrativeSystem({overlay:$('.overlay' ? 'overlay' : 'overlay'),modal:$('modal'),getProgress:()=>saveData.storyProgress,saveProgress:()=>persist(),getCoreId:()=>core?.id,onStart:()=>{state='cutscene';last=performance.now()},onEnd:()=>{last=performance.now()},onSound:()=>sfx('ui'),onType:()=>sfx('text')});
+const runtimePrelude = String.raw`const narrative=createNarrativeSystem({overlay:$('overlay'),modal:$('modal'),getProgress:()=>saveData.storyProgress,saveProgress:()=>persist(),getCoreId:()=>core?.id,onStart:()=>{state='cutscene';last=performance.now()},onEnd:()=>{last=performance.now()},onSound:()=>sfx('ui'),onType:()=>sfx('text')});
 let roomDialogueShown=new Set();const milestoneDeliveriesPresented=new Set();`;
 const fragments = [
   'src/systems/combat.js',
