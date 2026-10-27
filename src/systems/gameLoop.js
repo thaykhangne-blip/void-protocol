@@ -19,7 +19,7 @@ function updateAetherBeamQueue(dt){
    const ux=Math.cos(angle),uy=Math.sin(angle);
    for(const t of candidates){
     const dx=t.x-player.x,dy=t.y-player.y,along=dx*ux+dy*uy,side=Math.abs(dx*uy-dy*ux);
-    if(along>=0&&along<=length&&side<=(t.r||10)+7)applyDamage(t,beam.damage,'#ffe7a0',true,'AETHER TWIN BEAM');
+    if(along>=0&&along<=length&&side<=(t.r||10)+7){applyDamage(t,beam.damage,'#ffe7a0',true,'AETHER TWIN BEAM');t.stunned=Math.max(t.stunned||0,.5);const knock=Math.min(38,14+beam.damage*.025),kd=Math.hypot(dx,dy)||1;t.x+=dx/kd*knock;t.y+=dy/kd*knock;burst(t.x,t.y,'#ffe7a0',5);}
    }
   }
   queue.splice(i,1);
