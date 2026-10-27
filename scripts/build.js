@@ -6,7 +6,6 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (path) => readFile(resolve(root, path), 'utf8');
 
 const bootstrapPath = 'src/game-bootstrap.js';
-const originalPath = 'src/game.js';
 const outputPath = 'src/game.js';
 const placeholder = '// The module fragments below are concatenated here by the build script.';
 const bootstrap = await read(bootstrapPath);
@@ -17,13 +16,8 @@ if (placeholderIndex < 0) {
 }
 
 const prefix = bootstrap.slice(0, placeholderIndex).trimEnd();
-const previousBundle = await read(originalPath);
-const narrativeStart = previousBundle.indexOf('const narrative=createNarrativeSystem');
-const worldStart = previousBundle.indexOf('function world()', narrativeStart);
-if (narrativeStart < 0 || worldStart < 0) {
-  throw new Error('Could not recover narrative initialization from the current generated bundle.');
-}
-const runtimePrelude = previousBundle.slice(narrativeStart, worldStart).trimEnd();
+const runtimePrelude = `const narrative=createNarrativeSystem({overlay:$(\'overlay\'),modal:$(\'modal\'),getProgress:()=>saveData.storyProgress,saveProgress:()=>persist(),getCoreId:()=>core?.id,onStart:()=>{state=\'cutscene\';last=performance.now()},onEnd:()=>{last=performance.now()},onSound:()=>sfx(\'ui\'),onType:()=>sfx(\'text\')});
+let roomDialogueShown=new Set();const milestoneDeliveriesPresented=new Set();`;
 const fragments = [
   'src/systems/combat.js',
   'src/systems/campaign.js',
