@@ -1,5 +1,5 @@
 // MENUS MODULE
-// Runtime functions extracted from game.js; behavior preserved.
+// Source fragment consumed by scripts/build.js. Do not import directly.
 
 function markGlobalBackButtons(root=document){
  document.querySelectorAll('#modal button, #modal .menu-actions button, button.global-back-button').forEach(button=>{
