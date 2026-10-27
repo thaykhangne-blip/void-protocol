@@ -1,0 +1,3 @@
+function setupCombatHudHandlers(){
+const combatStatsToggle=$('combatStatsToggle'),combatStatsPanel=$('combatStatsPanel');if(combatStatsToggle&&combatStatsPanel){combatStatsToggle.addEventListener('click',()=>{const open=combatStatsPanel.hidden;combatStatsPanel.hidden=!open;combatStatsToggle.setAttribute('aria-expanded',String(open));sfx('ui');});updateCombatStatsUI();}const statsToggle=$('statsToggle'),statsContent=$('statsContent');if(statsToggle&&statsContent)statsToggle.onclick=()=>{const collapsed=statsContent.classList.toggle('collapsed');statsToggle.textContent=collapsed?'＋ SHOW STATS':'− HIDE STATS';statsToggle.setAttribute('aria-expanded',String(!collapsed));};
+}
