@@ -1358,11 +1358,11 @@ function showCoreDetails(id){
   nova:[
    {name:'Supernova Guidance',glyph:'✦',desc:'Homing Missile Salvo launches a larger, harder-hitting volley.'},
    {name:'Prismatic Overdrive',glyph:'✦',desc:'Boosts attack power and firing speed.'},
-   {name:'Prism Echo',glyph:'✧',desc:'Strengthens Aether shard damage and improves the bonus effect triggered by upgraded shard attacks.'},
-   {name:'Prism Focus',glyph:'✧',desc:'Increases Aether shard damage.'},
-   {name:'Overclock',glyph:'ϟ',desc:'Every fourth Aether shard deals +35% damage and gains a larger hitbox.'},
-   {name:'Spectrum Burn',glyph:'◈',desc:'Aether shard hits mark enemies so they take increased damage.'},
-   {name:'Event Horizon',glyph:'◉',desc:'Strengthens Aether shard damage and widens the shard hitbox.'}
+   {name:'Prism Echo',glyph:'✧',desc:'Strengthens Aether beam damage and improves the bonus effect triggered by empowered beam attacks.'},
+   {name:'Prism Focus',glyph:'✧',desc:'Increases Aether twin-beam damage.'},
+   {name:'Overclock',glyph:'ϟ',desc:'Every fourth Aether auto-attack deals +35% damage and gains a wider beam hitbox.'},
+   {name:'Spectrum Burn',glyph:'◈',desc:'Aether beam hits mark enemies so they take increased damage.'},
+   {name:'Event Horizon',glyph:'◉',desc:'Strengthens Aether beam damage and widens the beam hitbox.'}
   ],
   nature:[
    {name:'Root Network',glyph:'❧',desc:'Extends vine bind duration by 0.5 seconds per rank, up to 3 ranks.'},
