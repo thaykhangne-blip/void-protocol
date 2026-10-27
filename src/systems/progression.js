@@ -148,6 +148,8 @@ function perkRank(title){const t=String(title||'').toUpperCase();switch(t){
  case 'EMBER: PYRE CASCADE':return player?.pyreCascade||0;
  case 'FROST: CRYSTAL RESONANCE':return player?.crystalResonance||0;
  case 'AETHER: GRAVITATIONAL LENS':return player?.aetherGravitationalLensRank||0;
+ case 'AETHER: WIDE ORBIT':return player?.aetherRingRangeRank||0;
+ case 'AETHER: DEEP-FIELD RESONANCE':return player?.aetherDeepFieldRank||0;
  case 'PRISM: CUBIC OVERLOAD':return player?.elementalCubeOverload||0;
  case 'PRISM: CHAIN REACTION':return player?.elementalChainReaction||0;
  case 'PRISM: FROST LATTICE':return player?.elementalFrostLattice||0;
@@ -183,7 +185,7 @@ function perkRank(title){const t=String(title||'').toUpperCase();switch(t){
 
 // Use the shared rank table; perks without a listed cap can keep stacking.
 
-function perkMaxRank(title){const key=String(title||'').trim().toUpperCase();return PERK_MAX_RANK[key]??Infinity}
+function perkMaxRank(title){const key=String(title||'').trim().toUpperCase();if(key==='AETHER: WIDE ORBIT')return 3;if(key==='AETHER: DEEP-FIELD RESONANCE')return 1;return PERK_MAX_RANK[key]??Infinity}
 
 function perkAvailable(o){if(String(o.title||'').trim().toUpperCase()==='AURALIS: CORE RESONANCE'&&core?.id!=='remielle')return false;return perkRank(o.title)<perkMaxRank(o.title)}
 
@@ -229,7 +231,7 @@ const coreExclusiveAdditions={
  ],
  nova:[
  ['AETHER: WIDE ORBIT','◉','RARE · Aether ring range +12% per rank (max 3).',true,()=>{player.aetherRingRangeBonus=Math.min(.36,(player.aetherRingRangeBonus||0)+.12);player.aetherRingRangeRank=Math.min(3,(player.aetherRingRangeRank||0)+1)}],
- ['AETHER: DEEP-FIELD RESONANCE','✧','Aether ring range +8% and ATK Speed +6%.',false,()=>{player.aetherRingRangeBonus=Math.min(.75,(player.aetherRingRangeBonus||0)+.08);player.fireRate*=1.06}],
+ ['AETHER: DEEP-FIELD RESONANCE','✧','Aether ring range +8% and ATK Speed +6%.',false,()=>{player.aetherRingRangeBonus=Math.min(.75,(player.aetherRingRangeBonus||0)+.08);player.aetherDeepFieldRank=1;player.fireRate*=1.06}],
  ['AETHER: EVENT HORIZON','◉','Singularity radius +8%.',false,()=>{player.aetherWellRadiusBonus=(player.aetherWellRadiusBonus||0)+.08}],
  ['AETHER: SINGULARITY AMPLIFIER','✦','Singularity detonation damage +10%, subject to Black Sun damage caps.',false,()=>{player.aetherCollapseMult=(player.aetherCollapseMult||1)*1.10}],
  ['AETHER: COLLAPSING STAR','✹','RARE · Black Sun detonation damage +10%, subject to its per-target cap.',true,()=>{player.aetherCollapseMult=(player.aetherCollapseMult||1)*1.10}],
