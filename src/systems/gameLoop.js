@@ -2,6 +2,29 @@
 // Source fragment consumed by scripts/build.js. Do not import directly.
 // update() and frame() share the runtime lexical closure by design.
 
+function updateAetherBeamQueue(dt){
+ if(!player||!player.aetherBeamQueue?.length)return;
+ const queue=player.aetherBeamQueue;
+ for(let i=queue.length-1;i>=0;i--){
+  const beam=queue[i];beam.delay-=dt;
+  if(beam.delay>0)continue;
+  const candidates=[...(enemies||[]).filter(e=>e&&e.hp>0)];
+  if(blackHole&&blackHole.hp>0&&!blackHole.inactive)candidates.push(blackHole);
+  const target=candidates.filter(t=>!beam.used.has(t)).sort((a,b)=>dist(player,a)-dist(player,b))[0];
+  if(target){
+   beam.used.add(target);
+   const angle=Math.atan2(target.y-player.y,target.x-player.x),length=700;
+   const x2=player.x+Math.cos(angle)*length,y2=player.y+Math.sin(angle)*length;
+   skillFx.push({type:'aetherTwinBeam',x1:player.x,y1:player.y,x2,y2,life:.22,max:.22,color:'#ffe7a0'});
+   const ux=Math.cos(angle),uy=Math.sin(angle);
+   for(const t of candidates){
+    const dx=t.x-player.x,dy=t.y-player.y,along=dx*ux+dy*uy,side=Math.abs(dx*uy-dy*ux);
+    if(along>=0&&along<=length&&side<=(t.r||10)+7)applyDamage(t,beam.damage,'#ffe7a0',true,'AETHER TWIN BEAM');
+   }
+  }
+  queue.splice(i,1);
+ }
+}
 function update(dt){
  if(ultimateCinematic){
   ultimateCinematic.timer-=dt;
