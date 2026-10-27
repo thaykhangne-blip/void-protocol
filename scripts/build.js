@@ -10,13 +10,12 @@ const outputPath = 'src/game.js';
 const placeholder = '// The module fragments below are concatenated here by the build script.';
 const bootstrap = await read(bootstrapPath);
 const placeholderIndex = bootstrap.indexOf(placeholder);
-
-if (placeholderIndex < 0) {
-  throw new Error(`Build placeholder not found in ${bootstrapPath}. Restore the bootstrap marker before building.`);
-}
+if (placeholderIndex < 0) throw new Error(`Build placeholder missing in ${bootstrapPath}`);
 
 const prefix = bootstrap.slice(0, placeholderIndex).trimEnd();
-const runtimePrelude = `let roomDialogueShown=new Set();const milestoneDeliveriesPresented=new Set();`;
+const runtimePrelude = `const narrative=createNarrativeSystem({overlay:$(\'overlay\'),modal:$(\'modal\'),getProgress:()=>saveData.storyProgress,saveProgress:()=>persist(),getCoreId:()=>core?.id,onStart:()=>{state=\'cutscene\';last=performance.now()},onEnd:()=>{last=performance.now()},onSound:()=>sfx(\'ui\'),onType:()=>sfx(\'text\')});
+let roomDialogueShown=new Set();const milestoneDeliveriesPresented=new Set();`;
+
 const fragments = [
   'src/systems/combat.js',
   'src/systems/campaign.js',
@@ -24,7 +23,6 @@ const fragments = [
   'src/ui/menus.js',
   'src/systems/runtime.js',
 ];
-
 const sections = await Promise.all(fragments.map(read));
 const output = [
   '// GENERATED FILE. Edit src/game-bootstrap.js and the files in src/systems/ or src/ui/ instead.',
