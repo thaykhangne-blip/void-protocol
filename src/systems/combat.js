@@ -1,5 +1,5 @@
 // COMBAT MODULE
-// These function declarations are concatenated into the game runtime to retain shared state.
+// Runtime functions extracted from game.js; behavior preserved.
 
 function updateCombatStatsUI(){const keys=['damageDealt','healingReceived','damageReceived'],peak=Math.max(1,...keys.map(k=>roomCombatStats[k]||0));for(const key of keys){const value=roomCombatStats[key]||0,valueNode=$(key+'Value'),barNode=$(key+'Bar');if(valueNode)valueNode.textContent=Math.round(value).toLocaleString();if(barNode)barNode.style.width=Math.min(100,value/peak*100)+'%';}}
 
