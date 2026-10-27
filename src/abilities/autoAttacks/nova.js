@@ -3,7 +3,7 @@
 export function fireNovaAutoAttack(context, locals) {
  const { player, enemies, blackHole, applyDamage, skillFx, burst, dist } = context;
  const inward = (player.aetherRingPhase = ((player.aetherRingPhase || 0) + 1) % 2) === 1;
- const radius = (148 + Math.min(32, (player.evoTier || 0) * 8)) * (1 + Math.min(.75, player.aetherRingRangeBonus || 0));
+ const radius = (132 + Math.min(28, (player.evoTier || 0) * 7)) * (1 + Math.min(.75, player.aetherRingRangeBonus || 0));
  const innerRadius = Math.max(22, player.r + 10);
  const pulseDamage = player.damage * .62 * (player.laserDamageMult || 1);
  const color = '#fff0a6';
