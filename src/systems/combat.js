@@ -438,3 +438,18 @@ function damagePlayer(d){if((skillFx||[]).some(fx=>fx.type==='aetherBlackSun'&&f
 
 function killEnemy(e){if(core?.id==='remielle'&&featherTraps.filter(f=>f.fromKillCrystal&&!f.hit&&f.life>0).length<5){featherTraps.push({x:e.x,y:e.y,age:0,life:8,damage:player.damage*.65,homing:false,targetId:null,targetCore:false,targetRef:null,hit:false,fromKillCrystal:true});burst(e.x,e.y,'#ffd8f0',5);}sfx('kill');addEnergy(3+(player.energyOnKill||0));addShards(Math.floor(rand(3,7)+(player.shardBonus||0)));if(e.isMiniBoss){const bonusShards=55+room*2;addShards(bonusShards);gainXP(70+room*7);notify(`MINI-BOSS DEFEATED · +${bonusShards} SHARDS · BONUS XP`);supernovaBurst(e.x,e.y,e.r||22,e.color||'#fff',true);}if(player.lifeSiphon)restoreHull(player.lifeSiphon);if(core?.id==='ember'&&e.burn>0&&player.phoenixHeal)restoreHull(player.phoenixHeal);if(core?.id==='ember'&&e.burn>0&&player.burnSplash){for(const other of enemies){if(other!==e&&other.hp>0&&dist(e,other)<78){applyDamage(other,player.damage*.45,'#ff9c65',false,'ASHFALL');other.burn=Math.max(other.burn||0,1.8);other.burnDps=Math.max(other.burnDps||0,6*(player.burnMult||1));other.burnFx=0;other.burnTick=0;other.burnPending=0;}}}kills++;if(blackHole&&!blackHole.inactive){blackHole.kills=(blackHole.kills||0)+1;}if(['horde','ambush','challenge'].includes(roomType)&&!e.isMiniBoss){roomObjective.kills=(roomObjective.kills||0)+1;roomKills=roomObjective.kills;if(roomType==='challenge'&&roomObjective.kills>=roomObjective.target){completeObjectiveRoom();}}const rawValue=Math.round(9+room*1.4+level*.8);const remaining=Math.max(0,stageXpCap-stageXpEarned);const taper=Math.pow(Math.max(0,1-stageXpEarned/Math.max(1,stageXpCap)),0.65);const value=Math.min(remaining,Math.max(0,Math.round(rawValue*taper)));if(value>0){stageXpEarned+=value;xpDrops.push({x:e.x,y:e.y,vx:rand(-28,28),vy:rand(-35,5),r:4,value,life:12,pulse:rand(0,6)})}if(e.isFinalBoss||e.isBoss||e.role==='boss')supernovaBurst(e.x,e.y,e.r||30,e.color||'#bd92ff',true);else if(e.isMiniBoss||e.role==='miniboss')supernovaBurst(e.x,e.y,e.r||22,e.color||'#aabaff',false);else burst(e.x,e.y,e.color||'#9cb5ff',7)}
 
+
+
+export function installCombatModule(runtime) {
+  Object.assign(runtime, {
+    updateCombatStatsUI, recordCombatMetric, withinCoreRange, addLightningArc, triggerChainAttack,
+    getPriorityTarget, nearestTarget, getPrimaryAttackTarget, drawPrimaryTargetIndicator,
+    applyLumineBuildup, firePhaseFlowAttack, launchElementalVerdantSalvo, addElementalEffect,
+    updateElementalEffects, drawElementalEffectIcons, applyElementalStrike, applyElementalAutoSplash,
+    configureVoidWeaponAutoAttack, shoot, pushParticle, compactEffectsByLife, burst, supernovaBurst,
+    floatDamage, applyDamage, coreSkillCooldown, useCoreSkill, updateCoreSkill, castUltimate,
+    rainbowCoreColor, coreTrail, updateDamageTexts, enemyContactDamage, grantVengeanceShield,
+    clampVengeanceShields, restoreHull, aetherRendAttackMultiplier, hasAetherBlackHoleField,
+    hasAetherEventideSingularity, damagePlayer, killEnemy
+  });
+}
