@@ -608,11 +608,3 @@ const combatStatsToggle=$('combatStatsToggle'),combatStatsPanel=$('combatStatsPa
 })();
 
 
-
-export function installRuntimeModule(runtime) {
-  Object.assign(runtime, {
-    updateUI, update, renderStatusHud, drawDashChargeDiamonds, drawCinematicWorldBackdrop,
-    drawMenuCinematicBackground, drawAetherSingularity, draw, drawEnemyCreature, frame,
-    fitGameScreen, pos, showPerkTooltip, hidePerkTooltip, showCoreGlobalTip, hideCoreGlobalTip
-  });
-}
