@@ -23,7 +23,7 @@ export function fireNovaAutoAttack(context, locals) {
  if (blackHole && blackHole.hp > 0 && !blackHole.inactive && dist(player, blackHole) <= radius + (blackHole.r || 0)) {
   applyDamage(blackHole, pulseDamage, color, true, inward ? 'AETHER GRAVITY INFLUX' : 'AETHER GRAVITY REJECTION');
  }
- skillFx.push({ type:'aetherRingPulse', x:player.x, y:player.y, life:.36, max:.36, radius, innerRadius, inward, color });
+ skillFx.push({ type:'aetherRingPulse', x:player.x, y:player.y, life:.36, max:.36, radius, innerRadius, inward, color, ringCount:2+Math.min(2,player.sideCannons||0) });
  // Orbital Overdrive is now an empowered inward pulse, not a projectile.
  if (inward && player.novaOverclock && ((player.novaOverclockCount = (player.novaOverclockCount || 0) + 1) >= 4)) {
   player.novaOverclockCount = 0;
