@@ -607,3 +607,12 @@ function hideCoreGlobalTip(el){if(el&&activeCoreTip!==el)return;activeCoreTip=nu
 const combatStatsToggle=$('combatStatsToggle'),combatStatsPanel=$('combatStatsPanel');if(combatStatsToggle&&combatStatsPanel){combatStatsToggle.addEventListener('click',()=>{const open=combatStatsPanel.hidden;combatStatsPanel.hidden=!open;combatStatsToggle.setAttribute('aria-expanded',String(open));sfx('ui');});updateCombatStatsUI();}const statsToggle=$('statsToggle'),statsContent=$('statsContent');if(statsToggle&&statsContent)statsToggle.onclick=()=>{const collapsed=statsContent.classList.toggle('collapsed');statsToggle.textContent=collapsed?'＋ SHOW STATS':'− HIDE STATS';statsToggle.setAttribute('aria-expanded',String(!collapsed));};$('ultimateHud').onclick=()=>{sfx('ui');castUltimate()};$('skillHud').onclick=()=>{sfx('ui');useCoreSkill()};$('dashHud').onclick=performDash;$('pauseBtn').onclick=()=>{sfx('ui');if(['playing','portal','shop','paused'].includes(state))pauseGame();else if(state==='settings'){state='paused';showPauseMenu()}else if(state==='start'||state==='worldselect')showWorldSelect();else showPauseMenu()};showMainMenu();requestAnimationFrame(frame);window.__voidLoaderReady?.();
 })();
 
+
+
+export function installRuntimeModule(runtime) {
+  Object.assign(runtime, {
+    updateUI, update, renderStatusHud, drawDashChargeDiamonds, drawCinematicWorldBackdrop,
+    drawMenuCinematicBackground, drawAetherSingularity, draw, drawEnemyCreature, frame,
+    fitGameScreen, pos, showPerkTooltip, hidePerkTooltip, showCoreGlobalTip, hideCoreGlobalTip
+  });
+}
