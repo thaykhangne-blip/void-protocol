@@ -1,5 +1,5 @@
 // CAMPAIGN MODULE
-// These function declarations are concatenated into the game runtime to retain shared state.
+// Runtime functions extracted from game.js; behavior preserved.
 
 function world(){return currentWorld===-1?tutorialWorld:(worlds[currentWorld]||worlds[0])}
 
