@@ -313,6 +313,32 @@ skillFx=skillFx.filter(f=>f.life>0);
 
 function castUltimate(){
  if(state!=='playing'||!player||!core)return;
+ if(energy<100){notify(`ULTIMATE REQUIRES 100 ENERGY · ${energy}% CHARGED`);return;}
+ if(ultimateCinematic)return;
+ const accent=({ember:'#ff9c65',frost:'#8cecff',aether:'#ffe45c',remielle:'#ff9ed8',auralis:'#ff9ed8',flash:'#83eaff',nature:'#8dff9a',prism:'#c7a5ff',crimson:'#ff496c',blood:'#ff496c'})[core.id]||'#c18aff';
+ ultimateCinematic={timer:1.7,color:accent};
+ if(c){
+  c.style.transition='transform 1.7s cubic-bezier(.16,.78,.22,1)';
+  c.style.transformOrigin=(player.x/Math.max(1,W)*100)+'% '+(player.y/Math.max(1,H)*100)+'%';
+  c.style.transform='scale(1.18)';
+ }
+ let overlay=$('ultimateCinematicOverlay');
+ if(!overlay){
+  overlay=document.createElement('div');overlay.id='ultimateCinematicOverlay';
+  Object.assign(overlay.style,{position:'fixed',inset:'0',zIndex:'9999',pointerEvents:'none',opacity:'0',transition:'opacity 1.7s ease',boxShadow:'inset 0 0 0 0 '+accent});
+  document.body.appendChild(overlay);
+ }
+ overlay.style.boxShadow='inset 0 0 90px 24px '+accent;
+ overlay.style.opacity='1';
+}
+function endUltimateCinematic(){
+ if(c){c.style.transform='';c.style.transformOrigin='';c.style.transition='';}
+ const overlay=$('ultimateCinematicOverlay');
+ if(overlay){overlay.style.opacity='0';overlay.style.boxShadow='inset 0 0 0 0 transparent';}
+ ultimateCinematic=null;
+}
+function resolveUltimateCast(){
+ if(state!=='playing'||!player||!core)return;
  const minimum=100;
  if(energy<minimum){notify(`ULTIMATE REQUIRES 100 ENERGY · ${energy}% CHARGED`);return;}
  sfx('ultimate');const spent=energy;energy=Math.min(100,(player.afterglowCapacitor||0)*8);const lv=ultLevel,energyPower=(.65+spent/100)*(1+lv*.18),center={x:player.x,y:player.y},ultRange=Math.min(520,Math.max(340,Math.min(W,H)*.55));const inUltRange=target=>!!target&&dist(center,target)<=ultRange+(target.r||0);ultCastFlash=.55;
