@@ -2523,6 +2523,22 @@ if(roomTransition){
  const fade=roomTransition.phase==='out'?Math.min(1,roomTransition.elapsed/roomTransition.fadeOut):1-Math.min(1,roomTransition.elapsed/roomTransition.fadeIn);
  if(fade>0){ctx.save();ctx.globalAlpha=fade;ctx.fillStyle='#020207';ctx.fillRect(0,0,W,H);ctx.restore();}
 }
+ // Portal interaction takes place inside the void: hide the arena and render drifting stars.
+ if(state==='portal'||state==='portalTransition'){
+  ctx.save();ctx.globalAlpha=1;ctx.fillStyle='#020207';ctx.fillRect(0,0,W,H);
+  const tm=performance.now()*.001;
+  for(let i=0;i<110;i++){
+   const seed=i*127.1+311.7;
+   const x=((Math.sin(seed)*43758.5453)%1+1)%1*W;
+   const y=((Math.sin(seed*1.71)*24634.6345)%1+1)%1*H;
+   const twinkle=.25+.65*(.5+.5*Math.sin(tm*(1.1+(i%5)*.24)+i));
+   const drift=(tm*(3+(i%7)*1.5))%(H+12);
+   ctx.globalAlpha=twinkle;ctx.fillStyle=i%9===0?'#9beaff':'#e4e9ff';
+   ctx.beginPath();ctx.arc(x,(y+drift)%H, i%13===0?1.5:.65,0,Math.PI*2);ctx.fill();
+  }
+  ctx.restore();
+ }
+
 }
 
 
