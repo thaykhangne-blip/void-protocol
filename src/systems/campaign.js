@@ -1,4 +1,5 @@
-// Extracted from the legacy game runtime. Runtime behavior is intentionally preserved.
+// CAMPAIGN MODULE
+// These function declarations are concatenated into the game runtime to retain shared state.
 
 function world(){return currentWorld===-1?tutorialWorld:(worlds[currentWorld]||worlds[0])}
 
@@ -210,3 +211,4 @@ function beginPortalTransition(portal){
 }
 
 function enterPortal(type,portalData=null){state='portal';environmentHazards=[];hazardSpawnTimer=Math.max(1.8,4.2-(Math.max(0,currentWorld)*.35));hazardHitCooldown=0;portals=[];burst(player.x,player.y,'#72f6ff',12);if(type==='heal'){const healed=restoreHull(Math.ceil(player.maxHp*.4));updateUI();showModal('REPAIR GATE','CORE RESTORED',`The gate repairs ${Number(healed.toFixed(1)).toLocaleString('en-US',{maximumFractionDigits:1})} hull.`,[{glyph:'✚',color:'#83ffc5',title:'CONTINUE',desc:'Proceed with your repaired core.',action:finishPortalRoom}]);return}if(type==='exchange'){const oldPerk=portalData?.exchangeFrom||'No existing perk';const offer=portalData?.exchangeTo||null;if(!offer){showModal('PERK EXCHANGE','NO VALID OFFER','No general perk is available. This portal cannot be refreshed.',[{glyph:'→',title:'CONTINUE',desc:'Leave the exchange untouched.',action:finishPortalRoom}]);return}showPerkExchange(offer);return}if(type==='event'){showAnomaly();return}if(type==='shop'){shopVisits++;shopStock=null;shopPurchased=[];showShop();return}if(type==='forge'){showVoidForge();return}}
+
