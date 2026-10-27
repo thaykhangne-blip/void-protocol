@@ -27,19 +27,12 @@ export function fireNovaAutoAttack(context, locals) {
   player.aetherSuccessfulPulses = (player.aetherSuccessfulPulses || 0) + 1;
   if (player.aetherSuccessfulPulses >= 6) {
    player.aetherSuccessfulPulses = 0;
-   const beamLength = 520, offsets = [-17, 17], beamDamage = player.damage * .9 * (player.laserDamageMult || 1);
-   for (const offset of offsets) {
-    const y = player.y + offset;
-    skillFx.push({type:'aetherTwinBeam', x1:player.x, y1:y, x2:player.x-beamLength, y2:y, life:.22, max:.22, color:'#ffe7a0'});
-    for (const enemy of enemies) {
-     if (!enemy || enemy.hp <= 0) continue;
-     if (enemy.x <= player.x && enemy.x >= player.x-beamLength && Math.abs(enemy.y-y) <= (enemy.r || 10) + 5) {
-      applyDamage(enemy, beamDamage, '#ffe7a0', true, 'AETHER TWIN BEAM');
-      burst(enemy.x, enemy.y, '#ffe7a0', 4);
-     }
-    }
-    if (blackHole && blackHole.hp > 0 && !blackHole.inactive && blackHole.x <= player.x && blackHole.x >= player.x-beamLength && Math.abs(blackHole.y-y) <= (blackHole.r || 10) + 5) applyDamage(blackHole, beamDamage, '#ffe7a0', true, 'AETHER TWIN BEAM');
-   }
+   const beamDamage = player.damage * .9 * (player.laserDamageMult || 1);
+   // Queue the upper beam first and the lower beam 0.3s later.
+   player.aetherBeamQueue = [
+    {delay:0, damage:beamDamage, used:new Set()},
+    {delay:.3, damage:beamDamage, used:new Set()}
+   ];
   }
  }
  if (blackHole && blackHole.hp > 0 && !blackHole.inactive && dist(player, blackHole) <= radius + (blackHole.r || 0)) {
