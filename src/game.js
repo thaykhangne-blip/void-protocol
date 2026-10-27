@@ -344,27 +344,44 @@ function startUltimateCosmicParticles(overlay,accent){
  const resize=()=>{canvas.width=Math.max(1,innerWidth*devicePixelRatio);canvas.height=Math.max(1,innerHeight*devicePixelRatio);ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);};
  resize();
  const w=()=>innerWidth,h=()=>innerHeight,cx=()=>w()/2,cy=()=>h()/2;
- const particles=Array.from({length:115},()=>({a:Math.random()*Math.PI*2,r:Math.random()*Math.max(w(),h())*.72,s:.4+Math.random()*2.5,sz:.6+Math.random()*2.4,tw:Math.random()*Math.PI*2,orbit:(Math.random()-.5)*.025}));
+ const particles=Array.from({length:155},()=>({x:Math.random()*w(),y:Math.random()*h(),vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,size:.35+Math.random()*1.35,tw:Math.random()*Math.PI*2,alpha:.25+Math.random()*.65,streak:Math.random()<.14}));
+ const nebula=Array.from({length:7},()=>({x:Math.random()*w(),y:Math.random()*h(),r:45+Math.random()*120,a:.018+Math.random()*.035,phase:Math.random()*6.28}));
  let start=performance.now(),last=start;
  const frame=now=>{
   if(!ultimateCinematic||!overlay.isConnected){ultimateCosmicRaf=0;return;}
   const elapsed=now-start,dt=Math.min(2,(now-last)/16.67);last=now;
   ctx.clearRect(0,0,w(),h());
-  const haze=ctx.createRadialGradient(cx(),cy(),8,cx(),cy(),Math.max(w(),h())*.72);
-  haze.addColorStop(0,'rgba(255,255,255,0.10)');haze.addColorStop(.28,accent+'20');haze.addColorStop(1,'rgba(0,0,0,0)');
-  ctx.fillStyle=haze;ctx.fillRect(0,0,w(),h());
-  for(const p of particles){
-   p.a+=p.orbit*dt;p.r-=p.s*dt;
-   if(p.r<18){p.r=Math.max(w(),h())*(.45+Math.random()*.35);p.a=Math.random()*Math.PI*2;}
-   const x=cx()+Math.cos(p.a)*p.r,y=cy()+Math.sin(p.a)*p.r*.72;
-   const alpha=.28+.65*(.5+.5*Math.sin(elapsed*.008+p.tw));
-   const tail=4+p.s*5;
-   ctx.globalAlpha=alpha;ctx.strokeStyle=accent;ctx.lineWidth=p.sz*.7;
-   ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x-Math.cos(p.a)*tail,y-Math.sin(p.a)*tail);ctx.stroke();
-   ctx.fillStyle='#ffffff';ctx.beginPath();ctx.arc(x,y,p.sz*.55,0,Math.PI*2);ctx.fill();
+  // Narrow, restrained edge bloom; most of the frame stays dark and readable.
+  const edge=ctx.createRadialGradient(cx(),cy(),Math.min(w(),h())*.34,cx(),cy(),Math.max(w(),h())*.78);
+  edge.addColorStop(0,'rgba(0,0,0,0)');edge.addColorStop(.72,accent+'08');edge.addColorStop(1,accent+'20');
+  ctx.fillStyle=edge;ctx.fillRect(0,0,w(),h());
+  // Faint nebula clouds, blurred and slow-moving rather than a solid colored wash.
+  for(const n of nebula){
+   n.phase+=.002*dt;
+   const g=ctx.createRadialGradient(n.x+Math.sin(n.phase)*10,n.y+Math.cos(n.phase)*8,0,n.x,n.y,n.r);
+   g.addColorStop(0,accent+'0a');g.addColorStop(1,accent+'00');
+   ctx.fillStyle=g;ctx.fillRect(n.x-n.r,n.y-n.r,n.r*2,n.r*2);
   }
-  ctx.globalAlpha=.2;ctx.strokeStyle=accent;ctx.lineWidth=1;
-  for(let i=0;i<3;i++){ctx.beginPath();ctx.ellipse(cx(),cy(),w()*(.18+i*.11),h()*(.12+i*.085),elapsed*.00012*(i%2?1:-1),.25+i*.6,Math.PI*1.65+i*.6);ctx.stroke();}
+  for(const p of particles){
+   p.x+=p.vx*dt;p.y+=p.vy*dt;
+   if(p.x<0)p.x=w();if(p.x>w())p.x=0;if(p.y<0)p.y=h();if(p.y>h())p.y=0;
+   const twinkle=.45+.55*(.5+.5*Math.sin(elapsed*.004+p.tw));
+   ctx.globalAlpha=p.alpha*twinkle;
+   if(p.streak){
+    ctx.strokeStyle=accent;ctx.lineWidth=.45;
+    ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x-p.vx*26,p.y-p.vy*26);ctx.stroke();
+   }
+   // White-hot stars with only a subtle accent tint.
+   ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();
+   if(p.size>1.25&&twinkle>.82){
+    ctx.globalAlpha*=.45;ctx.strokeStyle=accent;ctx.lineWidth=.45;
+    ctx.beginPath();ctx.moveTo(p.x-p.size*2.4,p.y);ctx.lineTo(p.x+p.size*2.4,p.y);ctx.moveTo(p.x,p.y-p.size*2.4);ctx.lineTo(p.x,p.y+p.size*2.4);ctx.stroke();
+   }
+  }
+  // Sparse, hairline orbital traces instead of large graphic ellipses.
+  ctx.globalAlpha=.09;ctx.strokeStyle=accent;ctx.lineWidth=.65;
+  ctx.beginPath();ctx.ellipse(cx(),cy(),w()*.2,h()*.145,-.16+Math.sin(elapsed*.0003)*.025,.15,Math.PI*1.55);ctx.stroke();
+  ctx.beginPath();ctx.ellipse(cx(),cy(),w()*.27,h()*.19,.24+Math.sin(elapsed*.00025)*.02,3.4,Math.PI*2.02);ctx.stroke();
   ctx.globalAlpha=1;
   if(elapsed<1900)ultimateCosmicRaf=requestAnimationFrame(frame);else{ctx.clearRect(0,0,w(),h());ultimateCosmicRaf=0;}
  };
@@ -390,7 +407,7 @@ function castUltimate(){
   document.body.appendChild(overlay);
  }
  overlay.style.background='radial-gradient(ellipse at center, '+accent+'12 0%, transparent 58%)';
- overlay.style.boxShadow='inset 0 0 125px 34px '+accent+', inset 0 0 230px 70px '+accent+'55';
+ overlay.style.boxShadow='inset 0 0 48px 8px '+accent+'88, inset 0 0 92px 18px '+accent+'22';
  overlay.style.opacity='1';
  startUltimateCosmicParticles(overlay,accent);
 }
