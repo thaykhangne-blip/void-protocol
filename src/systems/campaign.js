@@ -204,9 +204,9 @@ function showPortals(){
  // Exit toward a random edge, then enter portal selection from the opposite side.
  const exit=randomCoreEdge(),opposite={top:'bottom',bottom:'top',left:'right',right:'left'}[exit.edge];
  player.portalExitEdge=exit.edge;
- player.portalArrival={elapsed:0,duration:.72,startX:opposite==='left'?-((player.r||12)*2):opposite==='right'?W+(player.r||12)*2:W/2,startY:opposite==='top'?-((player.r||12)*2):opposite==='bottom'?H+(player.r||12)*2:H/2,targetX:W/2,targetY:H/2};
- player.x=exit.x;player.y=exit.y;
- clearRoomProjectiles();clearAuralisRoomEffects();clearNatureRoomEffects();featherTraps=[];state='portal';blackHole=null;enemies=[];
+ player.portalDeparture={elapsed:0,duration:.55,startX:player.x,startY:player.y,targetX:exit.x,targetY:exit.y,edge:exit.edge,arrivalEdge:opposite};
+ player.portalArrival=null;
+ clearRoomProjectiles();clearAuralisRoomEffects();clearNatureRoomEffects();featherTraps=[];state='portalDepart';blackHole=null;enemies=[];
  const perksInBuild=(build||[]).filter(Boolean);
  const exchangeFrom=perksInBuild.length?pick(perksInBuild):'No existing perk';
  const exchangeOptions=createGeneralPerks().filter(p=>perkAvailable(p));
