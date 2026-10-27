@@ -2443,6 +2443,11 @@ function hideCoreGlobalTip(el){if(el&&activeCoreTip!==el)return;activeCoreTip=nu
 }
 
 
+function setupCombatHudHandlers(){
+const combatStatsToggle=$('combatStatsToggle'),combatStatsPanel=$('combatStatsPanel');if(combatStatsToggle&&combatStatsPanel){combatStatsToggle.addEventListener('click',()=>{const open=combatStatsPanel.hidden;combatStatsPanel.hidden=!open;combatStatsToggle.setAttribute('aria-expanded',String(open));sfx('ui');});updateCombatStatsUI();}const statsToggle=$('statsToggle'),statsContent=$('statsContent');if(statsToggle&&statsContent)statsToggle.onclick=()=>{const collapsed=statsContent.classList.toggle('collapsed');statsToggle.textContent=collapsed?'＋ SHOW STATS':'− HIDE STATS';statsToggle.setAttribute('aria-expanded',String(!collapsed));};
+}
+
+
 // RUNTIME MODULE
 // Source fragment consumed by scripts/build.js. Do not import directly.
 
@@ -2557,7 +2562,7 @@ function frame(t){const particlePanel=$('particlePanel');if(particlePanel)partic
 function fitGameScreen(){resizeGameCanvas();}window.addEventListener('resize',fitGameScreen);window.addEventListener('load',()=>{fitGameScreen();const target=Math.ceil((W*H)/6200);while(stars.length<target)stars.push({x:Math.random()*W,y:Math.random()*H,s:Math.random()<.85?1:2,a:rand(.15,.8),p:rand(0,6)});mouse.x=Math.min(W,Math.max(0,mouse.x));mouse.y=Math.min(H,Math.max(0,mouse.y));mouse.lastX=mouse.x;mouse.lastY=mouse.y;});
 
 setupInputHandlers();setupTooltipHandlers();
-const combatStatsToggle=$('combatStatsToggle'),combatStatsPanel=$('combatStatsPanel');if(combatStatsToggle&&combatStatsPanel){combatStatsToggle.addEventListener('click',()=>{const open=combatStatsPanel.hidden;combatStatsPanel.hidden=!open;combatStatsToggle.setAttribute('aria-expanded',String(open));sfx('ui');});updateCombatStatsUI();}const statsToggle=$('statsToggle'),statsContent=$('statsContent');if(statsToggle&&statsContent)statsToggle.onclick=()=>{const collapsed=statsContent.classList.toggle('collapsed');statsToggle.textContent=collapsed?'＋ SHOW STATS':'− HIDE STATS';statsToggle.setAttribute('aria-expanded',String(!collapsed));};$('ultimateHud').onclick=()=>{sfx('ui');castUltimate()};$('skillHud').onclick=()=>{sfx('ui');useCoreSkill()};$('dashHud').onclick=performDash;$('pauseBtn').onclick=()=>{sfx('ui');if(['playing','portal','shop','paused'].includes(state))pauseGame();else if(state==='settings'){state='paused';showPauseMenu()}else if(state==='start'||state==='worldselect')showWorldSelect();else showPauseMenu()};showMainMenu();requestAnimationFrame(frame);window.__voidLoaderReady?.();
+setupCombatHudHandlers();$('ultimateHud').onclick=()=>{sfx('ui');castUltimate()};$('skillHud').onclick=()=>{sfx('ui');useCoreSkill()};$('dashHud').onclick=performDash;$('pauseBtn').onclick=()=>{sfx('ui');if(['playing','portal','shop','paused'].includes(state))pauseGame();else if(state==='settings'){state='paused';showPauseMenu()}else if(state==='start'||state==='worldselect')showWorldSelect();else showPauseMenu()};showMainMenu();requestAnimationFrame(frame);window.__voidLoaderReady?.();
 
 
 
