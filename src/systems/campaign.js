@@ -1,4 +1,4 @@
-let portalInteractionActive=false;
+window.window.portalInteractionActive=false;
 // CAMPAIGN MODULE
 // Source fragment consumed by scripts/build.js. Do not import directly.
 
@@ -156,7 +156,7 @@ function finishPortalRoom(){
 }
 
 function finishPortalRoomNow(){
- portalInteractionActive=false;
+ window.portalInteractionActive=false;
  if(player&&(player.repairMatrix||0)>0){const restored=Math.min(Math.max(0,player.maxHp-player.hp),8*Math.min(3,player.repairMatrix));if(restored>0){player.hp+=restored;recordCombatMetric('healingReceived',restored);damageTexts.push({x:player.x+rand(-4,4),y:player.y-player.r-10,vx:0,vy:-34,life:1.05,max:1.05,text:'+'+Math.round(restored)+' HP',color:'#83ffc5',crit:false});burst(player.x,player.y,'#83ffc5',5);}}cleared++;if(currentWorld>=0){saveData.campaignCheckpoint={world:currentWorld,room:Math.min(world().rooms,room+1),cleared:cleared,updatedAt:Date.now()};saveData.lastWorld=currentWorld;persist()}if(room>=world().rooms){saveData.bestRooms[currentWorld]=Math.max(saveData.bestRooms[currentWorld]||0,world().rooms);saveData.campaignCheckpoint=null;persist();completeWorld();return}room++;enterRoom();saveRunCheckpoint();state='playing';hideModal();last=performance.now();updateUI()}
 
 function continueAfterRoomClear(){
@@ -234,5 +234,5 @@ function beginPortalTransition(portal){
  state='portalTransition';sfx('portal');
 }
 
-function enterPortal(type,portalData=null){portalInteractionActive=true;state='portal';environmentHazards=[];hazardSpawnTimer=Math.max(1.8,4.2-(Math.max(0,currentWorld)*.35));hazardHitCooldown=0;portals=[];burst(player.x,player.y,'#72f6ff',12);if(type==='heal'){const healed=restoreHull(Math.ceil(player.maxHp*.4));updateUI();showModal('REPAIR GATE','CORE RESTORED',`The gate repairs ${Number(healed.toFixed(1)).toLocaleString('en-US',{maximumFractionDigits:1})} hull.`,[{glyph:'✚',color:'#83ffc5',title:'CONTINUE',desc:'Proceed with your repaired core.',action:finishPortalRoom}]);return}if(type==='exchange'){const oldPerk=portalData?.exchangeFrom||'No existing perk';const offer=portalData?.exchangeTo||null;if(!offer){showModal('PERK EXCHANGE','NO VALID OFFER','No general perk is available. This portal cannot be refreshed.',[{glyph:'→',title:'CONTINUE',desc:'Leave the exchange untouched.',action:finishPortalRoom}]);return}showPerkExchange(offer);return}if(type==='event'){showAnomaly();return}if(type==='shop'){shopVisits++;shopStock=null;shopPurchased=[];showShop();return}if(type==='forge'){showVoidForge();return}}
+function enterPortal(type,portalData=null){window.portalInteractionActive=true;state='portal';environmentHazards=[];hazardSpawnTimer=Math.max(1.8,4.2-(Math.max(0,currentWorld)*.35));hazardHitCooldown=0;portals=[];burst(player.x,player.y,'#72f6ff',12);if(type==='heal'){const healed=restoreHull(Math.ceil(player.maxHp*.4));updateUI();showModal('REPAIR GATE','CORE RESTORED',`The gate repairs ${Number(healed.toFixed(1)).toLocaleString('en-US',{maximumFractionDigits:1})} hull.`,[{glyph:'✚',color:'#83ffc5',title:'CONTINUE',desc:'Proceed with your repaired core.',action:finishPortalRoom}]);return}if(type==='exchange'){const oldPerk=portalData?.exchangeFrom||'No existing perk';const offer=portalData?.exchangeTo||null;if(!offer){showModal('PERK EXCHANGE','NO VALID OFFER','No general perk is available. This portal cannot be refreshed.',[{glyph:'→',title:'CONTINUE',desc:'Leave the exchange untouched.',action:finishPortalRoom}]);return}showPerkExchange(offer);return}if(type==='event'){showAnomaly();return}if(type==='shop'){shopVisits++;shopStock=null;shopPurchased=[];showShop();return}if(type==='forge'){showVoidForge();return}}
 
