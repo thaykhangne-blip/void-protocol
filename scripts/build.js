@@ -16,7 +16,7 @@ if (placeholderIndex < 0) {
 }
 
 const prefix = bootstrap.slice(0, placeholderIndex).trimEnd();
-const runtimePrelude = ``;
+const runtimePrelude = `let roomDialogueShown=new Set();const milestoneDeliveriesPresented=new Set();`;
 const fragments = [
   'src/systems/combat.js',
   'src/systems/campaign.js',
