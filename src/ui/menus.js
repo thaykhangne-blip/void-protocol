@@ -1,5 +1,5 @@
 // MENUS MODULE
-// These function declarations are concatenated into the game runtime to retain shared state.
+// Runtime functions extracted from game.js; behavior preserved.
 
 function markGlobalBackButtons(root=document){
  document.querySelectorAll('#modal button, #modal .menu-actions button, button.global-back-button').forEach(button=>{
