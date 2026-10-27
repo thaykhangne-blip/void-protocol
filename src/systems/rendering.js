@@ -118,7 +118,7 @@ function drawMenuCinematicBackground(){
  ctx.save();
  const bg=ctx.createRadialGradient(W*.52,H*.48,Math.min(W,H)*.04,W*.52,H*.48,Math.max(W,H)*.78);
  bg.addColorStop(0,'#11152d');bg.addColorStop(.55,'#070a18');bg.addColorStop(1,'#010208');
- ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+ ctx.fillStyle=(state==='portal'||state==='portalTransition')?'#000000':bg;ctx.fillRect(0,0,W,H);
  // Distant singularity with a luminous accretion disk.
  const x=W*.53,y=H*.48,r=Math.min(W,H)*.19;
  ctx.save();ctx.translate(x,y);ctx.rotate(-.22+t*.018);
