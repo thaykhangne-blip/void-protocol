@@ -2151,7 +2151,7 @@ function drawMenuCinematicBackground(){
  ctx.save();
  const bg=ctx.createRadialGradient(W*.52,H*.48,Math.min(W,H)*.04,W*.52,H*.48,Math.max(W,H)*.78);
  bg.addColorStop(0,'#11152d');bg.addColorStop(.55,'#070a18');bg.addColorStop(1,'#010208');
- const portalStarfieldActive=portalInteractionActive||(state==='portalTransition'&&portalTransition&&portalTransition.elapsed>=portalTransition.travelDuration)||(state==='portal'&&!$('overlay')?.classList.contains('hidden'));ctx.fillStyle=portalStarfieldActive?'#000000':bg;ctx.fillRect(0,0,W,H);
+ const portalStarfieldActive=window.portalInteractionActive===true||(state==='portalTransition'&&portalTransition&&portalTransition.elapsed>=portalTransition.travelDuration)||(state==='portal'&&!$('overlay')?.classList.contains('hidden'));ctx.fillStyle=portalStarfieldActive?'#000000':bg;ctx.fillRect(0,0,W,H);
  // Distant singularity with a luminous accretion disk.
  const x=W*.53,y=H*.48,r=Math.min(W,H)*.19;
  ctx.save();ctx.translate(x,y);ctx.rotate(-.22+t*.018);
@@ -2541,7 +2541,7 @@ if(roomTransition){
  if(fade>0){ctx.save();ctx.globalAlpha=fade;ctx.fillStyle='#020207';ctx.fillRect(0,0,W,H);ctx.restore();}
 }
  // Portal interaction takes place inside the void: hide the arena and render drifting stars.
- if(portalInteractionActive||(state==='portalTransition'&&portalTransition&&portalTransition.elapsed>=portalTransition.travelDuration)||(state==='portal'&&!$('overlay')?.classList.contains('hidden'))){
+ if(window.portalInteractionActive===true||(state==='portalTransition'&&portalTransition&&portalTransition.elapsed>=portalTransition.travelDuration)||(state==='portal'&&!$('overlay')?.classList.contains('hidden'))){
   ctx.save();ctx.globalAlpha=1;ctx.fillStyle='#020207';ctx.fillRect(0,0,W,H);
   const tm=performance.now()*.001;
   for(let i=0;i<110;i++){
