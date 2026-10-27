@@ -34,7 +34,6 @@ const output = [
   ...sections,
   '})();',
   '',
-].join('\n\n');
-
+].join('\\n\\n');
 await writeFile(resolve(root, outputPath), output, 'utf8');
 console.log(`Built ${outputPath} from ${bootstrapPath} and ${fragments.length} source fragments.`);
