@@ -1,8 +1,3 @@
-import './systems/combat.js';
-import './systems/campaign.js';
-import './systems/progression.js';
-import './ui/menus.js';
-import './systems/runtime.js';
 import { worlds, tutorialWorld, tutorialTips } from './data/worlds.js';
 import { cores, elements } from './data/cores.js';
 import { PERKCODEXDATA, PERK_MAX_RANK, PERK_RARITY } from './data/perks.js';
@@ -80,6 +75,15 @@ import './systems/campaign.js';
 import './systems/progression.js';
 import './ui/menus.js';
 import './systems/runtime.js';
+
+// Modularized functions are loaded after the shared runtime scope is initialized.
+await Promise.all([
+  import('./systems/combat.js'),
+  import('./systems/campaign.js'),
+  import('./systems/progression.js'),
+  import('./ui/menus.js'),
+  import('./systems/runtime.js')
+]);
 
 let roomDialogueShown=new Set();const milestoneDeliveriesPresented=new Set();
 
