@@ -24,6 +24,7 @@ const fragments = [
   'src/systems/rendering.js',
   'src/systems/input.js',
   'src/systems/tooltips.js',
+  'src/systems/combatHud.js',
   'src/systems/runtime.js',
 ];
 const sections = await Promise.all(fragments.map(read));
