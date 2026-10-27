@@ -1,6 +1,9 @@
 // CAMPAIGN MODULE
 // Source fragment consumed by scripts/build.js. Do not import directly.
 
+const narrative=createNarrativeSystem({overlay:$('overlay'),modal:$('modal'),getProgress:()=>saveData.storyProgress,saveProgress:()=>persist(),getCoreId:()=>core?.id,onStart:()=>{state='cutscene';last=performance.now()},onEnd:()=>{last=performance.now()},onSound:()=>sfx('ui'),onType:()=>sfx('text')});
+let roomDialogueShown=new Set();const milestoneDeliveriesPresented=new Set();
+
 function world(){return currentWorld===-1?tutorialWorld:(worlds[currentWorld]||worlds[0])}
 
 function allWorldsCleared(){return worlds.length===4&&worlds.every((w,i)=>(Number(saveData.bestRooms?.[i])||0)>=w.rooms)}
