@@ -1,4 +1,4 @@
-window.window.portalInteractionActive=false;
+window.portalInteractionActive=false;
 // CAMPAIGN MODULE
 // Source fragment consumed by scripts/build.js. Do not import directly.
 
