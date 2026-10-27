@@ -18,11 +18,24 @@ export function fireNovaAutoAttack(context, locals) {
  for (let i=0; i<angles.length; i++) {
   const angle = angles[i];
   const ux = Math.cos(angle), uy = Math.sin(angle);
-  skillFx.push({type:'aetherTwinBeam',x1:player.x,y1:player.y,x2:player.x+ux*length,y2:player.y+uy*length,life:.22,max:.22,color:'#ffe7a0',beamIndex:i,beamCount:angles.length});
+  // Emit beams from the edge of the core, not its center. Focused twin beams
+  // use two separate side emitters; Side Cannon beams originate on the edge
+  // facing their cardinal direction.
+  let originX, originY;
+  if (rank > 0) {
+   const emitterOffset = 13;
+   originX = player.x + ux * emitterOffset;
+   originY = player.y + uy * emitterOffset;
+  } else {
+   const sideOffset = i === 0 ? -9 : 9;
+   originX = player.x - uy * sideOffset;
+   originY = player.y + ux * sideOffset;
+  }
+  skillFx.push({type:'aetherTwinBeam',x1:originX,y1:originY,x2:originX+ux*length,y2:originY+uy*length,life:.22,max:.22,color:'#ffe7a0',beamIndex:i,beamCount:angles.length});
   const candidates = [...(enemies || []).filter(e => e && e.hp > 0)];
   if (blackHole && blackHole.hp > 0 && !blackHole.inactive) candidates.push(blackHole);
   for (const entity of candidates) {
-   const dx=entity.x-player.x, dy=entity.y-player.y;
+   const dx=entity.x-originX, dy=entity.y-originY;
    const along=dx*ux+dy*uy, side=Math.abs(dx*uy-dy*ux);
    if (along<0 || along>length || side>(entity.r||10)+width || used.has(entity)) continue;
    used.add(entity);
