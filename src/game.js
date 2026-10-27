@@ -1872,13 +1872,8 @@ elementalBurn:{title:'PRISM: BURNING CONSTELLATION',glyph:'♨',color:'#ff4358',
 
 
 
-// RUNTIME MODULE
-// Runtime functions extracted from game.js; behavior preserved.
-
-function persist(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(saveData))}catch(e){}}
-
-function applyUiScale(value=saveData.uiScale){const scale=Math.max(.8,Math.min(1.5,Number(value)||1));saveData.uiScale=scale;const wrap=document.querySelector('.wrap');document.documentElement.style.setProperty('--ui-scale',String(scale));if(wrap){wrap.style.zoom=String(scale);wrap.style.width=(100/scale)+'%';wrap.style.maxWidth='none';}return scale;}
-applyUiScale();
+// AUDIO MODULE
+// Audio synthesis, sound effects, and procedural world music.
 
 function getAudioContext(){try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;if(!audioCtx)audioCtx=new AC();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx}catch(e){return null}}
 
@@ -1925,6 +1920,16 @@ function stopMusic(){if(musicTimer){clearInterval(musicTimer);musicTimer=null}if
 function updateMusicVolume(){if(musicBus&&audioCtx&&musicEnabled)musicBus.gain.setTargetAtTime(musicVolume,audioCtx.currentTime,.04)}
 
 function sfx(type){if(!sfxEnabled)return;const now=performance.now();const minGap=type==='shoot'?95:type==='hit'?35:type==='text'?28:0;if(minGap&&now-(sfxLast[type]||0)<minGap)return;sfxLast[type]=now;const ac=ensureAudio();if(!ac)return;const presets={shoot:[560,230,.055,'square',.035],shoot_ember:[260,105,.095,'sawtooth',.045],shoot_frost:[760,420,.085,'triangle',.04],shoot_nova:[920,130,.19,'sawtooth',.035],hit:[220,95,.075,'triangle',.045],kill:[390,690,.12,'sine',.055],xp:[720,1080,.09,'sine',.035],damage:[155,70,.16,'sawtooth',.055],ultimate:[120,520,.38,'sawtooth',.075],portal:[330,880,.22,'sine',.05],ui:[520,660,.045,'sine',.025],text:[840,520,.025,'square',.012],dash:[260,720,.1,'triangle',.04],level:[660,990,.16,'sine',.045]};const q=presets[type]||presets.ui;try{const osc=ac.createOscillator(),gain=ac.createGain();osc.type=q[3];osc.frequency.setValueAtTime(q[0],ac.currentTime);osc.frequency.exponentialRampToValueAtTime(Math.max(35,q[1]),ac.currentTime+q[2]);gain.gain.setValueAtTime(q[4],ac.currentTime);gain.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+q[2]);osc.connect(gain);gain.connect(ac.destination);osc.start();osc.stop(ac.currentTime+q[2]+.01)}catch(e){}}
+
+// RUNTIME MODULE
+// Runtime functions extracted from game.js; behavior preserved.
+
+function persist(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(saveData))}catch(e){}}
+
+function applyUiScale(value=saveData.uiScale){const scale=Math.max(.8,Math.min(1.5,Number(value)||1));saveData.uiScale=scale;const wrap=document.querySelector('.wrap');document.documentElement.style.setProperty('--ui-scale',String(scale));if(wrap){wrap.style.zoom=String(scale);wrap.style.width=(100/scale)+'%';wrap.style.maxWidth='none';}return scale;}
+applyUiScale();
+
+
 const narrative=createNarrativeSystem({overlay:$('overlay'),modal:$('modal'),getProgress:()=>saveData.storyProgress,saveProgress:()=>persist(),getCoreId:()=>core?.id,onStart:()=>{state='cutscene';last=performance.now()},onEnd:()=>{last=performance.now()},onSound:()=>sfx('ui'),onType:()=>sfx('text')});
 let roomDialogueShown=new Set();const milestoneDeliveriesPresented=new Set();
 
