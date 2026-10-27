@@ -20,6 +20,7 @@ const fragments = [
   'src/systems/campaign.js',
   'src/systems/progression.js',
   'src/ui/menus.js',
+  'src/systems/audio.js',
   'src/systems/runtime.js',
 ];
 const sections = await Promise.all(fragments.map(read));
