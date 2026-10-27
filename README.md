@@ -113,3 +113,16 @@ The current beta is **v0.7.2**. Combat, enemy behaviour, room objectives, core b
 *The universe is collapsing. Please submit your incident report before end of day.*
 
 </div>
+
+
+## Game source layout
+
+The browser entry point is the generated `src/game.js` bundle. Edit the authored runtime bootstrap in `src/game-bootstrap.js` and the feature source fragments instead of hand-editing the generated bundle:
+
+- `src/systems/combat.js`: attacks, damage, core skills, ultimates, and combat effects
+- `src/systems/campaign.js`: world/run setup, encounter flow, rooms, objectives, and portals
+- `src/systems/progression.js`: leveling, evolutions, perks, core setup, and upgrades
+- `src/ui/menus.js`: menus, codex, pause/settings screens, shops, and upgrade dialogs
+- `src/systems/runtime.js`: save/audio helpers, game updates, rendering, input, and tooltips
+
+After editing the source fragments, run `npm run build` to regenerate `src/game.js`. Run `npm run check` to rebuild and check the generated bundle and source files. The fragments share the existing runtime closure; this keeps current game-state behavior intact while making feature ownership clearer.

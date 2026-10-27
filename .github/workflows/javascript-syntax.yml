@@ -23,13 +23,8 @@ jobs:
         with:
           node-version: 22
 
-      - name: Check all JavaScript modules
-        run: |
-          set -eu
-          find src scripts -type f \( -name '*.js' -o -name '*.mjs' -o -name '*.cjs' \) -print 2>/dev/null | sort | while IFS= read -r file; do
-            echo "Checking $file"
-            node --check "$file"
-          done
+      - name: Run modular build and syntax checks
+        run: npm run check
 
       - name: Validate package.json
         run: node -e "JSON.parse(require('node:fs').readFileSync('package.json', 'utf8')); console.log('package.json is valid JSON')"
