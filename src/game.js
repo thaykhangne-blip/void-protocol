@@ -341,12 +341,13 @@ function castUltimate(){
  if(state!=='playing'||!player||!core)return;
  if(energy<100){notify(`ULTIMATE REQUIRES 100 ENERGY · ${energy}% CHARGED`);return;}
  if(ultimateCinematic)return;
- const accent=({ember:'#ff9c65',frost:'#8cecff',aether:'#ffe45c',remielle:'#ff9ed8',auralis:'#ff9ed8',flash:'#83eaff',nature:'#8dff9a',prism:'#c7a5ff',crimson:'#ff496c',blood:'#ff496c'})[core.id]||'#c18aff';
+ const accent=({ember:'#ff9c65',frost:'#8cecff',nova:'#ffe45c',aether:'#ffe45c',remielle:'#ff9ed8',auralis:'#ff9ed8',flash:'#83eaff',nature:'#8dff9a',prism:'#c7a5ff',crimson:'#ff496c',vengeance:'#ff496c',blood:'#ff496c'})[core.id]||'#c18aff';
  ultimateCinematic={timer:1.7,color:accent};
  if(c){
+  const zoom=1.28;
   c.style.transition='transform 1.7s cubic-bezier(.16,.78,.22,1)';
-  c.style.transformOrigin=(player.x/Math.max(1,W)*100)+'% '+(player.y/Math.max(1,H)*100)+'%';
-  c.style.transform='scale(1.18)';
+  c.style.transformOrigin='0 0';
+  c.style.transform='translate('+(W*.5-player.x*zoom)+'px,'+(H*.5-player.y*zoom)+'px) scale('+zoom+')';
  }
  let overlay=$('ultimateCinematicOverlay');
  if(!overlay){
