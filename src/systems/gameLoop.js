@@ -3,6 +3,14 @@
 // update() and frame() share the runtime lexical closure by design.
 
 function update(dt){
+ if(ultimateCinematic){
+  ultimateCinematic.timer-=dt;
+  if(ultimateCinematic.timer<=0){
+   endUltimateCinematic();
+   resolveUltimateCast();
+  }
+  return;
+ }
  // Keep short presentation-only effects alive while gameplay is paused for the level-up reveal.
  if(state==='levelupIntro'){
   for(const star of stars){star.y+=((star.s===1?24:46)+(star.p%2)*7)*dt;star.x-=(((star.s===1?24:46)+(star.p%2)*7)*.13)*dt;if(star.y>H+2){star.y=-2;star.x=Math.random()*W;}if(star.x<-2)star.x=W+2;}
