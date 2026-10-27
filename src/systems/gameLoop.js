@@ -26,6 +26,7 @@ function updateAetherBeamQueue(dt){
  }
 }
 function update(dt){
+ updateAetherBeamQueue(dt);
  if(ultimateCinematic){
   ultimateCinematic.timer-=dt;
   if(ultimateCinematic.timer<=0){
