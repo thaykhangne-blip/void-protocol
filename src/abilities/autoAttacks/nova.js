@@ -9,8 +9,7 @@ export function fireNovaAutoAttack(context, locals) {
  const length = 700, width = 10;
  const damage = player.damage * .72 * (player.laserDamageMult || 1);
  const rank = Math.max(0, Math.min(2, player.sideCannons || 0));
- // Twin Cannon adds one extra primary beam per rank: 2 / 3 / 4 beams total.
- const beamCount = 2 + rank;
+ const beamCount = 2 + rank; // Twin Cannon: +1 beam per rank (2 / 3 / 4).
  const used = new Set();
  for (let i=0; i<beamCount; i++) {
   const angle = baseAngle + (i-(beamCount-1)/2)*.045;
