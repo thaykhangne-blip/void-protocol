@@ -1,3 +1,8 @@
+import { installCombatModule } from './systems/combat.js';
+import { installCampaignModule } from './systems/campaign.js';
+import { installProgressionModule } from './systems/progression.js';
+import { installMenusModule } from './ui/menus.js';
+import { installRuntimeModule } from './systems/runtime.js';
 import { worlds, tutorialWorld, tutorialTips } from './data/worlds.js';
 import { cores, elements } from './data/cores.js';
 import { PERKCODEXDATA, PERK_MAX_RANK, PERK_RARITY } from './data/perks.js';
@@ -72,11 +77,14 @@ function sfx(type){if(!sfxEnabled)return;const now=performance.now();const minGa
 const narrative=createNarrativeSystem({overlay:$('overlay'),modal:$('modal'),getProgress:()=>saveData.storyProgress,saveProgress:()=>persist(),getCoreId:()=>core?.id,onStart:()=>{state='cutscene';last=performance.now()},onEnd:()=>{last=performance.now()},onSound:()=>sfx('ui'),onType:()=>sfx('text')});
 let roomDialogueShown=new Set();const milestoneDeliveriesPresented=new Set();
 
-// Functional modules remain in the established runtime closure for this first pass.
-import './systems/combat.js';
-import './systems/campaign.js';
-import './systems/progression.js';
-import './ui/menus.js';
-import './systems/runtime.js';
+// Install modules in the same shared closure so each feature keeps access to the runtime state.
+const runtime = {};
+// Module installation is performed in one pass below after module installers are imported.
+installCombatModule(runtime);
+installCampaignModule(runtime);
+installProgressionModule(runtime);
+installMenusModule(runtime);
+installRuntimeModule(runtime);
+
 
 })();
