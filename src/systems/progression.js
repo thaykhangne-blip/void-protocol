@@ -1,5 +1,5 @@
 // PROGRESSION MODULE
-// Runtime functions extracted from game.js; behavior preserved.
+// Source fragment consumed by scripts/build.js. Do not import directly.
 
 function clearToast(){toastTimer=0;toastPriority=0;const t=$('toast');if(t){t.classList.remove('show');t.textContent='';}}
 
