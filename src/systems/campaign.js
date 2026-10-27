@@ -120,6 +120,12 @@ function failDefense(){if(state==='dead')return;state='dead';saveData.bestRooms[
 function clearRoomProjectiles(){bullets.length=0;lasers.length=0;enemyShots.length=0;skillMissiles.length=0;lightningArcs.length=0;particles.length=0;damageTexts.length=0;skillFx=[];ultFx=[];featherTraps=[];}
 
 function enterRoom(){
+ // Start each new room with the core entering from a random edge.
+ if(player){
+  const entry=randomCoreEdge(),pad=(player.r||12)+10;
+  player.roomEntry={elapsed:0,duration:.72,startX:entry.edge==='left'?-pad:entry.edge==='right'?W+pad:entry.x,startY:entry.edge==='top'?-pad:entry.edge==='bottom'?H+pad:entry.y,targetX:W/2,targetY:H/2};
+  player.x=player.roomEntry.startX;player.y=player.roomEntry.startY;
+ }
  // Room transitions must always release Aether's Black Sun auto-attack lock from the previous room.
  shootCd=0;if(player)player.voidWeaponOnPrimaryAttack=null;
  if(currentWorld>=0&&room===10){
@@ -157,6 +163,14 @@ function continueAfterRoomClear(){
  if(pendingTutorialAdvance){pendingTutorialAdvance=false;if(room>=world().rooms){state='tutorialcomplete';tutorialTipVisible=false;$('tutorialTip').hidden=true;showModal('TRAINING SIMULATION · COMPLETE','YOU ARE READY','', [{title:'RETURN TO WORLD SELECT',glyph:'⌂',color:'#72f6ff',desc:'Confirm to return to campaign select.',action:()=>{if(window.__voidTutorialTypeTimer)clearInterval(window.__voidTutorialTypeTimer);hideModal();state='worldselect';showWorldSelect();}}]);const modal=$('modal'),message='MOVEMENT CALIBRATED. DASH PROTOCOL VERIFIED. CORE SKILL ONLINE. ULTIMATE DISCHARGED. TRAINING COMPLETE. YOUR CAMPAIGN BEGINS NOW.';const desc=modal.querySelector('p');desc.classList.add('tutorial-typewriter');desc.textContent='';if(window.__voidTutorialTypeTimer)clearInterval(window.__voidTutorialTypeTimer);let typeIndex=0;window.__voidTutorialTypeTimer=setInterval(()=>{if(state!=='tutorialcomplete'||!desc.isConnected){clearInterval(window.__voidTutorialTypeTimer);return;}desc.textContent=message.slice(0,++typeIndex);if(typeIndex%3===0)sfx('text');if(typeIndex>=message.length)clearInterval(window.__voidTutorialTypeTimer);},28);return;}room++;enterRoom();state='playing';hideModal();last=performance.now();updateUI();}
 }
 
+function randomCoreEdge(){
+ const edge=Math.floor(Math.random()*4);
+ const pad=(player?.r||12)+10;
+ if(edge===0)return {edge:'top',x:W/2,y:pad};
+ if(edge===1)return {edge:'bottom',x:W/2,y:H-pad};
+ if(edge===2)return {edge:'left',x:pad,y:H/2};
+ return {edge:'right',x:W-pad,y:H/2};
+}
 function showPortals(){
  // Safety net: every campaign milestone must present its delivery before room dialogue.
  if(currentWorld>=0&&[5,10,15,20].includes(room)){
@@ -187,6 +201,11 @@ function showPortals(){
   narrative.play(sceneForPlay,{force:true,markSeen:true,presentation:'field',onComplete:()=>showPortals()});return;
  }
  awardCoreCurrency();
+ // Exit toward a random edge, then enter portal selection from the opposite side.
+ const exit=randomCoreEdge(),opposite={top:'bottom',bottom:'top',left:'right',right:'left'}[exit.edge];
+ player.portalExitEdge=exit.edge;
+ player.portalArrival={elapsed:0,duration:.72,startX:opposite==='left'?-((player.r||12)*2):opposite==='right'?W+(player.r||12)*2:W/2,startY:opposite==='top'?-((player.r||12)*2):opposite==='bottom'?H+(player.r||12)*2:H/2,targetX:W/2,targetY:H/2};
+ player.x=exit.x;player.y=exit.y;
  clearRoomProjectiles();clearAuralisRoomEffects();clearNatureRoomEffects();featherTraps=[];state='portal';blackHole=null;enemies=[];
  const perksInBuild=(build||[]).filter(Boolean);
  const exchangeFrom=perksInBuild.length?pick(perksInBuild):'No existing perk';
