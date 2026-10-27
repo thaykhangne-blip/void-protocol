@@ -621,15 +621,3 @@ function showCoreDetails(id){
 }
 
 
-
-export function installProgressionModule(runtime) {
-  Object.assign(runtime, {
-    clearToast, notify, addEnergy, addShards, xpRequired, applyCoreEvolution, showCoreEvolution,
-    playCoreLevelUpEffect, gainXP, perkRank, perkMaxRank, perkAvailable, coreExclusiveWeight,
-    randomPerks, createGeneralPerks, showLevelUp, makeCoreExclusivePerk, cooldownFactor,
-    dashChargeCapacity, dashCooldownDuration, performDash, newPlayer, applyCoreDefaults,
-    coreUpgradeRank, coreUpgradeCost, showVoidWeaponTenPull, showCoreUpgradeSystem,
-    awardCoreCurrency, coreUnlockRequirement, isCoreUnlocked, coreUnlockMessage,
-    showVoidWeaponInventory, showCoreSelection, typeCoreText, selectCore, deployCore, showCoreDetails
-  });
-}
