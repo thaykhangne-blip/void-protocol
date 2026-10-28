@@ -63,7 +63,7 @@ function applyCoreEvolution(lv){
   player.damage+=.8;player.maxHp+=10;player.hp=Math.min(player.maxHp,player.hp+10);player.armor=(player.armor||0)+3;
   growthDesc='Core growth: +8% ATK, +10 Max HP (restore 10 HP), +3 DEF.';
  }else if(id==='nova'){
-  player.damage*=1.08;player.maxHp+=6;player.hp=Math.min(player.maxHp,player.hp+6);
+  player.damage+=.8;player.maxHp+=6;player.hp=Math.min(player.maxHp,player.hp+6);
   growthDesc='Core growth: +8% ATK, +6 Max HP (restore 6 HP).';
  }else if(id==='flash'){
   player.damage*=1.06;player.maxHp+=5;restoreHull(5);
