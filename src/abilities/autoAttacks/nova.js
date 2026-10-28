@@ -8,9 +8,8 @@ export function fireNovaAutoAttack(context, locals) {
  const baseAngle = Math.atan2(target.y-player.y, target.x-player.x);
  const damage = player.damage * .72 * (player.laserDamageMult || 1);
  const rank = Math.max(0, Math.min(2, player.sideCannons || 0));
- const angles = rank > 0
-  ? [-Math.PI / 2, Math.PI / 2, 0, Math.PI].slice(0, 2 + rank)
-  : [baseAngle - .0225, baseAngle + .0225];
+ // All cannons aim at the same target; their orbiting origins provide the spread.
+ const angles = Array(2 + rank).fill(baseAngle);
  if (!Array.isArray(player.aetherBeamQueue)) player.aetherBeamQueue = [];
  const volleyId = (player.aetherBeamVolleyId || 0) + 1;
  player.aetherBeamVolleyId = volleyId;
