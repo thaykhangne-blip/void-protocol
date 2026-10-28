@@ -114,7 +114,7 @@ export function getOwnedVoidWeapons(saveData) {
       return {
         ...weapon,
         stats: {
-          atkPct: weapon.stats.atkPct + refinementBonus,
+          atkFlat: (weapon.stats.atkFlat ?? (weapon.stats.atkPct || 0) * 10) + refinementBonus * 10 + (weapon.passive?.statKey === 'atkFlat' ? passiveStatBonus * 10 : 0),
           hpPct: weapon.stats.hpPct + (weapon.stats.hpPct > 0 ? refinementBonus : 0) + (weapon.passive?.statKey === 'hpPct' ? passiveStatBonus : 0),
           armorPct: weapon.stats.armorPct + refinementBonus,
           critChance: weapon.passive?.statKey === 'critChance' ? passiveStatBonus : 0,
@@ -191,7 +191,7 @@ export function getVoidWeaponBonuses(saveData, coreId) {
   const safe = normalizeVoidWeaponSave(saveData);
   const weaponId = safe.equippedVoidWeapons[coreId];
   const weapon = weaponId ? VOID_WEAPON_BY_ID[weaponId] : null;
-  if (!weapon) return { weapon: null, stats: { atkPct: 0, hpPct: 0, armorPct: 0, critChance: 0, critDamage: 0, fireRate: 0, damage: 0 }, signaturePassive: null, refinementLevel: 0 };
+  if (!weapon) return { weapon: null, stats: { atkFlat: 0, hpPct: 0, armorPct: 0, critChance: 0, critDamage: 0, fireRate: 0, damage: 0 }, signaturePassive: null, refinementLevel: 0 };
   const refinementLevel = safe.voidWeaponRefinements[weaponId] || 0;
   const refinementBonus = refinementLevel * 0.02;
   const passive = weapon.category === 'general' || weapon.signatureCoreId === coreId ? weapon.passive : null;
@@ -200,7 +200,7 @@ export function getVoidWeaponBonuses(saveData, coreId) {
   return {
     weapon,
     stats: {
-      atkPct: weapon.stats.atkPct + refinementBonus,
+      atkFlat: (weapon.stats.atkFlat ?? (weapon.stats.atkPct || 0) * 10) + refinementBonus * 10,
       hpPct: weapon.stats.hpPct + refinementBonus + (passive?.statKey === 'hpPct' ? passiveStatBonus : 0),
       armorPct: weapon.stats.armorPct + refinementBonus,
       critChance: passive?.statKey === 'critChance' ? passiveStatBonus : 0,
