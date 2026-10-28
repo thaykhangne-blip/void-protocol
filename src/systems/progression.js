@@ -57,7 +57,7 @@ function applyCoreEvolution(lv){
  // These are applied once because the milestone is recorded only after this block.
  let growthDesc='';
  if(id==='ember'){
-  player.damage*=1.10;player.maxHp+=8;restoreHull(8);player.armor=(player.armor||0)+2;
+  player.damage+=1;player.maxHp+=8;restoreHull(8);player.armor=(player.armor||0)+2;
   growthDesc='Core growth: +10% ATK, +8 Max HP (restore 8 HP), +2 DEF.';
  }else if(id==='frost'){
   player.damage*=1.08;player.maxHp+=10;player.hp=Math.min(player.maxHp,player.hp+10);player.armor=(player.armor||0)+3;
