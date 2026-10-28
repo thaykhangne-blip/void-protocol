@@ -69,7 +69,7 @@ function applyCoreEvolution(lv){
   player.damage+=.6;player.maxHp+=5;restoreHull(5);
   growthDesc='Core growth: +6% ATK, +5 Max HP (restore 5 HP).';
  }else if(id==='remielle'){
-  player.damage*=1.08;player.maxHp+=7;player.hp=Math.min(player.maxHp,player.hp+7);
+  player.damage+=.8;player.maxHp+=7;player.hp=Math.min(player.maxHp,player.hp+7);
   growthDesc='Core growth: +8% ATK, +7 Max HP (restore 7 HP).';
  }else if(id==='elemental'){
   player.damage*=1.10;player.maxHp+=8;restoreHull(8);
