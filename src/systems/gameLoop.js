@@ -33,14 +33,23 @@ function updateAetherGravityPassive(dt){
   const dx=player.x-enemy.x,dy=player.y-enemy.y,d=Math.hypot(dx,dy)||1;
   if(d>radius+(enemy.r||0))continue;
   const falloff=Math.max(.15,1-d/Math.max(1,radius));
-  const strength=(inward?34:16)*falloff;
+  // Bosses and minibosses resist gravity control, but must still respond to Aether's outward pulse.
+  const elite=enemy.isMiniBoss||enemy.isFinalBoss||enemy.isBoss||enemy.role==='boss'||enemy.role==='miniboss'||enemy.role==='warden';
+  const strength=(inward?(elite?20:34):(elite?25:16))*falloff;
   enemy.x+=(inward?dx/d:-dx/d)*strength;
   enemy.y+=(inward?dy/d:-dy/d)*strength;
   applyDamage(enemy,pulseDamage,color,true,inward?'AETHER GRAVITY INFLUX':'AETHER GRAVITY REJECTION');
   if(player.laserVulnerability)enemy.novaVuln=Math.max(enemy.novaVuln||0,1.5);
   burst(enemy.x,enemy.y,color,2);
  }
- if(blackHole&&blackHole.hp>0&&!blackHole.inactive&&dist(player,blackHole)<=radius+(blackHole.r||0))applyDamage(blackHole,pulseDamage,color,true,inward?'AETHER GRAVITY INFLUX':'AETHER GRAVITY REJECTION');
+ if(blackHole&&blackHole.hp>0&&!blackHole.inactive&&dist(player,blackHole)<=radius+(blackHole.r||0)){
+  const dx=player.x-blackHole.x,dy=player.y-blackHole.y,d=Math.hypot(dx,dy)||1;
+  const falloff=Math.max(.15,1-d/Math.max(1,radius));
+  const strength=(inward?20:25)*falloff;
+  blackHole.x+=(inward?dx/d:-dx/d)*strength;
+  blackHole.y+=(inward?dy/d:-dy/d)*strength;
+  applyDamage(blackHole,pulseDamage,color,true,inward?'AETHER GRAVITY INFLUX':'AETHER GRAVITY REJECTION');
+ }
  skillFx.push({type:'aetherRingPulse',x:player.x,y:player.y,life:.36,max:.36,radius,innerRadius,inward,color,ringCount:2+Math.min(2,player.sideCannons||0)});
 }
 
