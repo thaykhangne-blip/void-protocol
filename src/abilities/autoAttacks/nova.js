@@ -1,47 +1,21 @@
-// Aether primary attack: twin focused beams pierce along two parallel lanes.
+// Aether primary attack: focused beams fire sequentially from orbiting emitters.
 // Pulsing gravity rings are handled separately as Aether's passive.
 export function fireNovaAutoAttack(context, locals) {
- const { player, enemies, blackHole, applyDamage, skillFx, burst } = context;
+ const { player, enemies, blackHole } = context;
  const target = locals?.target || enemies.filter(e => e && e.hp > 0)
   .sort((a, b) => Math.hypot(player.x-a.x, player.y-a.y) - Math.hypot(player.x-b.x, player.y-b.y))[0] || blackHole;
  if (!target || target.hp <= 0) return;
  const baseAngle = Math.atan2(target.y-player.y, target.x-player.x);
- const length = 700, width = 10;
  const damage = player.damage * .72 * (player.laserDamageMult || 1);
  const rank = Math.max(0, Math.min(2, player.sideCannons || 0));
- // Without Side Cannons, keep the focused twin-beam attack aimed at the target.
- // With the perk, the extra emitters cover the cardinal directions around Aether.
  const angles = rank > 0
   ? [-Math.PI / 2, Math.PI / 2, 0, Math.PI].slice(0, 2 + rank)
   : [baseAngle - .0225, baseAngle + .0225];
+ if (!Array.isArray(player.aetherBeamQueue)) player.aetherBeamQueue = [];
+ const volleyId = (player.aetherBeamVolleyId || 0) + 1;
+ player.aetherBeamVolleyId = volleyId;
  const used = new Set();
  for (let i=0; i<angles.length; i++) {
-  const angle = angles[i];
-  const ux = Math.cos(angle), uy = Math.sin(angle);
-  // Emit beams from the edge of the core, not its center. Focused twin beams
-  // use two separate side emitters; Side Cannon beams originate on the edge
-  // facing their cardinal direction.
-  let originX, originY;
-  if (rank > 0) {
-   const emitterOffset = 13;
-   originX = player.x + ux * emitterOffset;
-   originY = player.y + uy * emitterOffset;
-  } else {
-   const sideOffset = i === 0 ? -9 : 9;
-   originX = player.x - uy * sideOffset;
-   originY = player.y + ux * sideOffset;
-  }
-  skillFx.push({type:'aetherTwinBeam',x1:originX,y1:originY,x2:originX+ux*length,y2:originY+uy*length,life:.22,max:.22,color:'#ffe7a0',beamIndex:i,beamCount:angles.length});
-  const candidates = [...(enemies || []).filter(e => e && e.hp > 0)];
-  if (blackHole && blackHole.hp > 0 && !blackHole.inactive) candidates.push(blackHole);
-  for (const entity of candidates) {
-   const dx=entity.x-originX, dy=entity.y-originY;
-   const along=dx*ux+dy*uy, side=Math.abs(dx*uy-dy*ux);
-   if (along<0 || along>length || side>(entity.r||10)+width || used.has(entity)) continue;
-   used.add(entity);
-   applyDamage(entity,damage,'#ffe7a0',true,'AETHER TWIN BEAM');
-   if(player.laserVulnerability)entity.novaVuln=Math.max(entity.novaVuln||0,1.5);
-   burst(entity.x,entity.y,'#ffe7a0',5);
-  }
+  player.aetherBeamQueue.push({delay:i*.3, angle:angles[i], damage, used, volleyId, beamIndex:i, beamCount:angles.length, rotatingEmitter:rank>0, length:700});
  }
 }
