@@ -388,7 +388,7 @@ function perkExchangeInfo(name){
   [/LIVE WIRE/,'Crit Chance +6 % and ATK Speed +10%.'],
   [/PYRE CASCADE/,'Burn potency +15% per rank.'],
   [/CRYSTAL RESONANCE/,'Gain +2 DEF and +3 % critical chance per rank.'],
-  [/PRISMATIC OVERDRIVE/,'ATK +12% and ATK Speed +8% per rank.'],
+  [/PRISMATIC OVERDRIVE/,'ATK +1.2 and ATK Speed +8% per rank.'],
   [/CUBIC OVERLOAD/,'Elemental cube damage +10% and cube size +6% per rank.'],
   [/CHAIN REACTION/,'Lightning chains hit one additional enemy and deal +15% chain damage per rank.'],
   [/FROST LATTICE/,'Frost hits add one chill stack and freeze requires fewer stacks per rank.'],
