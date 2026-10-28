@@ -70,10 +70,10 @@ function applyCoreEvolution(lv){
   growthDesc='Core growth: +0.6 ATK, +5 Max HP (restore 5 HP).';
  }else if(id==='remielle'){
   player.damage+=.8;player.maxHp+=7;player.hp=Math.min(player.maxHp,player.hp+7);
-  growthDesc='Core growth: +8% ATK, +7 Max HP (restore 7 HP).';
+  growthDesc='Core growth: +0.8 ATK, +7 Max HP (restore 7 HP).';
  }else if(id==='elemental'){
   player.damage*=1.10;player.maxHp+=8;restoreHull(8);
-  growthDesc='Core growth: +10% attack damage, +8 Max HP (heal 8).';
+  growthDesc='Core growth: +1 ATK, +8 Max HP (heal 8).';
  }
  desc += ' ' + growthDesc + ' These gains are also listed in ORBITAL BUILD → EVOLUTION STAT GAINS.';
  const evo={level:lv,name,desc,core:id,color:core?.color||'#fff',growth:growthDesc};
@@ -113,9 +113,9 @@ function gainXP(amount){
  xp+=amount;
  while(xp>=xpNext){
   xp-=xpNext;level++;xpNext=xpRequired(level);levelUpsPending++;
-  player.maxHp+=3;restoreHull(5);player.damage*=1.035;player.armor=(player.armor||0)+1;
+  player.maxHp+=3;restoreHull(5);player.damage+=.35;player.armor=(player.armor||0)+1;
   if([5,10,15,20].includes(level)){
-   player.damage*=1.12;player.maxHp+=8;restoreHull(8);
+   player.damage+=1.2;player.maxHp+=8;restoreHull(8);
    const evo=applyCoreEvolution(level);if(evo)coreEvolutionQueue.push(evo);
   }else notify('ORB LEVEL UP · LV '+level);
  }
@@ -222,7 +222,7 @@ const coreExclusiveAdditions={
  ],
  frost:[
  ['FROST: RIME PLATING','❄','DEF +4.',false,()=>{player.armor=Math.min(60,(player.armor||0)+4)}],
- ['FROST: WINTER PULSE','❄','ATK +8%.',false,()=>{player.damage*=1.08}],
+ ['FROST: WINTER PULSE','❄','ATK +0.8.',false,()=>{player.damage+=.8}],
  ['FROST: STILLWATER FOCUS','◇','Crit Damage +15%.',false,()=>{player.critDamage=(player.critDamage||1.5)*1.15}],
  ['FROST: BLUE HOUR','✧','Max HP +10 and restore 10 HP.',false,()=>{player.maxHp+=10;player.hp=Math.min(player.maxHp,player.hp+10)}],
  ['FROST: GLACIER HEART','⬡','Reduce incoming damage by 8%.',true,()=>{player.frostGlacierHeart=true}],
@@ -239,7 +239,7 @@ const coreExclusiveAdditions={
  ['AETHER: LUMINAL OVERDRIVE','✦','RARE · Black Sun duration +0.4s and periodic damage +8%.',true,()=>{player.aetherBlackSunDurationBonus=(player.aetherBlackSunDurationBonus||0)+.4;player.aetherBlackSunDamageBonus=(player.aetherBlackSunDamageBonus||0)+.08}]
  ],
  flash:[
- ['FLASH: VOLTAGE SPIKE','ϟ','ATK +8%.',false,()=>{player.damage*=1.08}],
+ ['FLASH: VOLTAGE SPIKE','ϟ','ATK +0.8.',false,()=>{player.damage+=.8}],
  ['FLASH: ARC FLASH','ϟ','ATK Speed +10%.',false,()=>{player.fireRate*=1.10}],
  ['FLASH: STORM CHASER','➤','Move Speed +8%.',true,()=>{player.speed*=1.08}],
  ['FLASH: OVERLOAD WINDOW','ϟ','Lightning chains deal 15% more damage.',true,()=>{player.flashChainPower=(player.flashChainPower||1)*1.15}]
@@ -251,7 +251,7 @@ const coreExclusiveAdditions={
  ['NATURE: LIVING CANOPY','❧','DEF +4.',true,()=>{player.armor=Math.min(60,(player.armor||0)+4)}]
  ],
  elemental:[
- ['PRISM: SPECTRAL FOCUS','◈','ATK +8%.',false,()=>{player.damage*=1.08}],
+ ['PRISM: SPECTRAL FOCUS','◈','ATK +0.8.',false,()=>{player.damage+=.8}],
  ['PRISM: FOURFOLD RESONANCE','◈','Crit Chance +4 percentage points.',false,()=>{player.critChance=Math.min(.75,(player.critChance||0)+.04)}],
  ['PRISM: CHROMATIC SHELL','⬢','Max HP +10 and restore 10 HP.',true,()=>{player.maxHp+=10;player.hp=Math.min(player.maxHp,player.hp+10)}],
  ['PRISM: ELEMENTAL AFTERSHOCK','✦','Elemental damage +15%.',true,()=>{player.elementalDamageMult=(player.elementalDamageMult||1)*1.15}]
