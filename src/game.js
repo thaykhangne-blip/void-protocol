@@ -670,10 +670,11 @@ function failDefense(){if(state==='dead')return;state='dead';saveData.bestRooms[
 function clearRoomProjectiles(){bullets.length=0;lasers.length=0;enemyShots.length=0;skillMissiles.length=0;lightningArcs.length=0;particles.length=0;damageTexts.length=0;skillFx=[];ultFx=[];featherTraps=[];}
 
 function enterRoom(){
- // Start each new room with the core entering from a random edge.
+ // Start each new room from the edge selected when the core entered the portal.
  if(player){
-  const entry=randomCoreEdge(),pad=(player.r||12)+10;
-  player.roomEntry={elapsed:0,duration:.72,startX:entry.edge==='left'?-pad:entry.edge==='right'?W+pad:entry.x,startY:entry.edge==='top'?-pad:entry.edge==='bottom'?H+pad:entry.y,targetX:W/2,targetY:H/2};
+  const entry=player.portalEntryEdge?{edge:player.portalEntryEdge}:randomCoreEdge(),pad=(player.r||12)+10;
+  player.portalEntryEdge=null;
+  player.roomEntry={elapsed:0,duration:.72,startX:entry.edge==='left'?-pad:entry.edge==='right'?W+pad:entry.edge==='top'?W/2:entry.edge==='bottom'?W/2:entry.x,startY:entry.edge==='top'?-pad:entry.edge==='bottom'?H+pad:entry.edge==='left'||entry.edge==='right'?H/2:entry.y,targetX:W/2,targetY:H/2};
   player.x=player.roomEntry.startX;player.y=player.roomEntry.startY;
  }
  // Room transitions must always release Aether's Black Sun auto-attack lock from the previous room.
@@ -699,6 +700,7 @@ function applyWorldBossDebuff(bh){if(!player||!bh)return;const worldIndex=Math.m
 function spawnMiniBoss(){const lateStageFactor=currentWorld===-1||room<10?1:1.25+(room-10)*.075+Math.pow((room-10)/10,2)*.25;const lateDamageFactor=currentWorld===-1||room<10?1:1.15+(room-10)*.045+Math.pow((room-10)/10,2)*.15;const hp=Math.round((620+room*58+Math.pow(room,1.2)*2)*(1+(level-1)*.078)*(1+currentWorld*.22+Math.pow(currentWorld,2)*.012)*lateStageFactor);const colors=['#ff754f','#78eaff','#86ffc2','#d4a0ff'];const names=['CINDER JUGGERNAUT','CRYO WARDEN','VERDANT EXECUTIONER','RIFT COLOSSUS'];const color=colors[currentWorld]||'#d4a0ff';const miniBoss={id:'miniboss-'+currentWorld+'-'+room+'-'+Math.random().toString(36).slice(2),x:player.x<W/2?W-70:70,y:rand(90,H-90),r:23,hp,maxHp:hp,speed:(48+room*.7+currentWorld*5)*(1+Math.min(.15,(level-1)*.004)+currentWorld*.025)*(currentWorld!==-1&&room>=10?1.05+(room-10)*.012:1),damage:(24+room*.65+currentWorld*5)*(1+(level-1)*.025)*(1+currentWorld*.04)*lateDamageFactor,type:names[currentWorld]||'VOID CHAMPION',role:'miniboss',isMiniBoss:true,color,cd:1.25,slow:0,burn:0,frostStacks:0,frozen:0,minionTimer:2.2,shieldTriggered:false,shieldHp:0,shieldMax:0,shieldPulse:0,shieldCooldown:rand(7,11),shieldRecasts:0};if(hardModeActive()){miniBoss.hp=Math.round(miniBoss.hp*1.65);miniBoss.maxHp=miniBoss.hp;miniBoss.damage*=1.35;miniBoss.speed*=1.12;}enemies.push(miniBoss);}
 
 function finishPortalRoom(){
+ window.portalInteractionActive=false;
  if(roomTransition||portalTransition)return;
  roomTransition={phase:'out',elapsed:0,fadeOut:.22,fadeIn:.38,callback:finishPortalRoomNow};
  state='roomTransition';hideModal();return;
@@ -782,7 +784,7 @@ function beginPortalTransition(portal){
  state='portalTransition';sfx('portal');
 }
 
-function enterPortal(type,portalData=null){window.portalInteractionActive=true;state='portal';environmentHazards=[];hazardSpawnTimer=Math.max(1.8,4.2-(Math.max(0,currentWorld)*.35));hazardHitCooldown=0;portals=[];burst(player.x,player.y,'#72f6ff',12);if(type==='heal'){const healed=restoreHull(Math.ceil(player.maxHp*.4));updateUI();showModal('REPAIR GATE','CORE RESTORED',`The gate repairs ${Number(healed.toFixed(1)).toLocaleString('en-US',{maximumFractionDigits:1})} hull.`,[{glyph:'✚',color:'#83ffc5',title:'CONTINUE',desc:'Proceed with your repaired core.',action:finishPortalRoom}]);return}if(type==='exchange'){const oldPerk=portalData?.exchangeFrom||'No existing perk';const offer=portalData?.exchangeTo||null;if(!offer){showModal('PERK EXCHANGE','NO VALID OFFER','No general perk is available. This portal cannot be refreshed.',[{glyph:'→',title:'CONTINUE',desc:'Leave the exchange untouched.',action:finishPortalRoom}]);return}showPerkExchange(offer);return}if(type==='event'){showAnomaly();return}if(type==='shop'){shopVisits++;shopStock=null;shopPurchased=[];showShop();return}if(type==='forge'){showVoidForge();return}}
+function enterPortal(type,portalData=null){window.portalInteractionActive=true;state='portal';if(player){const edges=['top','bottom','left','right'];const edge=edges[Math.floor(Math.random()*edges.length)];const pad=(player.r||12)+24;player.portalEntryEdge=edge;player.x=edge==='left'?-pad:edge==='right'?W+pad:W/2;player.y=edge==='top'?-pad:edge==='bottom'?H+pad:H/2;player.portalArrival=null;player.portalDeparture=null;}environmentHazards=[];hazardSpawnTimer=Math.max(1.8,4.2-(Math.max(0,currentWorld)*.35));hazardHitCooldown=0;portals=[];burst(player.x,player.y,'#72f6ff',12);if(type==='heal'){const healed=restoreHull(Math.ceil(player.maxHp*.4));updateUI();showModal('REPAIR GATE','CORE RESTORED',`The gate repairs ${Number(healed.toFixed(1)).toLocaleString('en-US',{maximumFractionDigits:1})} hull.`,[{glyph:'✚',color:'#83ffc5',title:'CONTINUE',desc:'Proceed with your repaired core.',action:finishPortalRoom}]);return}if(type==='exchange'){const oldPerk=portalData?.exchangeFrom||'No existing perk';const offer=portalData?.exchangeTo||null;if(!offer){showModal('PERK EXCHANGE','NO VALID OFFER','No general perk is available. This portal cannot be refreshed.',[{glyph:'→',title:'CONTINUE',desc:'Leave the exchange untouched.',action:finishPortalRoom}]);return}showPerkExchange(offer);return}if(type==='event'){showAnomaly();return}if(type==='shop'){shopVisits++;shopStock=null;shopPurchased=[];showShop();return}if(type==='forge'){showVoidForge();return}}
 
 
 
