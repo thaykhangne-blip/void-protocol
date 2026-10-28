@@ -95,8 +95,7 @@ function update(dt){
   transition.elapsed=Math.min(transition.duration,transition.elapsed+dt);
   for(const portal of portals){portal.pulse=(portal.pulse||0)+dt;portal.age=(portal.age||0)+dt;}
   const travel=Math.max(0,Math.min(1,transition.elapsed/transition.travelDuration)),ease=travel*travel*(3-2*travel);
-  player.x=transition.startX+(transition.x-transition.startX)*ease;
-  player.y=transition.startY+(transition.y-transition.startY)*ease;
+  if(!transition.coreEnteredPortal&&transition.elapsed>=transition.travelDuration){const edges=['top','bottom','left','right'],edge=edges[Math.floor(Math.random()*edges.length)],pad=(player.r||12)+24;player.portalEntryEdge=edge;player.x=edge==='left'?-pad:edge==='right'?W+pad:W/2;player.y=edge==='top'?-pad:edge==='bottom'?H+pad:H/2;player.portalArrival=null;player.portalDeparture=null;transition.coreEnteredPortal=true;}else if(!transition.coreEnteredPortal){player.x=transition.startX+(transition.x-transition.startX)*ease;player.y=transition.startY+(transition.y-transition.startY)*ease;}
   if(transition.elapsed>=transition.duration){
    transition.hold+=dt;
    if(transition.hold>=.12){const destination=transition.type,portalData=transition.portalData;portalTransition=null;enterPortal(destination,portalData);last=performance.now();}
