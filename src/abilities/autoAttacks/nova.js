@@ -15,6 +15,6 @@ export function fireNovaAutoAttack(context, locals) {
  player.aetherBeamVolleyId = volleyId;
  const used = new Set();
  for (let i=0; i<angles.length; i++) {
-  player.aetherBeamQueue.push({delay:i*.3, angle:angles[i], damage, used, volleyId, beamIndex:i, beamCount:angles.length, rotatingEmitter:rank>0, length:700});
+  player.aetherBeamQueue.push({delay:i===0?0:.3, angle:angles[i], damage, used, volleyId, beamIndex:i, beamCount:angles.length, rotatingEmitter:true, length:700});
  }
 }
