@@ -114,7 +114,7 @@ export function getOwnedVoidWeapons(saveData) {
       return {
         ...weapon,
         stats: {
-          atkFlat: (weapon.stats.atkFlat ?? (weapon.stats.atkPct || 0) * 10) + refinementBonus * 10,
+          atkFlat: (weapon.stats.atkFlat ?? (weapon.stats.atkPct || 0) * 10) + refinementBonus * 10 + (weapon.passive?.statKey === 'atkFlat' ? passiveStatBonus * 10 : 0),
           hpPct: weapon.stats.hpPct + (weapon.stats.hpPct > 0 ? refinementBonus : 0) + (weapon.passive?.statKey === 'hpPct' ? passiveStatBonus : 0),
           armorPct: weapon.stats.armorPct + refinementBonus,
           critChance: weapon.passive?.statKey === 'critChance' ? passiveStatBonus : 0,
