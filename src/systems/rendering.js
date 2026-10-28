@@ -388,7 +388,7 @@ ctx.restore();
  const emitterCount=Math.max(1,Math.min(2,player.sideCannons||0)),t=performance.now()*.001;
  // Side Cannon emitters are tiny event horizons embedded in Aether's rim.
  // Each perk rank adds one emitter, placed at the edge where its beam exits.
- const emitterAngles=emitterCount===1?[-Math.PI/2]:[-Math.PI/2,Math.PI/2];
+ const emitterAngles=Array.from({length:emitterCount},(_,i)=>t*1.4+i*Math.PI*2/emitterCount);
  for(let i=0;i<emitterCount;i++){
   const a=emitterAngles[i],rr=player.r+2.5,x=Math.cos(a)*rr,y=Math.sin(a)*rr,pulse=.5+.5*Math.sin(t*8+i*2.1);
   ctx.save();ctx.translate(x,y);
