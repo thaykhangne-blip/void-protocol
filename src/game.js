@@ -2423,7 +2423,7 @@ ctx.restore();
  const emitterCount=Math.max(1,Math.min(2,player.sideCannons||0)),t=performance.now()*.001;
  // Side Cannon emitters are tiny event horizons embedded in Aether's rim.
  // Each perk rank adds one emitter, placed at the edge where its beam exits.
- const emitterAngles=emitterCount===1?[-Math.PI/2]:[-Math.PI/2,Math.PI/2];
+ const emitterAngles=Array.from({length:emitterCount},(_,i)=>t*1.4+i*Math.PI*2/emitterCount);
  for(let i=0;i<emitterCount;i++){
   const a=emitterAngles[i],rr=player.r+2.5,x=Math.cos(a)*rr,y=Math.sin(a)*rr,pulse=.5+.5*Math.sin(t*8+i*2.1);
   ctx.save();ctx.translate(x,y);
@@ -2595,25 +2595,20 @@ const combatStatsToggle=$('combatStatsToggle'),combatStatsPanel=$('combatStatsPa
 function updateAetherBeamQueue(dt){
  if(!player||!player.aetherBeamQueue?.length)return;
  const queue=player.aetherBeamQueue;
- for(let i=queue.length-1;i>=0;i--){
-  const beam=queue[i];beam.delay-=dt;
-  if(beam.delay>0)continue;
-  const candidates=[...(enemies||[]).filter(e=>e&&e.hp>0)];
-  if(blackHole&&blackHole.hp>0&&!blackHole.inactive)candidates.push(blackHole);
-  const target=candidates.filter(t=>!beam.used.has(t)).sort((a,b)=>dist(player,a)-dist(player,b))[0];
-  if(target){
-   beam.used.add(target);
-   const angle=Math.atan2(target.y-player.y,target.x-player.x),length=700;
-   const x2=player.x+Math.cos(angle)*length,y2=player.y+Math.sin(angle)*length;
-   skillFx.push({type:'aetherTwinBeam',x1:player.x,y1:player.y,x2,y2,life:.22,max:.22,color:'#ffe7a0'});
-   const ux=Math.cos(angle),uy=Math.sin(angle);
-   for(const t of candidates){
-    const dx=t.x-player.x,dy=t.y-player.y,along=dx*ux+dy*uy,side=Math.abs(dx*uy-dy*ux);
-    if(along>=0&&along<=length&&side<=(t.r||10)+7){applyDamage(t,beam.damage,'#ffe7a0',true,'AETHER TWIN BEAM');t.stunned=Math.max(t.stunned||0,.5);const knock=Math.min(38,14+beam.damage*.025),kd=Math.hypot(dx,dy)||1;t.x+=dx/kd*knock;t.y+=dy/kd*knock;burst(t.x,t.y,'#ffe7a0',5);}
-   }
-  }
-  queue.splice(i,1);
- }
+ // Advance only the head item so later beams retain their full 0.3s spacing.
+ const beam=queue[0];if(!beam)return;beam.delay-=dt;if(beam.delay>0)return;
+ queue.shift();
+ const candidates=[...(enemies||[]).filter(e=>e&&e.hp>0)];
+ if(blackHole&&blackHole.hp>0&&!blackHole.inactive)candidates.push(blackHole);
+ const target=candidates.filter(t=>!beam.used.has(t)).sort((a,b)=>dist(player,a)-dist(player,b))[0];
+ if(!target)return;
+ const angle=Number.isFinite(beam.angle)?beam.angle:Math.atan2(target.y-player.y,target.x-player.x),length=beam.length||700;
+ let originX=player.x,originY=player.y;
+ if(beam.rotatingEmitter){const count=Math.max(1,Math.min(4,beam.beamCount||2)),time=performance.now()*.001,emitterAngle=time*1.4+beam.beamIndex*Math.PI*2/count,radius=player.r+2.5;originX=player.x+Math.cos(emitterAngle)*radius;originY=player.y+Math.sin(emitterAngle)*radius;}
+ const x2=originX+Math.cos(angle)*length,y2=originY+Math.sin(angle)*length;
+ skillFx.push({type:'aetherTwinBeam',x1:originX,y1:originY,x2,y2,life:.22,max:.22,color:'#ffe7a0'});
+ const ux=Math.cos(angle),uy=Math.sin(angle);
+ for(const t of candidates){const dx=t.x-originX,dy=t.y-originY,along=dx*ux+dy*uy,side=Math.abs(dx*uy-dy*ux);if(along>=0&&along<=length&&side<=(t.r||10)+7&&!beam.used.has(t)){beam.used.add(t);applyDamage(t,beam.damage,'#ffe7a0',true,'AETHER TWIN BEAM');t.stunned=Math.max(t.stunned||0,.5);const knock=Math.min(38,14+beam.damage*.025),kd=Math.hypot(dx,dy)||1;t.x+=dx/kd*knock;t.y+=dy/kd*knock;burst(t.x,t.y,'#ffe7a0',5);}}
 }
 function updateAetherGravityPassive(dt){
  if(!player||core?.id!=='nova'||state!=='playing')return;
