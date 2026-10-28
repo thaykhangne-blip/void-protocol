@@ -20,7 +20,7 @@ export const PERKCODEXDATA=[
 ["EMBER: IGNITION CASCADE","☄","Rare · Crit Chance +5 percentage points."],
 ["EMBER: LAST SPARK","✹","Rare · Deal 15% more damage while below 35% HP."],
 ["FROST: RIME PLATING","❄","DEF +4."],
-["FROST: WINTER PULSE","❄","Attack damage +8%."],
+["FROST: WINTER PULSE","❄","ATK +0.8."],
 ["FROST: STILLWATER FOCUS","◇","Crit Damage +15%."],
 ["FROST: BLUE HOUR","✧","Max HP +10 and restore 10 HP."],
 ["FROST: GLACIER HEART","⬡","Rare · DEF +4."],
