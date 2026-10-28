@@ -58,7 +58,7 @@ function applyCoreEvolution(lv){
  let growthDesc='';
  if(id==='ember'){
   player.damage+=1;player.maxHp+=8;restoreHull(8);player.armor=(player.armor||0)+2;
-  growthDesc='Core growth: +10% ATK, +8 Max HP (restore 8 HP), +2 DEF.';
+  growthDesc='Core growth: +1 ATK, +8 Max HP (restore 8 HP), +2 DEF.';
  }else if(id==='frost'){
   player.damage+=.8;player.maxHp+=10;player.hp=Math.min(player.maxHp,player.hp+10);player.armor=(player.armor||0)+3;
   growthDesc='Core growth: +8% ATK, +10 Max HP (restore 10 HP), +3 DEF.';
