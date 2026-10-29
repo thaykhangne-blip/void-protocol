@@ -62,6 +62,10 @@ Old saves normalize to an empty inventory, no equipped Companion and a locked sy
 - **Ruin:** fires two homing projectiles every 1.5 seconds. Hits apply a 4-second, 25% damage-taken mark. Below 25% HP, non-boss targets can be executed at 25% chance, or 35% while marked. Failed execution attempts deal fallback damage. Execution is explicitly excluded from bosses, minibosses and singularity cores.
 - **Bastion:** releases a 90-radius shockwave every 1.5 seconds, dealing damage and displacing ordinary enemies only. Its passive grants a DEF bonus, with a minimum 8-point bonus when base DEF is low. A single incoming hit of at least 15% Max HP can trigger a 20% Max HP barrier for 10 seconds, with a 25-second cooldown.
 
+## Alpha-test telemetry
+
+The Room Stats panel tracks Companion damage dealt, healing restored, shield/barrier absorption, damage prevented by Companion defensive effects, successful executions, and barrier durability granted. These values reset at each room transition and are not saved as progression data. Use them to compare the three Companions across similar room types and builds.
+
 ## Verification
 
 - `npm run check` rebuilds the modular bundle and runs JavaScript syntax/build validation.
