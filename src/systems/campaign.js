@@ -176,6 +176,16 @@ function randomCoreEdge(){
  return {edge:'right',x:W-pad,y:H/2};
 }
 function showPortals(){
+ // Companion access unlocks after clearing World 1, Room 10. Persist before showing the milestone delivery.
+ if(currentWorld===0&&room>=10&&!saveData.companionSystemUnlocked){
+  const unlock=unlockCompanionSystemAfterClear(saveData,currentWorld,room);
+  saveData=unlock.saveData;
+  if(unlock.newlyUnlocked){
+   persist();
+   showModal('NEW SYSTEM UNLOCKED','COMPANION REGISTRY','Your core can now equip one recruited Companion. Companions are obtained through Mystery Deliveries and persist between runs.',[{glyph:'✦',color:'#ffd978',title:'OPEN COMPANION REGISTRY',desc:'Review your collection and equipment slot.',action:()=>showCompanionCodex()},{glyph:'→',color:'#72f6ff',title:'CONTINUE CAMPAIGN',desc:'Proceed to the room reward and portal selection.',action:()=>showPortals()}]);
+   return;
+  }
+ }
  // Safety net: every campaign milestone must present its delivery before room dialogue.
  if(currentWorld>=0&&[5,10,15,20].includes(room)){
   const milestoneKey=`${currentWorld}:${room}`;
