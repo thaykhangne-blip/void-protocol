@@ -241,7 +241,7 @@ const coreExclusiveAdditions={
  ['AETHER: EVENT HORIZON','◉','Event Horizon stasis lasts 0.6s longer before the singularity begins moving.',false,()=>{player.aetherStasisBonus=(player.aetherStasisBonus||0)+.6}],
  ['AETHER: SINGULARITY AMPLIFIER','✦','Collapse damage gains +12% per enemy caught, up to +60%.',false,()=>{player.aetherCollapsePerCaptureBonus=(player.aetherCollapsePerCaptureBonus||0)+.12}],
  ['AETHER: COLLAPSING STAR','✹','RARE · Black Sun deals 20% more collapse damage to bosses and singularity cores.',true,()=>{player.aetherBossCollapseBonus=(player.aetherBossCollapseBonus||0)+.20}],
- ['AETHER: GRAVITY WELL','◉','RARE · Event Horizon moving-singularity phase lasts +0.8s per rank, up to +2.4s.',true,()=>{player.aetherWellDurationBonus=Math.min(2.4,(player.aetherWellDurationBonus||0)+.8}],
+ ['AETHER: GRAVITY WELL','◉','RARE · Event Horizon moving-singularity phase lasts +0.8s per rank, up to +2.4s.',true,()=>{player.aetherWellDurationBonus=Math.min(2.4,(player.aetherWellDurationBonus||0)+.8)}],
  ['AETHER: LUMINAL OVERDRIVE','✦','RARE · Black Sun gravity field reaches 12% farther.',true,()=>{player.aetherBlackSunRadiusBonus=(player.aetherBlackSunRadiusBonus||0)+.12}],
  ['AETHER: BLACK SUN AFTERSHOCK','◉','Black Sun collapse releases a secondary shockwave dealing 35% of collapse damage.',true,()=>{player.aetherAftershockRank=1}],
  ['AETHER: GRAVITATIONAL RESONANCE','◎','Enemies hit by Aether field pulses are slowed by 20% for 1.2s.',false,()=>{player.aetherSlowFieldRank=1}]
