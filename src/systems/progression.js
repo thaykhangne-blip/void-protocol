@@ -320,7 +320,7 @@ function showVoidWeaponTenPull(rewards,onDone){
  const valid=(rewards||[]).filter(reward=>reward&&reward.claimKey);
  if(!valid.length){onDone?.();return;}
  const single=valid.length===1;
- const rarityRank=reward=>reward.type!=='weapon'?0:reward.rarity==='legendary'?5:reward.rarity==='unique'?4:3;
+ const rarityRank=reward=>reward.type==='companion'?5:reward.type!=='weapon'?0:reward.rarity==='legendary'?5:reward.rarity==='unique'?4:3;
  const topRank=Math.max(...valid.map(rarityRank));
  const tier=topRank>=5?'gold':topRank>=4?'purple':'blue';
  const accent=tier==='gold'?'#ffd66b':tier==='purple'?'#c69aff':'#72dfff';
@@ -339,12 +339,13 @@ function showVoidWeaponTenPull(rewards,onDone){
   }
   const cards=valid.map((reward,index)=>{
    const weapon=reward.type==='weapon'?getVoidWeapon(reward.weaponId):null;
+   const companion=reward.type==='companion'?getCompanion(reward.companionId):null;
    const rank=rarityRank(reward);
    const cardTier=rank>=5?'gold':rank>=4?'purple':'blue';
-   const color=rank>=5?'#ffd66b':rank>=4?'#c69aff':'#72dfff';
-   const glyph=weapon?.glyph||'✧';
-   const title=reward.presentationOnly?'MILESTONE REWARD':(weapon?.name||'NEXUS FRAGMENTS');
-   const detail=reward.presentationOnly?'ALREADY CLAIMED':(weapon?(weapon.rarity==='legendary'?'LEGENDARY ★★★★★':weapon.rarity==='unique'?'UNIQUE ★★★★':'RARE ★★★')+' VOID WEAPON':'+ '+reward.amount+' FRAGMENTS');
+   const color=companion?.color||(rank>=5?'#ffd66b':rank>=4?'#c69aff':'#72dfff');
+   const glyph=weapon?.glyph||companion?.glyph||'✧';
+   const title=reward.presentationOnly?'MILESTONE REWARD':(weapon?.name||companion?.name||'NEXUS FRAGMENTS');
+   const detail=reward.presentationOnly?'ALREADY CLAIMED':(companion?'LEGENDARY ★★★★★ COMPANION':weapon?(weapon.rarity==='legendary'?'LEGENDARY ★★★★★':weapon.rarity==='unique'?'UNIQUE ★★★★':'RARE ★★★')+' VOID WEAPON':'+ '+reward.amount+' FRAGMENTS');
    const conversion=reward.convertedFragments?'<em class="void-duplicate-conversion">✦ CONVERTED TO '+reward.convertedFragments.toLocaleString()+' FRAGMENTS</em>':'';
    return '<article class="void-ten-pull-card tier-'+cardTier+'" style="--pull-accent:'+color+';animation-delay:'+(index*35)+'ms"><span class="void-ten-pull-index">PULL '+String(index+1).padStart(2,'0')+'</span><div class="void-ten-pull-glyph">'+(revealed?glyph:'?')+'</div><b>'+(revealed?title:'SEALED')+'</b><small>'+(revealed?detail:'MYSTERY REWARD')+'</small>'+(revealed?conversion:'')+'</article>';
   }).join('');
@@ -367,7 +368,7 @@ function showCoreUpgradeSystem(back=showMainMenu,initialTab='upgrades'){
   modal.className='modal core-upgrade-modal void-shop-modal';
   const upgrade=saveData.coreUpgrades||{};
   const upgradesHtml=coreUpgradeDefs.map(d=>{const rank=coreUpgradeRank(null,d.id),cost=coreUpgradeCost(d,rank),max=rank>=d.max;return `<div class="core-upgrade-card"><div class="core-upgrade-icon">${d.glyph}</div><b>${d.name}</b><small>${d.desc}</small><div class="core-upgrade-rank">RANK ${rank} / ${d.max}</div><button class="btn" data-upgrade="${d.id}" ${max||saveData.coreCurrency<cost?'disabled':''}>${max?'MAX RANK':`UPGRADE · ${cost} ✦`}</button></div>`}).join('');
-  modal.innerHTML=`<div class="eyebrow">NEXUS EXCHANGE</div><h2>VOID SHOP</h2><p>Spend Nexus Fragments on permanent core upgrades or mystery deliveries. Core upgrades are saved between runs.</p><div class="currency-banner">✦ NEXUS FRAGMENTS <b>${saveData.coreCurrency||0}</b></div><nav class="void-shop-tabs"><button type="button" data-shop-tab="upgrades" ${activeTab==='upgrades'?'aria-current="page"':''}>PERMANENT UPGRADES</button><button type="button" data-shop-tab="boxes" ${activeTab==='boxes'?'aria-current="page"':''}>MYSTERY DELIVERIES</button></nav>${activeTab==='upgrades'?'<div class="core-upgrade-grid">'+upgradesHtml+'</div>':`<section class="void-shop-boxes"><div class="void-shop-box-art"><span>?</span><i></i><i></i></div><h3>MYSTERY DELIVERY</h3><p>Each opening grants one reward: 5% Legendary weapon, 12% Unique weapon, 33% Rare weapon, or 50% Nexus Fragments. Ten pulls cost 4,500 Fragments instead of 5,000, saving 10%.</p><div class="void-shop-purchase-row"><button type="button" class="btn" id="buyMysteryOne" ${!developerMode&&saveData.coreCurrency<500?'disabled':''}>OPEN ×1 <b>${developerMode?'FREE · DEV MODE':'500 ✦'}</b></button><button type="button" class="btn" id="buyMysteryTen" ${!developerMode&&saveData.coreCurrency<4500?'disabled':''}><span class="void-pull-discount-tag">SAVE 10%</span>OPEN ×10 <b>${developerMode?'FREE · DEV MODE':'4,500 ✦'}</b></button></div></section>`}<div class="menu-actions"><button class="btn" id="coreUpgradeBack">← BACK</button></div><p class="save-note">Purchases and permanent upgrades are saved in this browser.</p>`;
+  modal.innerHTML=`<div class="eyebrow">NEXUS EXCHANGE</div><h2>VOID SHOP</h2><p>Spend Nexus Fragments on permanent core upgrades or mystery deliveries. Core upgrades are saved between runs.</p><div class="currency-banner">✦ NEXUS FRAGMENTS <b>${saveData.coreCurrency||0}</b></div><nav class="void-shop-tabs"><button type="button" data-shop-tab="upgrades" ${activeTab==='upgrades'?'aria-current="page"':''}>PERMANENT UPGRADES</button><button type="button" data-shop-tab="boxes" ${activeTab==='boxes'?'aria-current="page"':''}>MYSTERY DELIVERIES</button></nav>${activeTab==='upgrades'?'<div class="core-upgrade-grid">'+upgradesHtml+'</div>':`<section class="void-shop-boxes"><div class="void-shop-box-art"><span>?</span><i></i><i></i></div><h3>MYSTERY DELIVERY</h3><p>Each opening grants one reward: 2.5% Legendary Void Weapon, 2.5% Legendary Companion, 12% Unique weapon, 33% Rare weapon, or 50% Nexus Fragments. Ten pulls cost 4,500 Fragments instead of 5,000, saving 10%.</p><div class="void-shop-purchase-row"><button type="button" class="btn" id="buyMysteryOne" ${!developerMode&&saveData.coreCurrency<500?'disabled':''}>OPEN ×1 <b>${developerMode?'FREE · DEV MODE':'500 ✦'}</b></button><button type="button" class="btn" id="buyMysteryTen" ${!developerMode&&saveData.coreCurrency<4500?'disabled':''}><span class="void-pull-discount-tag">SAVE 10%</span>OPEN ×10 <b>${developerMode?'FREE · DEV MODE':'4,500 ✦'}</b></button></div></section>`}<div class="menu-actions"><button class="btn" id="coreUpgradeBack">← BACK</button></div><p class="save-note">Purchases and permanent upgrades are saved in this browser.</p>`;
   modal.querySelectorAll('[data-shop-tab]').forEach(b=>b.onclick=()=>{activeTab=b.dataset.shopTab;render()});
   modal.querySelectorAll('[data-upgrade]').forEach(b=>b.onclick=()=>{const d=coreUpgradeDefs.find(x=>x.id===b.dataset.upgrade),rank=coreUpgradeRank(null,d.id),cost=coreUpgradeCost(d,rank);if(!d||rank>=d.max||saveData.coreCurrency<cost)return;saveData.coreCurrency-=cost;saveData.coreUpgrades[d.id]=rank+1;persist();sfx('ui');render()});
   const buy=count=>{
@@ -383,14 +384,22 @@ function showCoreUpgradeSystem(back=showMainMenu,initialTab='upgrades'){
     else if(roll<.50){rarity='rare';pool=voidWeapons.filter(w=>w.rarity==='rare');}
     if(rarity==='legendary'){
       const mustBeSignature=Boolean(saveData.voidWeaponNextLegendarySignature);
-      const eligible=mustBeSignature?pool.filter(w=>w.category==='signature'):pool;
-      const weapon=eligible[Math.floor(Math.random()*eligible.length)];
+      const awardCompanion=!guaranteedLegendary&&!mustBeSignature&&Math.random()>=0.5;
       saveData.voidWeaponPity=0;
-      if(mustBeSignature)saveData.voidWeaponNextLegendarySignature=false;
-      else if(guaranteedLegendary&&weapon.category==='general')saveData.voidWeaponNextLegendarySignature=true;
-      const grant=grantVoidWeaponToSave(saveData,weapon.id,1);saveData=grant.saveData;
-      const convertedFragments=grant.convertedFragments||0;
-      rewards.push({type:'weapon',weaponId:weapon.id,rarity:weapon.rarity,convertedFragments,worldId:-1,roomNumber:i+1,claimKey:'shop:'+Date.now()+':'+i});
+      if(awardCompanion){
+        const companionPool=companions.filter(companion=>companion.rarity==='legendary');
+        const companion=companionPool[Math.floor(Math.random()*companionPool.length)];
+        const grant=grantCompanion(saveData,companion.id,1);saveData=grant.saveData;
+        rewards.push({type:'companion',companionId:companion.id,rarity:companion.rarity,stars:companion.stars,worldId:-1,roomNumber:i+1,claimKey:'shop:'+Date.now()+':'+i});
+      }else{
+        const eligible=mustBeSignature?pool.filter(w=>w.category==='signature'):pool;
+        const weapon=eligible[Math.floor(Math.random()*eligible.length)];
+        if(mustBeSignature)saveData.voidWeaponNextLegendarySignature=false;
+        else if(guaranteedLegendary&&weapon.category==='general')saveData.voidWeaponNextLegendarySignature=true;
+        const grant=grantVoidWeaponToSave(saveData,weapon.id,1);saveData=grant.saveData;
+        const convertedFragments=grant.convertedFragments||0;
+        rewards.push({type:'weapon',weaponId:weapon.id,rarity:weapon.rarity,convertedFragments,worldId:-1,roomNumber:i+1,claimKey:'shop:'+Date.now()+':'+i});
+      }
     }else{
       saveData.voidWeaponPity=nextPity;
       if(pool?.length){const weapon=pool[Math.floor(Math.random()*pool.length)];const grant=grantVoidWeaponToSave(saveData,weapon.id,1);saveData=grant.saveData;const convertedFragments=grant.convertedFragments||0;rewards.push({type:'weapon',weaponId:weapon.id,rarity:weapon.rarity,convertedFragments,worldId:-1,roomNumber:i+1,claimKey:'shop:'+Date.now()+':'+i});}

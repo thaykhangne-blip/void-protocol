@@ -89,6 +89,9 @@ test('legacy saves with no Void Weapon fields normalize safely', () => {
   assert.deepEqual(normalized.voidWeaponClaims, []);
   assert.deepEqual(normalized.pendingVoidWeaponRewards, []);
   assert.equal(normalized.coreCurrency, 12);
+  assert.deepEqual(normalized.companionInventory, {});
+  assert.equal(normalized.equippedCompanionId, null);
+  assert.equal(normalized.companionSystemUnlocked, false);
 });
 
 
@@ -225,7 +228,7 @@ test('Void Weapon descriptions show only values for the current rank', () => {
   assert.match(cinder.passive.description, /Critical Rate: \\+12%\\./);
   assert.match(cinder.passive.description, /Burning enemies take 25% more damage/);
   assert.match(cinder.passive.description, /spawn 1 additional smaller homing fireball/);
-  assert.doesNotMatch(cinder.passive.description, /12% \\/ 14%|25% \\/ 30%|1 \\/ 2 \\/ 3/);
+  assert.doesNotMatch(cinder.passive.description, /12% \/ 14%|25% \/ 30%|1 \/ 2 \/ 3/);
 
   const rankThree = getVoidWeapon('cinder-oath', 2);
   assert.match(rankThree.passive.description, /Critical Rate: \\+16%\\./);

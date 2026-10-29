@@ -26,5 +26,8 @@ jobs:
       - name: Run modular build and syntax checks
         run: npm run check
 
+      - name: Run automated tests
+        run: npm run test:companions
+
       - name: Validate package.json
         run: node -e "JSON.parse(require('node:fs').readFileSync('package.json', 'utf8')); console.log('package.json is valid JSON')"

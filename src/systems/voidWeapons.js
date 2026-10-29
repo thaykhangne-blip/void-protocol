@@ -1,5 +1,7 @@
 /* Persistent Void Weapon inventory helpers. No DOM or game-loop dependencies. */
 import { voidWeapons, VOID_WEAPON_BY_ID } from '../data/voidWeapons.js';
+import { companions, COMPANION_BY_ID } from '../data/companions.js';
+import { grantCompanion, normalizeCompanionSave } from './companions.js';
 
 export const VOID_WEAPON_SAVE_DEFAULTS = Object.freeze({
   voidWeaponInventory: {},
@@ -8,7 +10,10 @@ export const VOID_WEAPON_SAVE_DEFAULTS = Object.freeze({
   voidWeaponClaims: [],
   pendingVoidWeaponRewards: [],
   voidWeaponPity: 0,
-  voidWeaponNextLegendarySignature: false
+  voidWeaponNextLegendarySignature: false,
+  companionInventory: {},
+  equippedCompanionId: null,
+  companionSystemUnlocked: false
 });
 
 const CORE_IDS = new Set(VOID_WEAPON_SIGNATURE_CORE_IDS_SAFE().filter(Boolean));
@@ -64,12 +69,14 @@ export function normalizeVoidWeaponSave(saveData = {}) {
   normalized.pendingVoidWeaponRewards = pendingRewards.filter(reward => {
     if (!isRecord(reward) || typeof reward.claimKey !== 'string' || !normalized.voidWeaponClaims.includes(reward.claimKey)) return false;
     if (reward.type === 'weapon') return Object.prototype.hasOwnProperty.call(VOID_WEAPON_BY_ID, reward.weaponId);
+    if (reward.type === 'companion') return Object.prototype.hasOwnProperty.call(COMPANION_BY_ID, reward.companionId);
     return reward.type === 'nexus-fragments' && Number.isFinite(Number(reward.amount)) && Number(reward.amount) > 0;
-  }).map(reward => reward.type === 'weapon'
-    ? { type: 'weapon', weaponId: reward.weaponId, worldId: Number(reward.worldId), roomNumber: Number(reward.roomNumber), claimKey: reward.claimKey }
-    : { type: 'nexus-fragments', amount: Math.floor(Number(reward.amount)), worldId: Number(reward.worldId), roomNumber: Number(reward.roomNumber), claimKey: reward.claimKey }
-  );
-  return normalized;
+  }).map(reward => {
+    if (reward.type === 'weapon') return { type: 'weapon', weaponId: reward.weaponId, worldId: Number(reward.worldId), roomNumber: Number(reward.roomNumber), claimKey: reward.claimKey };
+    if (reward.type === 'companion') return { type: 'companion', companionId: reward.companionId, rarity: 'legendary', stars: 5, worldId: Number(reward.worldId), roomNumber: Number(reward.roomNumber), claimKey: reward.claimKey };
+    return { type: 'nexus-fragments', amount: Math.floor(Number(reward.amount)), worldId: Number(reward.worldId), roomNumber: Number(reward.roomNumber), claimKey: reward.claimKey };
+  });
+  return normalizeCompanionSave(normalized);
 }
 
 /**
@@ -230,41 +237,56 @@ export function claimVoidWeaponMilestone(saveData, worldId, roomNumber) {
 /** Resolve and persist a campaign milestone reward exactly once. */
 export function resolveVoidWeaponMilestoneReward(saveData, worldId, roomNumber, rng = Math.random) {
   const claim = claimVoidWeaponMilestone(saveData, worldId, roomNumber);
-  const safe = claim.saveData;
+  const safe = normalizeCompanionSave(claim.saveData);
   if (!claim.claimed) return { saveData: safe, awarded: false, reason: 'already-claimed-or-invalid', claimKey: claim.key };
 
   const world = Number(worldId);
   const room = Number(roomNumber);
   const roll = Number(rng());
   let reward;
-  let weaponPool = null;
+  let rewardPool = null;
   let poolStart = 0;
   let poolWidth = 0;
-  if (Number.isFinite(roll) && roll >= 0 && roll < 0.05) {
-    weaponPool = voidWeapons.filter(weapon => weapon.rarity === 'legendary');
-    poolStart = 0; poolWidth = 0.05;
+
+  // Legendary chance remains 5% overall, split evenly between weapons and Companions.
+  if (Number.isFinite(roll) && roll >= 0 && roll < 0.025) {
+    rewardPool = voidWeapons.filter(weapon => weapon.rarity === 'legendary');
+    poolStart = 0;
+    poolWidth = 0.025;
+  } else if (Number.isFinite(roll) && roll >= 0.025 && roll < 0.05) {
+    rewardPool = companions.filter(companion => companion.rarity === 'legendary');
+    poolStart = 0.025;
+    poolWidth = 0.025;
   } else if (Number.isFinite(roll) && roll >= 0.05 && roll < 0.17) {
-    weaponPool = voidWeapons.filter(weapon => weapon.rarity === 'unique');
-    poolStart = 0.05; poolWidth = 0.12;
+    rewardPool = voidWeapons.filter(weapon => weapon.rarity === 'unique');
+    poolStart = 0.05;
+    poolWidth = 0.12;
   } else if (Number.isFinite(roll) && roll >= 0.17 && roll < 0.50) {
-    weaponPool = voidWeapons.filter(weapon => weapon.rarity === 'rare');
-    poolStart = 0.17; poolWidth = 0.33;
+    rewardPool = voidWeapons.filter(weapon => weapon.rarity === 'rare');
+    poolStart = 0.17;
+    poolWidth = 0.33;
   }
-  if (weaponPool?.length) {
+
+  if (rewardPool?.length && roll >= 0.025 && roll < 0.05) {
     const poolRoll = Math.max(0, Math.min(0.999999999, (roll - poolStart) / poolWidth));
-    const index = Math.min(weaponPool.length - 1, Math.floor(poolRoll * weaponPool.length));
-    const weapon = weaponPool[index];
+    const index = Math.min(rewardPool.length - 1, Math.floor(poolRoll * rewardPool.length));
+    const companion = rewardPool[index];
+    const granted = grantCompanion(safe, companion.id, 1);
+    Object.assign(safe, granted.saveData);
+    reward = { type: 'companion', companionId: companion.id, rarity: companion.rarity, stars: companion.stars, worldId: world, roomNumber: room, claimKey: claim.key };
+  } else if (rewardPool?.length) {
+    const poolRoll = Math.max(0, Math.min(0.999999999, (roll - poolStart) / poolWidth));
+    const index = Math.min(rewardPool.length - 1, Math.floor(poolRoll * rewardPool.length));
+    const weapon = rewardPool[index];
     const granted = grantVoidWeapon(safe, weapon.id, 1);
+    Object.assign(safe, granted.saveData);
     reward = { type: 'weapon', weaponId: weapon.id, rarity: weapon.rarity, worldId: world, roomNumber: room, claimKey: claim.key };
-    safe.voidWeaponInventory = granted.saveData.voidWeaponInventory;
-    safe.equippedVoidWeapons = granted.saveData.equippedVoidWeapons;
-    safe.voidWeaponClaims = granted.saveData.voidWeaponClaims;
-    safe.pendingVoidWeaponRewards = granted.saveData.pendingVoidWeaponRewards || safe.pendingVoidWeaponRewards || [];
   } else {
     const amount = 15 + world * 5;
     safe.coreCurrency = Math.max(0, Number(safe.coreCurrency) || 0) + amount;
     reward = { type: 'nexus-fragments', amount, worldId: world, roomNumber: room, claimKey: claim.key };
   }
+
   safe.pendingVoidWeaponRewards = [...(safe.pendingVoidWeaponRewards || []), reward];
   return { saveData: safe, awarded: true, reward, claimKey: claim.key };
 }
