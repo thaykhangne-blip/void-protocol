@@ -141,6 +141,46 @@ function showVoidWeaponCodex(){
 }
 
 
+
+function showCompanionInventory(){
+ state='companion-inventory';
+ const modal=$('modal');
+ const render=()=>{
+  const safe=normalizeCompanionSave(saveData);
+  const owned=getOwnedCompanions(safe);
+  const equippedId=safe.equippedCompanionId||null;
+  modal.className='modal companion-inventory-modal';
+  modal.onwheel=event=>{
+   if(modal.scrollHeight>modal.clientHeight){event.preventDefault();modal.scrollTop+=event.deltaY;event.stopPropagation();}
+  };
+  modal.ontouchstart=null;
+  modal.style.overscrollBehavior='contain';
+  const cards=companions.map(companion=>{
+   const copies=safe.companionInventory?.[companion.id]||0;
+   const isOwned=copies>0,equipped=equippedId===companion.id;
+   return '<article class="companion-inventory-card '+(equipped?'is-equipped':'')+(isOwned?'':' is-locked')+'" style="--companion-accent:'+(isOwned?companion.color:'#60718a')+'">'+
+    '<div class="companion-inventory-card-head"><span class="companion-inventory-glyph">'+(isOwned?companion.glyph:'?')+'</span><div><small>'+(isOwned?companion.rarity.toUpperCase()+' · '+companion.role.map(role=>role.replace(/-/g,' ')).join(' / '):'SIGNAL UNRESOLVED')+'</small><h3>'+(isOwned?companion.name:'UNKNOWN COMPANION')+'</h3><p>'+(isOwned?companion.epithet:'Not yet recruited')+'</p></div><span class="companion-inventory-status">'+(equipped?'EQUIPPED':isOwned?'OWNED ×'+copies:'LOCKED')+'</span></div>'+
+    (isOwned?'<p class="companion-inventory-description">'+companion.visual+'</p><div class="companion-inventory-stats"><span>ROLE <b>'+companion.role.map(role=>role.replace(/-/g,' ')).join(' / ')+'</b></span><span>BASIC ATTACK <b>'+companion.basicAttack.name+'</b></span><span>PASSIVE <b>'+companion.passive.name+'</b></span></div><p class="companion-inventory-passive">'+companion.passive.description+'</p>':'<p class="companion-inventory-description">Recruit this companion from Mystery Deliveries to add it to your collection.</p>')+
+    '<button type="button" class="btn companion-inventory-equip" data-companion-inventory-action="'+companion.id+'" '+(!isOwned||!safe.companionSystemUnlocked?'disabled':'')+'>'+(equipped?'UNEQUIP COMPANION':!safe.companionSystemUnlocked?'SYSTEM LOCKED':!isOwned?'NOT RECRUITED':'EQUIP COMPANION')+'</button></article>';
+  }).join('');
+  const placeholders=Array.from({length:5},(_,i)=>'<article class="companion-inventory-card is-locked" style="--companion-accent:#60718a"><div class="companion-inventory-card-head"><span class="companion-inventory-glyph">?</span><div><small>ROSTER SLOT '+String(i+4).padStart(2,'0')+'</small><h3>UNKNOWN COMPANION</h3><p>Future content</p></div><span class="companion-inventory-status">LOCKED</span></div><p class="companion-inventory-description">This roster slot is reserved for a future companion.</p></article>').join('');
+  modal.innerHTML='<button type="button" class="world-holo-back" id="companionInventoryBack" aria-label="Back to core selection" title="Back to core selection">←</button>'+
+   '<div class="eyebrow">LOADOUT / COMPANION INVENTORY</div><h2>COMPANION INVENTORY</h2><p>Manage your recruited companions. Equip one companion to provide combat support to your core.</p>'+
+   '<div class="companion-inventory-summary"><div><b>'+owned.length+' / 8</b><small>RECRUITED</small></div><div><b>'+(equippedId?owned.find(item=>item.id===equippedId)?.name||'NONE':'NONE')+'</b><small>EQUIPPED</small></div><div><b>'+(safe.companionSystemUnlocked?'ONLINE':'LOCKED')+'</b><small>SYSTEM STATUS</small></div></div>'+
+   (!safe.companionSystemUnlocked?'<div class="companion-codex-unlock">SYSTEM LOCKED · CLEAR WORLD 1, ROOM 10 TO UNLOCK COMPANION EQUIPMENT.</div>':'')+
+   '<div class="companion-inventory-grid">'+cards+placeholders+'</div>';
+  $('companionInventoryBack').onclick=()=>showCoreSelection();
+  modal.querySelectorAll('[data-companion-inventory-action]').forEach(button=>button.onclick=()=>{
+   const id=button.dataset.companionInventoryAction;
+   const result=safe.equippedCompanionId===id?unequipCompanion(safe):equipCompanion(safe,id);
+   if(!result.equipped&&!result.unequipped){sfx('damage');return;}
+   saveData=result.saveData;persist();sfx('ui');render();
+  });
+ };
+ $('overlay').classList.remove('hidden','closing','story-overlay','dialogue-field-overlay');
+ sfx('portal');render();
+}
+
 function showCompanionCodex(){
  state='companion-codex';
  const modal=$('modal');
