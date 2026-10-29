@@ -164,7 +164,9 @@ export function getCompanionExecutionDamage(target) {
 /** Unlock the current Companion roster for developer-mode testing. */
 export function unlockAllCompanions(saveData = {}) {
   const safe = normalizeCompanionSave(saveData);
-  for (const companion of companions) safe.companionInventory[companion.id] = MAX_COMPANION_COPIES;
+  for (const companion of companions) {
+    safe.companionInventory[companion.id] = Math.max(1, safe.companionInventory[companion.id] || 0);
+  }
   safe.companionSystemUnlocked = true;
   return safe;
 }
