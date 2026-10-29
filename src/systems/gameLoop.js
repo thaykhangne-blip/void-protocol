@@ -8,6 +8,7 @@ function updateAetherBeamQueue(dt){
  // Advance only the head item so later beams retain their full 0.3s spacing.
  const beam=queue[0];if(!beam)return;beam.delay-=dt;if(beam.delay>0)return;
  queue.shift();
+ sfx('aether_beam');
  const candidates=[...(enemies||[]).filter(e=>e&&e.hp>0)];
  if(blackHole&&blackHole.hp>0&&!blackHole.inactive)candidates.push(blackHole);
  const target=candidates.sort((a,b)=>dist(player,a)-dist(player,b))[0];
