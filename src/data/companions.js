@@ -30,14 +30,14 @@ export const companions = [
       interval: 2.0,
       healingMaxHpRatio: 0.04,
       healingAttackRatio: 1.2,
-      description: "Periodically restores 2.5% of the main core's Max HP plus 120% of Solace's ATK. Excess healing becomes shield, capped at 35% of the main core's Max HP."
+      description: "Every 2 seconds, restores 4% of the main core's Max HP plus 120% of Solace's ATK."
     },
     passive: {
       id: 'gentle-light',
       name: 'Gentle Light',
       incomingHealingMultiplier: 1.25,
       incomingDamageMultiplier: 1,
-      description: "While deployed, increases healing received by the main core by 25%. Does not reduce incoming damage."
+      description: "Increases healing received by the main core by 25%."
     },
     signature: {
       id: 'sanctuary',
@@ -47,7 +47,7 @@ export const companions = [
       duration: 3,
       healingMaxHpRatio: 0.10,
       cooldown: 30,
-      description: 'Automatically activates below 35% HP and restores 10% Max HP over 3 seconds. It does not grant damage immunity or damage reduction. Cooldown: 30 seconds.'
+      description: 'Below 35% HP, restores 10% Max HP over 3 seconds. Cooldown: 30 seconds.'
     }
   },
   {
@@ -67,7 +67,7 @@ export const companions = [
       projectileCount: 2,
       projectileHoming: true,
       followDistance: 56,
-      targetingRange: 200
+      targetingRange: 360
     },
     basicAttack: {
       id: 'rupture',
@@ -86,7 +86,7 @@ export const companions = [
       reapplication: 'refresh-duration',
       affectsBosses: true,
       respectsGlobalDamageAmplificationCap: true,
-      description: 'Enemies hit by Ruin take 25% increased damage for 4 seconds. Does not stack; reapplication refreshes duration. Must respect the global damage-amplification cap.'
+      description: 'Marked enemies take 25% more damage for 4 seconds. Reapplying Death Mark refreshes its duration.'
     },
     signature: {
       id: 'final-judgment',
@@ -117,25 +117,25 @@ export const companions = [
       attack: 4,
       attackInterval: 1.5,
       followDistance: 40,
-      targetingRange: 120
+      targetingRange: 180
     },
     basicAttack: {
       id: 'seismic-strike',
       name: 'Seismic Strike',
       damage: 4,
       interval: 1.5,
-      radius: 90,
+      radius: 145,
       knockbackStrength: 100,
       canDisplaceBosses: false,
       canDisplaceSingularityCores: false,
-      description: 'Releases a short-range shockwave that deals damage and pushes ordinary enemies away from the main core. Bosses and singularity cores cannot be displaced.'
+      description: 'Releases a shockwave that damages and pushes nearby enemies away.'
     },
     passive: {
       id: 'fortification',
       name: 'Fortification',
       defBonusRatio: 0.25,
       stacks: false,
-      description: "Increases the main core's DEF by 25%. Does not stack with another copy of Bastion."
+      description: "Increases the main core's DEF by 25%."
     },
     signature: {
       id: 'bulwark',
