@@ -553,7 +553,6 @@ function killEnemy(e){if(core?.id==='remielle'&&featherTraps.filter(f=>f.fromKil
 
 // COMPANION COMBAT RUNTIME. Concatenated by scripts/build.js.
 function recordCompanionMetric(key,amount){if(!Object.prototype.hasOwnProperty.call(roomCombatStats,key)||!Number.isFinite(amount)||amount<=0)return;roomCombatStats[key]+=amount;updateCombatStatsUI();}
-function recordCompanionMetric(key,amount){if(!Object.prototype.hasOwnProperty.call(roomCombatStats,key)||!Number.isFinite(amount)||amount<=0)return;roomCombatStats[key]+=amount;updateCombatStatsUI();}
 function resetCompanionCombatRuntime(){companionCombatState=createCompanionCombatState();if(player){player.companionShieldHp=0;player.companionBarrierHp=0;player.companionBarrierTimer=0;player.companionSanctuaryHealRemaining=0;}}
 function activeCompanion(){return player&&saveData?.companionSystemUnlocked?getCompanion(saveData.equippedCompanionId):null;}
 function companionDefenseBonus(){const c=activeCompanion();return c?.id==='bastion'?Math.max(8,(Number(player?.armor)||0)*c.passive.defBonusRatio):0;}
