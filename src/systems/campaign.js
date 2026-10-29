@@ -182,7 +182,7 @@ function showPortals(){
   saveData=unlock.saveData;
   if(unlock.newlyUnlocked){
    persist();
-   showModal('NEW SYSTEM UNLOCKED','COMPANION REGISTRY','Your core can now equip one recruited Companion. Companions are obtained through Mystery Deliveries and persist between runs.',[{glyph:'✦',color:'#ffd978',title:'OPEN COMPANION REGISTRY',desc:'Review your collection and equipment slot.',action:()=>showCompanionCodex()},{glyph:'→',color:'#72f6ff',title:'CONTINUE CAMPAIGN',desc:'Proceed to the room reward and portal selection.',action:()=>showPortals()}]);
+   showModal('NEW SYSTEM UNLOCKED','COMPANION REGISTRY','Your core can now equip one recruited Companion. Companions are obtained through Mystery Deliveries and persist between runs. Open CODEX → COMPANIONS from the campaign menu to manage your collection.',[{glyph:'→',color:'#72f6ff',title:'CONTINUE CAMPAIGN',desc:'Proceed to the room reward and portal selection.',action:()=>showPortals()}]);
    return;
   }
  }
