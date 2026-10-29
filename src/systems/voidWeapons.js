@@ -76,7 +76,7 @@ export function normalizeVoidWeaponSave(saveData = {}) {
     if (reward.type === 'companion') return { type: 'companion', companionId: reward.companionId, rarity: 'legendary', stars: 5, worldId: Number(reward.worldId), roomNumber: Number(reward.roomNumber), claimKey: reward.claimKey };
     return { type: 'nexus-fragments', amount: Math.floor(Number(reward.amount)), worldId: Number(reward.worldId), roomNumber: Number(reward.roomNumber), claimKey: reward.claimKey };
   });
-  return normalized;
+  return normalizeCompanionSave(normalized);
 }
 
 /**
