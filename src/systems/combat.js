@@ -240,7 +240,7 @@ function useCoreSkill(){if(state==='paused'&&pausedFrom==='playing'&&player&&cor
  const x=player.x,y=player.y;
  const radius=(142+lv*10)*(1+(player.aetherWellRadiusBonus||0));
  skillFx.push({type:'aetherStasis',x,y,originX:x,originY:y,vx:0,vy:0,life:10,max:10,radius,color:'#fff0a6',damage:player.damage*(.20+lv*.045),collapseDamage:player.damage*(1.15+lv*.20)*(player.aetherCollapseMult||1),tickTimer:.2,phase:'stasis',weaponEnhanced:false});
- sfx('ultimate');burst(x,y,'#fff0a6',24);burst(x,y,'#08070a',12);
+ sfx('aether_event_horizon');burst(x,y,'#fff0a6',24);burst(x,y,'#08070a',12);
  notify('AETHER · EVENT HORIZON · 5s STASIS → 4s MOVING SINGULARITY → COLLAPSE',2);}
  updateUI();}
 
@@ -254,7 +254,8 @@ function updateCoreSkill(dt){if(!player||!core)return;clampVengeanceShields();if
    // During stasis the field is anchored to the moving Aether core, not the cast location.
    fx.x=player.x;fx.y=player.y;fx.phase='stasis';fx.tickTimer=(fx.tickTimer||0)-dt;
    for(const e of enemies){if(e.hp<=0||dist(e,fx)>fx.radius+(e.r||0))continue;e.stunned=Math.max(e.stunned||0,Math.min(remain,dt*1.5));e.stunDamageTaken=1;if(fx.tickTimer<=0)applyDamage(e,fx.damage,'#fff0a6',false,'AETHER EVENT HORIZON STASIS');}
-   if(fx.tickTimer<=0)fx.tickTimer=.32;
+   if(fx.tickTimer<=0){fx.tickTimer=.32;fx.soundPulseTimer=(fx.soundPulseTimer||0)-.32;}
+  fx.soundPulseTimer=(fx.soundPulseTimer||0)-dt;if(fx.soundPulseTimer<=0){sfx('aether_black_sun_pulse');fx.soundPulseTimer=.92;}
   }else if(elapsed<9){
    if(fx.phase!=='moving'){
     fx.phase='moving';fx.x=player.x;fx.y=player.y;
@@ -293,7 +294,7 @@ function updateCoreSkill(dt){if(!player||!core)return;clampVengeanceShields();if
   if(fx.tickTimer<=0)fx.tickTimer=.32;
   if(previousLife>0&&fx.life<=0){
    const capturedCount=Math.min(20,fx.capturedEnemies.size),collapseMultiplier=Math.min(2.5,1+capturedCount*.075);
-   burst(fx.x,fx.y,'#fff7cf',64);burst(fx.x,fx.y,'#fff0a6',48);burst(fx.x,fx.y,'#08070a',34);burst(fx.x,fx.y,'#ffffff',28);
+   sfx('aether_black_sun_collapse');burst(fx.x,fx.y,'#fff7cf',64);burst(fx.x,fx.y,'#fff0a6',48);burst(fx.x,fx.y,'#08070a',34);burst(fx.x,fx.y,'#ffffff',28);
    skillFx.push({type:'aetherCollapse',x:fx.x,y:fx.y,life:.78,max:.78,radius:fx.radius,color:'#fff7cf',ultimate:true});skillFx.push({type:'aetherShockwave',x:fx.x,y:fx.y,life:.62,max:.62,radius:fx.radius,color:'#fff0a6'});
    for(const e of enemies){if(e.hp<=0||dist(e,fx)>fx.radius*1.08)continue;const boss=e.isMiniBoss||e.isFinalBoss||e.role==='boss'||e.role==='miniboss'||e.role==='warden';applyDamage(e,Math.min(player.damage*12,fx.collapseDamage*collapseMultiplier*(boss?2:1)),'#fff7cf',true,'AETHER BLACK SUN COLLAPSE');}
    if(blackHole&&!blackHole.inactive&&blackHole.hp>0&&dist(fx,blackHole)<=fx.radius+(blackHole.r||0))applyDamage(blackHole,Math.min(player.damage*16,fx.collapseDamage*collapseMultiplier*2),'#fff7cf',true,'AETHER BLACK SUN COLLAPSE');
@@ -473,7 +474,7 @@ function resolveUltimateCast(){
    }
    skillFx=skillFx.filter(f=>!lingeringWells.includes(f)&&f.type!=='aetherRingPulse');
    skillFx.push({type:'aetherBlackSun',x:player.x,y:player.y,life:duration,max:duration,radius,color:'#fff0a6',damage:player.damage*(.17+lv*.035)*energyPower*(1+Math.min(.24,player.aetherBlackSunDamageBonus||0)),collapseDamage,tickTimer:.2,capturedEnemies:new Set(),isUltimate:true});
-   burst(player.x,player.y,'#fff0a6',38);burst(player.x,player.y,'#050509',28);burst(player.x,player.y,'#fff7cf',16);
+   sfx('aether_black_sun_start');burst(player.x,player.y,'#fff0a6',38);burst(player.x,player.y,'#050509',28);burst(player.x,player.y,'#fff7cf',16);
    notify('AETHER · BLACK SUN · 10s TRANSFORMATION · CONSUME ENEMIES TO AMPLIFY COLLAPSE',2);
  }else{
    const ax=mouse.dx||1,ay=mouse.dy||0;const len=Math.hypot(ax,ay)||1;const old={x:player.x,y:player.y};player.x=Math.max(16,Math.min(W-16,player.x+ax/len*(155+lv*28)));player.y=Math.max(16,Math.min(H-16,player.y+ay/len*(155+lv*28)));player.inv=Math.max(player.inv,.42);player.ultHaste=12+lv;
