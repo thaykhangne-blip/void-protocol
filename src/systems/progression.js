@@ -183,7 +183,7 @@ function perkRank(title){const t=String(title||'').toUpperCase();switch(t){
 
 // Use the shared rank table; perks without a listed cap can keep stacking.
 
-function perkMaxRank(title){const key=String(title||'').trim().toUpperCase();if(key==='AETHER: WIDE ORBIT')return 3;if(key==='AETHER: DEEP-FIELD RESONANCE')return 1;return PERK_MAX_RANK[key]??Infinity}
+function perkMaxRank(title){const key=String(title||'').trim().toUpperCase();return PERK_MAX_RANK[key]??Infinity}
 
 function perkAvailable(o){if(String(o.title||'').trim().toUpperCase()==='AURALIS: CORE RESONANCE'&&core?.id!=='remielle')return false;return perkRank(o.title)<perkMaxRank(o.title)}
 
