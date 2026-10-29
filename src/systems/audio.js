@@ -46,4 +46,20 @@ function stopMusic(){if(musicTimer){clearInterval(musicTimer);musicTimer=null}if
 
 function updateMusicVolume(){if(musicBus&&audioCtx&&musicEnabled)musicBus.gain.setTargetAtTime(musicVolume,audioCtx.currentTime,.04)}
 
-function sfx(type){if(!sfxEnabled)return;const now=performance.now();const minGap=type==='shoot'?95:type==='hit'?35:type==='text'?28:0;if(minGap&&now-(sfxLast[type]||0)<minGap)return;sfxLast[type]=now;const ac=ensureAudio();if(!ac)return;const presets={shoot:[560,230,.055,'square',.035],shoot_ember:[260,105,.095,'sawtooth',.045],shoot_frost:[760,420,.085,'triangle',.04],shoot_nova:[920,130,.19,'sawtooth',.035],hit:[220,95,.075,'triangle',.045],kill:[390,690,.12,'sine',.055],xp:[720,1080,.09,'sine',.035],damage:[155,70,.16,'sawtooth',.055],ultimate:[120,520,.38,'sawtooth',.075],portal:[330,880,.22,'sine',.05],ui:[520,660,.045,'sine',.025],text:[840,520,.025,'square',.012],dash:[260,720,.1,'triangle',.04],level:[660,990,.16,'sine',.045]};const q=presets[type]||presets.ui;try{const osc=ac.createOscillator(),gain=ac.createGain();osc.type=q[3];osc.frequency.setValueAtTime(q[0],ac.currentTime);osc.frequency.exponentialRampToValueAtTime(Math.max(35,q[1]),ac.currentTime+q[2]);gain.gain.setValueAtTime(q[4],ac.currentTime);gain.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+q[2]);osc.connect(gain);gain.connect(ac.destination);osc.start();osc.stop(ac.currentTime+q[2]+.01)}catch(e){}}
+function aetherLayer(ac,frequency,endFrequency,duration,wave,volume,delay=0){
+ try{const now=ac.currentTime+delay,o=ac.createOscillator(),g=ac.createGain();o.type=wave;o.frequency.setValueAtTime(frequency,now);o.frequency.exponentialRampToValueAtTime(Math.max(28,endFrequency),now+duration);g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(Math.max(.0002,volume),now+.008);g.gain.exponentialRampToValueAtTime(.0001,now+duration);o.connect(g);g.connect(ac.destination);o.start(now);o.stop(now+duration+.02)}catch(e){}
+}
+function sfx(type){
+ if(!sfxEnabled)return;
+ const now=performance.now(),minGap=type==='shoot'?95:type==='hit'?35:type==='text'?28:type==='aether_beam'?115:type==='aether_black_sun_pulse'?720:0;
+ if(minGap&&now-(sfxLast[type]||0)<minGap)return;sfxLast[type]=now;
+ const ac=ensureAudio();if(!ac)return;
+ // Aether gets layered, synthesized effects rather than one generic beep.
+ if(type==='aether_beam'){aetherLayer(ac,980,260,.105,'sawtooth',.025);aetherLayer(ac,185,72,.09,'sine',.035,.012);aetherLayer(ac,1500,720,.045,'triangle',.012,.018);return}
+ if(type==='aether_black_sun_start'){aetherLayer(ac,190,34,.9,'sine',.065);aetherLayer(ac,420,58,.72,'sawtooth',.025,.04);aetherLayer(ac,980,150,.62,'triangle',.018,.12);return}
+ if(type==='aether_black_sun_pulse'){aetherLayer(ac,105,48,.42,'sine',.035);aetherLayer(ac,340,120,.34,'triangle',.016,.025);aetherLayer(ac,760,260,.22,'sawtooth',.009,.06);return}
+ if(type==='aether_black_sun_collapse'){aetherLayer(ac,220,30,.78,'sine',.075);aetherLayer(ac,680,55,.56,'sawtooth',.035,.025);aetherLayer(ac,1250,180,.42,'triangle',.026,.055);aetherLayer(ac,90,38,.65,'square',.018,.08);return}
+ if(type==='aether_event_horizon'){aetherLayer(ac,520,80,.42,'sine',.045);aetherLayer(ac,1150,240,.28,'triangle',.02,.035);return}
+ const presets={shoot:[560,230,.055,'square',.035],shoot_ember:[260,105,.095,'sawtooth',.045],shoot_frost:[760,420,.085,'triangle',.04],shoot_nova:[920,130,.19,'sawtooth',.035],hit:[220,95,.075,'triangle',.045],kill:[390,690,.12,'sine',.055],xp:[720,1080,.09,'sine',.035],damage:[155,70,.16,'sawtooth',.055],ultimate:[120,520,.38,'sawtooth',.075],portal:[330,880,.22,'sine',.05],ui:[520,660,.045,'sine',.025],text:[840,520,.025,'square',.012],dash:[260,720,.1,'triangle',.04],level:[660,990,.16,'sine',.045]};
+ const q=presets[type]||presets.ui;try{const osc=ac.createOscillator(),gain=ac.createGain();osc.type=q[3];osc.frequency.setValueAtTime(q[0],ac.currentTime);osc.frequency.exponentialRampToValueAtTime(Math.max(35,q[1]),ac.currentTime+q[2]);gain.gain.setValueAtTime(q[4],ac.currentTime);gain.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+q[2]);osc.connect(gain);gain.connect(ac.destination);osc.start();osc.stop(ac.currentTime+q[2]+.01)}catch(e){}
+}
