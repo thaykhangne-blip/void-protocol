@@ -1,6 +1,6 @@
 /* Persistent Void Weapon inventory helpers. No DOM or game-loop dependencies. */
 import { voidWeapons, VOID_WEAPON_BY_ID } from '../data/voidWeapons.js';
-import { companions } from '../data/companions.js';
+import { companions, COMPANION_BY_ID } from '../data/companions.js';
 import { grantCompanion, normalizeCompanionSave } from './companions.js';
 
 export const VOID_WEAPON_SAVE_DEFAULTS = Object.freeze({
