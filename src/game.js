@@ -617,6 +617,7 @@ function drawCompanionCombat(ctx){
  for(const t of enemies){if((t.companionDeathMarkUntil||0)<=performance.now()||t.hp<=0)continue;ctx.save();const markPulse=.65+.35*Math.sin(now*9);ctx.globalAlpha=markPulse;ctx.strokeStyle='#d7b7ff';ctx.shadowColor='#9c62ff';ctx.shadowBlur=12;ctx.lineWidth=2;ctx.beginPath();ctx.arc(t.x,t.y,(t.r||8)+5+Math.sin(now*7)*2,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.moveTo(t.x-4,t.y-4);ctx.lineTo(t.x+4,t.y+4);ctx.moveTo(t.x+4,t.y-4);ctx.lineTo(t.x-4,t.y+4);ctx.stroke();ctx.restore();}
  for(const p of companionCombatState.projectiles){ctx.save();ctx.globalAlpha=Math.min(1,p.life/1.5);ctx.strokeStyle='#ff526d';ctx.shadowColor='#a884ff';ctx.shadowBlur=16;ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x-8,p.y+5);ctx.stroke();ctx.fillStyle='#fff2ff';ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill();ctx.restore();}
 }
+let roomDialogueShown=new Set();
 function world(){return currentWorld===-1?tutorialWorld:(worlds[currentWorld]||worlds[0])}
 
 function allWorldsCleared(){return worlds.length===4&&worlds.every((w,i)=>(Number(saveData.bestRooms?.[i])||0)>=w.rooms)}
