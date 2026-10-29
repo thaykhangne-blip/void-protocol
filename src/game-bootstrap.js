@@ -14,6 +14,12 @@ import { voidWeapons } from './data/voidWeapons.js';
 import { companions } from './data/companions.js';
 import { getCompanion, getOwnedCompanions, equipCompanion, unequipCompanion, normalizeCompanionSave, unlockCompanionSystemAfterClear, grantCompanion, unlockAllCompanions, createCompanionCombatState, getCompanionDamageAmplification, isCompanionExecuteTarget, getCompanionExecutionDamage } from './systems/companions.js';
 
+
+const SAVE_KEY='void_orb_save_v1';
+const DEV_MODE_PASSWORD_SHA256='4a1c5ba9bab4ffbd545fc0e59e31ffa673a1c7dd06e6bccccc432245d922ba14';
+let saveData={};
+let developerMode=false;
+
 const highlightVoidWeaponNumbers = value => String(value ?? '').replace(/(\d+(?:\.\d+)?%?)/g, '<span style="color:#5de8ff;font-weight:700;text-shadow:0 0 8px rgba(93,232,255,.18)">$1</span>');
 
 // Wait until the startup loader has preloaded the local app resources before booting the game.
