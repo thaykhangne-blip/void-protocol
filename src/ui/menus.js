@@ -389,10 +389,7 @@ function showPauseMenu(){returnBuildPanelHome();showModal('SYSTEM PAUSED','VOID 
 
 function unlockAllCompanionsForDeveloperMode(){
  if(!developerMode)return;
- const safe=normalizeCompanionSave(saveData);
- for(const companion of companions)safe.companionInventory[companion.id]=5;
- safe.companionSystemUnlocked=true;
- saveData=safe;
+ saveData=unlockAllCompanions(saveData);
  persist();
 }
 
