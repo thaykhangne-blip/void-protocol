@@ -14,7 +14,7 @@ import { executeAutoAttack } from './abilities/autoAttacks/execute.js';
 import { getVoidWeapon, getOwnedVoidWeapons, equipVoidWeapon, unequipVoidWeapon, getVoidWeaponBonuses, normalizeVoidWeaponSave, refineVoidWeapon, grantVoidWeapon as grantVoidWeaponToSave, MAX_VOID_WEAPON_REFINEMENT, resolveVoidWeaponMilestoneReward } from './systems/voidWeapons.js';
 import { voidWeapons } from './data/voidWeapons.js';
 import { companions } from './data/companions.js';
-import { getCompanion, getOwnedCompanions, equipCompanion, unequipCompanion, normalizeCompanionSave, unlockCompanionSystemAfterClear, grantCompanion, createCompanionCombatState, getCompanionDamageAmplification, isCompanionExecuteTarget, getCompanionExecutionDamage } from './systems/companions.js';
+import { getCompanion, getOwnedCompanions, equipCompanion, unequipCompanion, normalizeCompanionSave, unlockCompanionSystemAfterClear, grantCompanion, unlockAllCompanions, createCompanionCombatState, getCompanionDamageAmplification, isCompanionExecuteTarget, getCompanionExecutionDamage } from './systems/companions.js';
 
 const highlightVoidWeaponNumbers = value => String(value ?? '').replace(/(\d+(?:\.\d+)?%?)/g, '<span style="color:#5de8ff;font-weight:700;text-shadow:0 0 8px rgba(93,232,255,.18)">$1</span>');
 
@@ -1862,10 +1862,7 @@ function showPauseMenu(){returnBuildPanelHome();showModal('SYSTEM PAUSED','VOID 
 
 function unlockAllCompanionsForDeveloperMode(){
  if(!developerMode)return;
- const safe=normalizeCompanionSave(saveData);
- for(const companion of companions)safe.companionInventory[companion.id]=5;
- safe.companionSystemUnlocked=true;
- saveData=safe;
+ saveData=unlockAllCompanions(saveData);
  persist();
 }
 
