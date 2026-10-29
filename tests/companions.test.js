@@ -4,6 +4,9 @@ import { companions, COMPANION_BY_ID, MAX_EQUIPPED_COMPANIONS } from '../src/dat
 import {
   equipCompanion,
   getCompanion,
+  getCompanionDamageAmplification,
+  getCompanionExecutionDamage,
+  isCompanionExecuteTarget,
   getEquippedCompanion,
   getOwnedCompanions,
   grantCompanion,
@@ -115,4 +118,28 @@ test('unique, rare, and Nexus Fragment odds retain their existing thresholds', (
 
   const fragments = resolveVoidWeaponMilestoneReward(baseSave(), 0, 5, () => 0.50);
   assert.equal(fragments.reward.type, 'nexus-fragments');
+});
+
+
+test('Ruin Death Mark amplifies damage only while its four-second mark is active', () => {
+  const target = { hp: 80, maxHp: 100, companionDeathMarkUntil: 5000 };
+  assert.equal(getCompanionDamageAmplification(target, 4999), 1.25);
+  assert.equal(getCompanionDamageAmplification(target, 5000), 1);
+  assert.equal(getCompanionDamageAmplification({}, 0), 1);
+});
+
+test('Ruin execution eligibility excludes bosses and singularity cores', () => {
+  const ordinary = { hp: 20, maxHp: 100 };
+  assert.equal(isCompanionExecuteTarget(ordinary), true);
+  assert.equal(isCompanionExecuteTarget({ hp: 26, maxHp: 100 }), false);
+  assert.equal(isCompanionExecuteTarget({ hp: 10, maxHp: 100, isMiniBoss: true }), false);
+  assert.equal(isCompanionExecuteTarget({ hp: 10, maxHp: 100, role: 'boss' }), false);
+  const blackHole = { hp: 10, maxHp: 100 };
+  assert.equal(isCompanionExecuteTarget(blackHole, blackHole), false);
+});
+
+test('Ruin fallback execution damage scales with missing HP and remains non-negative', () => {
+  assert.equal(getCompanionExecutionDamage({ hp: 50, maxHp: 100 }), 50);
+  assert.equal(getCompanionExecutionDamage({ hp: 100, maxHp: 100 }), 40);
+  assert.equal(getCompanionExecutionDamage({ hp: 0, maxHp: 100 }), 0);
 });
