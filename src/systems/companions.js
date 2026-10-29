@@ -29,7 +29,7 @@ export function normalizeCompanionSave(saveData = {}) {
   for (const [id, count] of Object.entries(inventory)) {
     if (!Object.prototype.hasOwnProperty.call(COMPANION_BY_ID, id)) continue;
     const safeCount = Math.floor(Number(count));
-    if (Number.isFinite(safeCount) && safeCount > 0) normalized.companionInventory[id] = safeCount;
+    if (Number.isFinite(safeCount) && safeCount > 0) normalized.companionInventory[id] = Math.min(MAX_COMPANION_COPIES, safeCount);
   }
 
   const equippedId = normalized.equippedCompanionId;
