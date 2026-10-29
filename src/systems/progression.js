@@ -27,10 +27,10 @@ function applyCoreEvolution(lv){
   if(lv===15){player.shatterglass=true;name='SHATTERGLASS';desc='Deal 15% more damage to slowed enemies.'}
   if(lv===20){player.absoluteZero=true;player.frostSlowDuration=3.2;name='ABSOLUTE ZERO';desc='Slow lasts 3.2s.'}
  }else if(id==='nova'){
-  if(lv===5){player.aetherStasisBonus=(player.aetherStasisBonus||0)+.6;name='EVENT HORIZON';desc='Event Horizon stasis lasts 0.6s longer before the singularity begins moving.'}
-  if(lv===10){player.aetherCollapsePerCaptureBonus=(player.aetherCollapsePerCaptureBonus||0)+.12;name='SINGULARITY AMPLIFIER';desc='Collapse damage gains +12% per additional enemy caught, up to +60%.'}
-  if(lv===15){player.aetherSlowFieldRank=1;name='GRAVITATIONAL RESONANCE';desc='Enemies hit by Aether field pulses are slowed by 20% for 1.2s.'}
-  if(lv===20){player.aetherAftershockRank=1;name='BLACK SUN AFTERSHOCK';desc='Black Sun collapse releases a secondary shockwave dealing 35% of collapse damage.'}
+  if(lv===5){player.aetherStasisBonus=(player.aetherStasisBonus||0)+.6;name='AETHER: EVENT HORIZON';desc='Event Horizon stasis lasts 0.6s longer before the singularity begins moving.'}
+  if(lv===10){player.aetherCollapsePerCaptureBonus=(player.aetherCollapsePerCaptureBonus||0)+.12;name='AETHER: SINGULARITY AMPLIFIER';desc='Collapse damage gains +12% per additional enemy caught, up to +60%.'}
+  if(lv===15){player.aetherSlowFieldRank=1;name='AETHER: GRAVITATIONAL RESONANCE';desc='Enemies hit by Aether field pulses are slowed by 20% for 1.2s.'}
+  if(lv===20){player.aetherAftershockRank=1;name='AETHER: BLACK SUN AFTERSHOCK';desc='Black Sun collapse releases a secondary shockwave dealing 35% of collapse damage.'}
  }else if(id==='flash'){
   if(lv===5){player.flashChainPower=(player.flashChainPower||1)*1.10;name='ARC CONDUCTOR';desc='Lightning chain hits deal 10% more damage.'}
   if(lv===10){player.flashStunDurationBonus=(player.flashStunDurationBonus||0)+.20;name='STATIC CHARGE';desc='Static Shock stuns last 20% longer.'}
