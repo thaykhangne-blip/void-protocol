@@ -20,39 +20,8 @@ function updateAetherBeamQueue(dt){
  const ux=Math.cos(angle),uy=Math.sin(angle);
  const usedTargets=beam.used instanceof Set?beam.used:(beam.used=new Set(Array.isArray(beam.used)?beam.used:[]));for(const t of candidates){const dx=t.x-originX,dy=t.y-originY,along=dx*ux+dy*uy,side=Math.abs(dx*uy-dy*ux);if(along<0||along>length||side>(t.r||10)+7||usedTargets.has(t))continue;usedTargets.add(t);applyDamage(t,beam.damage,'#ffe7a0',true,'AETHER TWIN BEAM');const knockImmune=t===blackHole||t.isMiniBoss||t.isFinalBoss||t.isBoss||t.role==='boss'||t.role==='miniboss'||t.role==='warden';if(!knockImmune){const knock=Math.min(38,14+beam.damage*.025),kd=Math.hypot(dx,dy)||1;t.x+=dx/kd*knock;t.y+=dy/kd*knock;t.stunned=Math.max(t.stunned||0,.5);}burst(t.x,t.y,'#ffe7a0',5);}
 }
-function updateAetherGravityPassive(dt){
- if(!player||core?.id!=='nova'||state!=='playing')return;
- player.aetherGravityPassiveTimer=(player.aetherGravityPassiveTimer||0)-dt;
- if(player.aetherGravityPassiveTimer>0)return;
- player.aetherGravityPassiveTimer=.9;
- const radius=(100+Math.min(28,(player.evoTier||0)*7))*(1+Math.min(.75,player.aetherRingRangeBonus||0));
- const inward=(player.aetherRingPassivePhase=(player.aetherRingPassivePhase||0)+1)%2===1;
- const innerRadius=Math.max(22,player.r+10),color='#fff0a6';
- const pulseDamage=player.damage*.38*(player.laserDamageMult||1);
- for(const enemy of enemies||[]){
-  if(!enemy||enemy.hp<=0)continue;
-  const dx=player.x-enemy.x,dy=player.y-enemy.y,d=Math.hypot(dx,dy)||1;
-  if(d>radius+(enemy.r||0))continue;
-  const falloff=Math.max(.15,1-d/Math.max(1,radius));
-  // Bosses and minibosses resist gravity control, but must still respond to Aether's outward pulse.
-  const elite=enemy.isMiniBoss||enemy.isFinalBoss||enemy.isBoss||enemy.role==='boss'||enemy.role==='miniboss'||enemy.role==='warden';
-  const strength=(inward?(elite?20:34):(elite?25:16))*falloff;
-  enemy.x+=(inward?dx/d:-dx/d)*strength;
-  enemy.y+=(inward?dy/d:-dy/d)*strength;
-  applyDamage(enemy,pulseDamage,color,true,inward?'AETHER GRAVITY INFLUX':'AETHER GRAVITY REJECTION');
-  if(player.laserVulnerability)enemy.novaVuln=Math.max(enemy.novaVuln||0,1.5);
-  burst(enemy.x,enemy.y,color,2);
- }
- // The passive ring may damage the singularity, but must never move/knock it back.
- if(blackHole&&blackHole.hp>0&&!blackHole.inactive&&dist(player,blackHole)<=radius+(blackHole.r||0)){
-  applyDamage(blackHole,pulseDamage,color,true,inward?'AETHER GRAVITY INFLUX':'AETHER GRAVITY REJECTION');
- }
- skillFx.push({type:'aetherRingPulse',x:player.x,y:player.y,life:.36,max:.36,radius,innerRadius,inward,color,ringCount:2+Math.min(2,player.sideCannons||0)});
-}
-
 function update(dt){
  updateAetherBeamQueue(dt);
- updateAetherGravityPassive(dt);
  if(ultimateCinematic){
   ultimateCinematic.timer-=dt;
   if(ultimateCinematic.timer<=0){
