@@ -387,6 +387,15 @@ function resumeGame(){restorePausedPage()}
 
 function showPauseMenu(){returnBuildPanelHome();showModal('SYSTEM PAUSED','VOID PROTOCOL','Your run is paused. Resume, review your build, or adjust settings.',[{glyph:'▶',color:'#72f6ff',title:'RESUME RUN',desc:'Return to the current room.',action:resumeGame},{glyph:'◈',color:'#ff9ed8',title:'ORBITAL BUILD',desc:'Check your stats and perks. The run stays paused.',action:showOrbitalBuild},{glyph:'⚙',color:'#c29aff',title:'SETTINGS',desc:'Change controls and audio settings.',action:()=>showSettings('paused')},{glyph:'↻',color:'#ffe38a',title:'RESTART RUN',desc:'Erase this run’s checkpoint and restart from Room 1.',action:()=>{confirmInGame('RESTART THIS RUN?','This deletes your current run checkpoint, core, stats, and build. You will restart from Room 1.','DELETE CHECKPOINT & RESTART',()=>{returnBuildPanelHome();saveData.campaignCheckpoint=null;persist();run++;start()},showPauseMenu,'KEEP PLAYING')}},{glyph:'⌂',color:'#72f6ff',title:'CAMPAIGN MENU',desc:'Save your current checkpoint and return to world selection.',action:()=>{confirmInGame('RETURN TO CAMPAIGN MENU?',"Your current checkpoint will be saved. Starting a new run will replace it.",'SAVE & RETURN TO WORLDS',()=>{saveRunCheckpoint();returnBuildPanelHome();showWorldSelect()},showPauseMenu,'STAY IN RUN')}}])}
 
+function unlockAllCompanionsForDeveloperMode(){
+ if(!developerMode)return;
+ const safe=normalizeCompanionSave(saveData);
+ for(const companion of companions)safe.companionInventory[companion.id]=5;
+ safe.companionSystemUnlocked=true;
+ saveData=safe;
+ persist();
+}
+
 function showSettings(returnState='paused'){
  settingsReturn=returnState;state='settings';$('overlay').classList.remove('hidden','closing');
  const settingsModal=$('modal');settingsModal.className='modal settings-modal';
@@ -395,7 +404,7 @@ function showSettings(returnState='paused'){
  <div class="setting-row"><div><b>BACKGROUND MUSIC</b><br><span>Play the arcade soundtrack.</span></div><button class="btn" id="musicToggle">${musicEnabled?'ON':'OFF'}</button></div>
  <div class="setting-row"><div style="flex:1"><b>MUSIC VOLUME</b><br><span>Adjust music volume.</span><input id="musicVolume" aria-label="Music volume" type="range" min="0" max="100" value="${Math.round(musicVolume*100)}" style="display:block;width:100%;margin-top:9px;accent-color:var(--cyan)"></div><b id="musicVolumeValue">${Math.round(musicVolume*100)}%</b></div>
  <div class="setting-row"><div><b>SOUND EFFECTS</b><br><span>Toggle combat and menu sounds.</span></div><button class="btn" id="sfxToggle">${sfxEnabled?'ON':'OFF'}</button></div>
- <div class="setting-row"><div><b>DEVELOPER MODE</b><br><span>${developerMode?'All cores unlocked for this browser session.':'Unlock all cores for testing. Password is required; mode resets on page reload.'}</span></div><button class="btn" id="developerModeToggle">${developerMode?'ON · DISABLE':'OFF · ENABLE'}</button></div>
+ <div class="setting-row"><div><b>DEVELOPER MODE</b><br><span>${developerMode?'All cores and companions unlocked for this browser session.':'Unlock all cores and companions for testing. Password is required; mode resets on page reload.'}</span></div><button class="btn" id="developerModeToggle">${developerMode?'ON · DISABLE':'OFF · ENABLE'}</button></div>
  ${developerMode?'<div class="setting-row"><div><b>VOID WEAPON TEST LOADOUT</b><br><span>Unlock every Void Weapon at Refinement I and save the loadout to this browser.</span></div><button class="btn" id="grantDeveloperVoidWeapons">GRANT ALL · R1</button></div>':''}
  <div class="setting-row" id="developerPasswordPanel" style="display:none;flex-direction:column;align-items:stretch;gap:8px">
   <label for="developerPassword" style="font-size:11px;color:var(--muted)">DEVELOPER PASSWORD</label>
@@ -412,7 +421,7 @@ function showSettings(returnState='paused'){
  $('manualOpen').onclick=()=>showFlightManual(returnState);
  $('developerModeToggle').onclick=()=>{if(developerMode){developerMode=false;showSettings(returnState);return;}const panel=$('developerPasswordPanel');if(panel)panel.style.display='flex';const input=$('developerPassword');const error=$('developerPasswordError');if(error)error.textContent='';if(input){input.value='';input.focus();}};
  const grantDeveloperVoidWeapons=$('grantDeveloperVoidWeapons');if(grantDeveloperVoidWeapons)grantDeveloperVoidWeapons.onclick=()=>{for(const weapon of voidWeapons){saveData.voidWeaponInventory[weapon.id]=Math.max(1,Number(saveData.voidWeaponInventory[weapon.id])||0);saveData.voidWeaponRefinements[weapon.id]=1;}saveData=normalizeVoidWeaponSave(saveData);persist();sfx('ui');notify('ALL VOID WEAPONS UNLOCKED · REFINEMENT I');showSettings(returnState);};
- const submitDeveloperPassword=async()=>{const input=$('developerPassword'),error=$('developerPasswordError');if(!input||!error)return;if(!window.crypto?.subtle){error.textContent='Secure hashing is unavailable in this browser.';return;}try{const bytes=new TextEncoder().encode(input.value);const digest=await window.crypto.subtle.digest('SHA-256',bytes);const hash=Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('');if(hash===DEV_MODE_PASSWORD_SHA256){developerMode=true;showSettings(returnState);}else{input.value='';error.textContent='Incorrect password.';input.focus();}}catch(err){error.textContent='Could not verify password in this browser.';}};
+ const submitDeveloperPassword=async()=>{const input=$('developerPassword'),error=$('developerPasswordError');if(!input||!error)return;if(!window.crypto?.subtle){error.textContent='Secure hashing is unavailable in this browser.';return;}try{const bytes=new TextEncoder().encode(input.value);const digest=await window.crypto.subtle.digest('SHA-256',bytes);const hash=Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('');if(hash===DEV_MODE_PASSWORD_SHA256){developerMode=true;unlockAllCompanionsForDeveloperMode();showSettings(returnState);}else{input.value='';error.textContent='Incorrect password.';input.focus();}}catch(err){error.textContent='Could not verify password in this browser.';}};
  $('developerPasswordSubmit').onclick=submitDeveloperPassword;
  $('developerPassword').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();submitDeveloperPassword();}});
  $('settingsBack').onclick=()=>{if(returnState==='paused'){state='paused';showPauseMenu()}else if(returnState==='start'){showMainMenu()}else{state='playing';hideModal()}};
