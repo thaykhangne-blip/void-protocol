@@ -239,7 +239,7 @@ function useCoreSkill(){if(state==='paused'&&pausedFrom==='playing'&&player&&cor
  else if(core.id==='nova'){
  const x=player.x,y=player.y;
  const radius=(142+lv*10)*(1+(player.aetherWellRadiusBonus||0));
- const stasisBonus=Math.min(1.8,player.aetherStasisBonus||0);skillFx.push({type:'aetherStasis',x,y,originX:x,originY:y,vx:0,vy:0,life:10+stasisBonus,max:10+stasisBonus,radius,color:'#fff0a6',damage:player.damage*(.20+lv*.045),collapseDamage:player.damage*(1.15+lv*.20)*(player.aetherCollapseMult||1),tickTimer:.2,phase:'stasis',weaponEnhanced:false,stasisBonus});
+ const stasisBonus=Math.min(1.8,player.aetherStasisBonus||0),wellDurationBonus=Math.min(2.4,player.aetherWellDurationBonus||0);skillFx.push({type:'aetherStasis',x,y,originX:x,originY:y,vx:0,vy:0,life:10+stasisBonus+wellDurationBonus,max:10+stasisBonus+wellDurationBonus,radius,color:'#fff0a6',damage:player.damage*(.20+lv*.045),collapseDamage:player.damage*(1.15+lv*.20)*(player.aetherCollapseMult||1),tickTimer:.2,phase:'stasis',weaponEnhanced:false,stasisBonus,wellDurationBonus});
  sfx('aether_event_horizon');burst(x,y,'#fff0a6',24);burst(x,y,'#08070a',12);
  notify('AETHER · EVENT HORIZON · 5s STASIS → 4s MOVING SINGULARITY → COLLAPSE',2);}
  updateUI();}
@@ -256,7 +256,7 @@ function updateCoreSkill(dt){if(!player||!core)return;clampVengeanceShields();if
    for(const e of enemies){if(e.hp<=0||dist(e,fx)>fx.radius+(e.r||0))continue;e.stunned=Math.max(e.stunned||0,Math.min(remain,dt*1.5));e.stunDamageTaken=1;if(fx.tickTimer<=0)applyDamage(e,fx.damage,'#fff0a6',false,'AETHER EVENT HORIZON STASIS');if(player.aetherSlowFieldRank>0){e.slow=Math.max(e.slow||0,1.2);e.aetherFieldSlowTimer=Math.max(e.aetherFieldSlowTimer||0,1.2);}if(player.aetherSlowFieldRank>0){e.slow=Math.max(e.slow||0,1.2);e.aetherFieldSlowTimer=Math.max(e.aetherFieldSlowTimer||0,1.2);}}
    if(fx.tickTimer<=0)fx.tickTimer=.32;
   fx.soundPulseTimer=(fx.soundPulseTimer||0)-dt;if(fx.soundPulseTimer<=0){sfx('aether_black_sun_pulse');fx.soundPulseTimer=.92;}
-  }else if(elapsed<stasisDuration+4){
+  }else if(elapsed<stasisDuration+4+(fx.wellDurationBonus||0)){
    if(fx.phase!=='moving'){
     fx.phase='moving';fx.x=player.x;fx.y=player.y;
     // Prefer the singularity, then a boss. Otherwise aim at the densest enemy cluster.
@@ -276,7 +276,7 @@ function updateCoreSkill(dt){if(!player||!core)return;clampVengeanceShields();if
    }
    fx.x=Math.max(32,Math.min(W-32,fx.x+fx.vx*185*dt));fx.y=Math.max(32,Math.min(H-32,fx.y+fx.vy*185*dt));
    fx.tickTimer=(fx.tickTimer||0)-dt;
-   for(const e of enemies){if(e.hp<=0)continue;const dx=fx.x-e.x,dy=fx.y-e.y,d=Math.hypot(dx,dy)||1;if(d>=fx.radius)continue;const boss=e.isMiniBoss||e.isFinalBoss||e.role==='miniboss'||e.role==='warden',pull=(boss?64:285)*(1-d/fx.radius)*dt;e.x+=dx/d*pull;e.y+=dy/d*pull;if(fx.tickTimer<=0)applyDamage(e,fx.damage*(boss?.65:1),'#fff0a6',false,'AETHER EVENT HORIZON GRAVITY');if(player.aetherSlowFieldRank>0&&!boss){e.slow=Math.max(e.slow||0,1.2);e.aetherFieldSlowTimer=Math.max(e.aetherFieldSlowTimer||0,1.2);}if(player.aetherSlowFieldRank>0&&!boss){e.slow=Math.max(e.slow||0,1.2);e.aetherFieldSlowTimer=Math.max(e.aetherFieldSlowTimer||0,1.2);}}
+   for(const e of enemies){if(e.hp<=0)continue;const dx=fx.x-e.x,dy=fx.y-e.y,d=Math.hypot(dx,dy)||1;if(d>=fx.radius)continue;const boss=e.isMiniBoss||e.isFinalBoss||e.role==='miniboss'||e.role==='warden',pull=(boss?64:285*(1+(player.aetherPullStrengthBonus||0)))*(1-d/fx.radius)*dt;e.x+=dx/d*pull;e.y+=dy/d*pull;if(fx.tickTimer<=0)applyDamage(e,fx.damage*(boss?.65:1),'#fff0a6',false,'AETHER EVENT HORIZON GRAVITY');if(player.aetherSlowFieldRank>0&&!boss){e.slow=Math.max(e.slow||0,1.2);e.aetherFieldSlowTimer=Math.max(e.aetherFieldSlowTimer||0,1.2);}if(player.aetherSlowFieldRank>0&&!boss){e.slow=Math.max(e.slow||0,1.2);e.aetherFieldSlowTimer=Math.max(e.aetherFieldSlowTimer||0,1.2);}}
    if(fx.tickTimer<=0)fx.tickTimer=.32;
   }else if(fx.phase!=='collapse'){
    fx.phase='collapse';burst(fx.x,fx.y,'#fff7cf',20);burst(fx.x,fx.y,'#050509',12);skillFx.push({type:'aetherCollapse',x:fx.x,y:fx.y,life:.72,max:.72,radius:fx.radius,color:'#fff0a6'});
@@ -289,7 +289,7 @@ function updateCoreSkill(dt){if(!player||!core)return;clampVengeanceShields();if
   // Black Sun grants continuous invulnerability for the entire transformation.
   player.inv=Math.max(player.inv,dt+.05);
   fx.tickTimer=(fx.tickTimer||0)-dt;
-  for(const e of enemies){if(e.hp<=0)continue;const dx=fx.x-e.x,dy=fx.y-e.y,d2=dx*dx+dy*dy;const blackSunRadius=fx.radius*(1+(player.aetherBlackSunRadiusBonus||0));if(d2>=blackSunRadius*blackSunRadius)continue;const d=Math.sqrt(d2)||1,boss=e.isMiniBoss||e.isFinalBoss||e.role==='boss'||e.role==='miniboss'||e.role==='warden';const pull=(boss?72:430*(1+(player.aetherPullStrengthBonus||0)))*(1-d/fx.radius)*dt;e.x+=dx/d*pull;e.y+=dy/d*pull;if(d<=Math.max(32,player.r+18))fx.capturedEnemies.add(e.id??e);if(fx.tickTimer<=0)applyDamage(e,fx.damage*(boss?.55:1),'#fff0a6',false,'BLACK SUN GRAVITY');if(player.aetherSlowFieldRank>0&&!boss){e.slow=Math.max(e.slow||0,1.2);e.aetherFieldSlowTimer=Math.max(e.aetherFieldSlowTimer||0,1.2);}}
+  for(const e of enemies){if(e.hp<=0)continue;const dx=fx.x-e.x,dy=fx.y-e.y,d2=dx*dx+dy*dy;const blackSunRadius=fx.radius*(1+(player.aetherBlackSunRadiusBonus||0));if(d2>=blackSunRadius*blackSunRadius)continue;const d=Math.sqrt(d2)||1,boss=e.isMiniBoss||e.isFinalBoss||e.role==='boss'||e.role==='miniboss'||e.role==='warden';const pull=(boss?72:430*(1+(player.aetherPullStrengthBonus||0)))*(1-d/blackSunRadius)*dt;e.x+=dx/d*pull;e.y+=dy/d*pull;if(d<=Math.max(32,player.r+18))fx.capturedEnemies.add(e.id??e);if(fx.tickTimer<=0)applyDamage(e,fx.damage*(boss?.55:1),'#fff0a6',false,'BLACK SUN GRAVITY');if(player.aetherSlowFieldRank>0&&!boss){e.slow=Math.max(e.slow||0,1.2);e.aetherFieldSlowTimer=Math.max(e.aetherFieldSlowTimer||0,1.2);}}
   if(blackHole&&!blackHole.inactive&&blackHole.hp>0&&dist(fx,blackHole)<=fx.radius*(1+(player.aetherBlackSunRadiusBonus||0))+(blackHole.r||0)&&fx.tickTimer<=0)applyDamage(blackHole,fx.damage*.55,'#fff0a6',false,'BLACK SUN GRAVITY');
   if(fx.tickTimer<=0)fx.tickTimer=.32;
   if(previousLife>0&&fx.life<=0){
