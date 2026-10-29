@@ -13,7 +13,8 @@ import {
   grantCompanion,
   normalizeCompanionSave,
   unequipCompanion,
-  unlockCompanionSystemAfterClear
+  unlockCompanionSystemAfterClear,
+  unlockAllCompanions
 } from '../src/systems/companions.js';
 import { resolveVoidWeaponMilestoneReward } from '../src/systems/voidWeapons.js';
 
@@ -65,6 +66,18 @@ test('granting a Companion adds owned copies and rejects invalid IDs', () => {
   const second = grantCompanion(first.saveData, 'solace', 2);
   assert.equal(second.saveData.companionInventory.solace, 3);
   assert.equal(grantCompanion(second.saveData, 'not-real').granted, false);
+});
+
+test('developer mode unlocks every current Companion at one copy and enables equipment', () => {
+  const initial = { companionInventory: { solace: 3 }, companionSystemUnlocked: false };
+  const unlocked = unlockAllCompanions(initial);
+
+  assert.equal(unlocked.companionSystemUnlocked, true);
+  assert.equal(unlocked.companionInventory.solace, 3);
+  for (const companion of companions) {
+    assert.ok(unlocked.companionInventory[companion.id] >= 1);
+  }
+  assert.equal(getOwnedCompanions(unlocked).length, companions.length);
 });
 
 test('Companion system unlocks only after clearing room 10 of World 1 (zero-based ID 0)', () => {
