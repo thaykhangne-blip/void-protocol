@@ -20,4 +20,7 @@ let developerMode=false;
 
 const highlightVoidWeaponNumbers = value => String(value ?? '').replace(/(\\d+(?:\\.\\d+)?%?)/g, '<span style="color:#5de8ff;font-weight:700;text-shadow:0 0 8px rgba(93,232,255,.18)">$1</span>');
 
+// 2D Euclidean distance shared by combat, targeting, companions, and the game loop.
+function dist(a,b){if(!a||!b)return Infinity;const dx=(Number(a.x)||0)-(Number(b.x)||0),dy=(Number(a.y)||0)-(Number(b.y)||0);return Math.hypot(dx,dy);}
+
 // The module fragments below are concatenated here by the build script.
