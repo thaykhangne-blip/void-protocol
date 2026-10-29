@@ -160,3 +160,11 @@ export function getCompanionExecutionDamage(target) {
   if (!target || !(target.hp > 0)) return 0;
   return Math.max(0, 40 + Math.max(0, (Number(target.maxHp) || target.hp) - target.hp) * 0.20);
 }
+
+/** Unlock the current Companion roster for developer-mode testing. */
+export function unlockAllCompanions(saveData = {}) {
+  const safe = normalizeCompanionSave(saveData);
+  for (const companion of companions) safe.companionInventory[companion.id] = MAX_COMPANION_COPIES;
+  safe.companionSystemUnlocked = true;
+  return safe;
+}
