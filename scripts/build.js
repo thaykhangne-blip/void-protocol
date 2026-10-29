@@ -17,6 +17,7 @@ const runtimePrelude = ``;
 
 const fragments = [
   'src/systems/combat.js',
+  'src/systems/companionRuntime.js',
   'src/systems/campaign.js',
   'src/systems/progression.js',
   'src/ui/menus.js',
