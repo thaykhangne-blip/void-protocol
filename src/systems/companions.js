@@ -7,6 +7,9 @@ import {
   COMPANION_UNLOCK_ROOM
 } from '../data/companions.js';
 
+export const MAX_COMPANION_COPIES = 5; // Rank I plus four duplicates for future evolution.
+export const COMPANION_DUPLICATE_FRAGMENTS = 50;
+
 export const COMPANION_SAVE_DEFAULTS = Object.freeze({
   companionInventory: {},
   equippedCompanionId: null,
@@ -52,7 +55,7 @@ export function getOwnedCompanions(saveData = {}) {
   return companions.filter(companion => safe.companionInventory[companion.id] > 0);
 }
 
-/** Grant a Companion copy. Duplicate conversion is deliberately not defined yet. */
+/** Grant up to five total copies; convert excess duplicates into Nexus Fragments. */
 export function grantCompanion(saveData, companionId, copies = 1) {
   const safe = normalizeCompanionSave(saveData);
   const amount = Math.floor(Number(copies));
@@ -61,14 +64,13 @@ export function grantCompanion(saveData, companionId, copies = 1) {
     return { saveData: safe, granted: false, reason: 'invalid-companion-or-count' };
   }
 
-  safe.companionInventory[companionId] = (safe.companionInventory[companionId] || 0) + amount;
-  return {
-    saveData: safe,
-    granted: true,
-    companionId,
-    copies: amount,
-    totalCopies: safe.companionInventory[companionId]
-  };
+  const current = safe.companionInventory[companionId] || 0;
+  const copiesGranted = Math.min(amount, Math.max(0, MAX_COMPANION_COPIES - current));
+  const excessCopies = amount - copiesGranted;
+  const convertedFragments = excessCopies * COMPANION_DUPLICATE_FRAGMENTS;
+  if (copiesGranted > 0) safe.companionInventory[companionId] = current + copiesGranted;
+  if (convertedFragments > 0) safe.coreCurrency = Math.max(0, Number(safe.coreCurrency) || 0) + convertedFragments;
+  return { saveData: safe, granted: copiesGranted > 0, companionId, copies: copiesGranted, excessCopies, convertedFragments, totalCopies: safe.companionInventory[companionId] || current };
 }
 
 /** Equip the single allowed Companion slot. Ownership and unlock state are required. */
