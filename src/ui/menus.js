@@ -164,14 +164,14 @@ function showCompanionCodex(){
   modal.innerHTML='<div class="eyebrow">ARCHIVE / COMPANION REGISTRY</div><h2>COMPANION COLLECTION</h2><p>Recruit a companion from Mystery Deliveries, then equip one unit to accompany your core. Companions are persistent campaign collectibles.</p>'+
    '<div class="companion-codex-summary"><div><b>'+Object.keys(ownedMap).length+' / 8</b><small>RECRUITED</small></div><div><b>'+(safe.equippedCompanionId?ownedMap[safe.equippedCompanionId]?.name||'NONE':'NONE')+'</b><small>EQUIPPED COMPANION</small></div><div><b>'+(safe.companionSystemUnlocked?'UNLOCKED':'LOCKED')+'</b><small>ACCESS STATUS</small></div></div>'+
    (!safe.companionSystemUnlocked?'<div class="companion-codex-unlock">SYSTEM LOCKED · CLEAR WORLD 1, ROOM 10 TO UNLOCK COMPANION EQUIPMENT.</div>':'')+
-   '<div class="companion-codex-grid">'+roster+placeholders+'</div><div class="menu-actions"><button type="button" class="btn" id="companionCodexBack">← MAIN MENU</button></div>';
+   '<div class="companion-codex-grid">'+roster+placeholders+'</div>';
   modal.querySelectorAll('[data-companion-action]').forEach(button=>button.onclick=()=>{
    const id=button.dataset.companionAction;
    const result=safe.equippedCompanionId===id?unequipCompanion(safe):equipCompanion(safe,id);
    if(!result.equipped&&!result.unequipped){sfx('damage');return;}
    saveData=result.saveData;persist();sfx('ui');render();
   });
-  $('companionCodexBack').onclick=showMainMenu;
+  addUnifiedCodexTabs('companions');
  };
  $('overlay').classList.remove('hidden','closing','story-overlay','dialogue-field-overlay');
  sfx('portal');render();
