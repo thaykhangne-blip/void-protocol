@@ -36,7 +36,7 @@ const output = [
   runtimePrelude,
   ...sections,
   '',
-].join('\n\n') + '\n})();\n';
+].join('\n\n') + '\n';
 
 await writeFile(resolve(root, outputPath), output, 'utf8');
 console.log(`Built ${outputPath} from ${bootstrapPath} and ${fragments.length} source fragments.`);
