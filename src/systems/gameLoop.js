@@ -43,12 +43,8 @@ function updateAetherGravityPassive(dt){
   if(player.laserVulnerability)enemy.novaVuln=Math.max(enemy.novaVuln||0,1.5);
   burst(enemy.x,enemy.y,color,2);
  }
+ // The passive ring may damage the singularity, but must never move/knock it back.
  if(blackHole&&blackHole.hp>0&&!blackHole.inactive&&dist(player,blackHole)<=radius+(blackHole.r||0)){
-  const dx=player.x-blackHole.x,dy=player.y-blackHole.y,d=Math.hypot(dx,dy)||1;
-  const falloff=Math.max(.15,1-d/Math.max(1,radius));
-  const strength=(inward?20:25)*falloff;
-  blackHole.x+=(inward?dx/d:-dx/d)*strength;
-  blackHole.y+=(inward?dy/d:-dy/d)*strength;
   applyDamage(blackHole,pulseDamage,color,true,inward?'AETHER GRAVITY INFLUX':'AETHER GRAVITY REJECTION');
  }
  skillFx.push({type:'aetherRingPulse',x:player.x,y:player.y,life:.36,max:.36,radius,innerRadius,inward,color,ringCount:2+Math.min(2,player.sideCannons||0)});
