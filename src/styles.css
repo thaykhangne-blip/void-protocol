@@ -2555,3 +2555,17 @@ button.global-back-button { transition: opacity .18s ease; }
 .companion-inventory-equip{width:100%;margin-top:10px;border:1px solid var(--companion-accent);color:#edf0ff;background:color-mix(in srgb,var(--companion-accent) 13%,#0a1020)}
 .companion-inventory-equip:disabled{opacity:.48;cursor:not-allowed}
 @media(max-width:680px){.companion-inventory-grid{grid-template-columns:minmax(0,1fr)}.companion-inventory-summary{grid-template-columns:repeat(3,minmax(0,1fr))}.companion-inventory-card-head h3{font-size:16px}.companion-inventory-status{font-size:8px}}
+
+
+/* Companion inventory scrolling and readable icon-led ability descriptions. */
+.overlay.companion-inventory-overlay{align-items:flex-start;justify-content:center;overflow-y:auto;overscroll-behavior:contain;padding:14px 18px}
+.companion-inventory-modal{flex:0 0 auto;min-height:0;max-height:none;height:auto;overflow:visible;margin:auto}
+.companion-inventory-grid{align-items:stretch}
+.companion-inventory-ability{display:grid;grid-template-columns:30px minmax(0,1fr);gap:9px;align-items:start;margin:10px 0;padding:10px;border:1px solid color-mix(in srgb,var(--companion-accent) 35%,#293754);border-radius:6px;background:rgba(5,10,22,.72);text-align:left}
+.companion-inventory-ability-icon{display:grid;place-items:center;width:28px;height:28px;border:1px solid var(--companion-accent);border-radius:6px;color:var(--companion-accent);font-size:17px;background:color-mix(in srgb,var(--companion-accent) 10%,#080d19);box-shadow:0 0 12px color-mix(in srgb,var(--companion-accent) 12%,transparent)}
+.companion-inventory-ability>div{min-width:0}
+.companion-inventory-ability small{display:block;color:var(--companion-accent);font-size:9px;font-weight:800;letter-spacing:1px;line-height:1.5}
+.companion-inventory-ability p{margin:4px 0 0;color:#c5d0e5;font-size:11px;line-height:1.55;overflow-wrap:anywhere}
+#shieldTrack{box-sizing:border-box;height:6px;margin-top:3px;margin-bottom:5px;border:1px solid #f4f7ff55;background:#20283a;border-radius:2px;overflow:hidden}
+#shieldTrack #shieldbar{display:block;height:100%;min-width:0;background:linear-gradient(90deg,#dfe8ff,#fff)!important;box-shadow:0 0 8px #fff9;transition:width .15s}
+@media(max-width:680px){.overlay.companion-inventory-overlay{padding:8px}.companion-inventory-grid{grid-template-columns:minmax(0,1fr)}.companion-inventory-modal{width:100%}}
