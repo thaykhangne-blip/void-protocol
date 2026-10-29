@@ -128,14 +128,14 @@ export const companions = [
       knockbackStrength: 100,
       canDisplaceBosses: false,
       canDisplaceSingularityCores: false,
-      description: 'Releases a shockwave that damages and pushes nearby enemies away.'
+      description: 'Releases a shockwave that damages and pushes nearby enemies away, stunning affected enemies for 1 second.'
     },
     passive: {
       id: 'fortification',
       name: 'Fortification',
-      defBonusRatio: 0.25,
+      defBonusRatio: 0.45,
       stacks: false,
-      description: "Increases the main core's DEF by 25%."
+      description: "Increases the main core's DEF by 45%."
     },
     signature: {
       id: 'bulwark',
@@ -143,9 +143,9 @@ export const companions = [
       triggerDamageMaxHpRatio: 0.15,
       barrierMaxHpRatio: 0.20,
       duration: 10,
-      cooldown: 25,
+      cooldown: 12,
       cannotRecursivelyTrigger: true,
-      description: 'When a single hit deals at least 15% of the main core Max HP, creates a barrier with durability equal to 20% of Max HP for up to 10 seconds. Cooldown: 25 seconds. The barrier cannot trigger itself recursively.'
+      description: 'When a single hit deals at least 15% of the main core Max HP, creates a barrier with durability equal to 20% of Max HP for up to 10 seconds. Cooldown: 12 seconds. The barrier follows the main core and cannot trigger itself recursively.'
     }
   }
 ];
