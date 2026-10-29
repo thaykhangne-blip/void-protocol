@@ -149,7 +149,7 @@ function showCompanionInventory(){
   const safe=normalizeCompanionSave(saveData);
   const owned=getOwnedCompanions(safe);
   const equippedId=safe.equippedCompanionId||null;
-  modal.className='modal companion-inventory-modal';
+  modal.className='modal companion-inventory-modal';$('overlay').classList.add('companion-inventory-overlay');
   modal.onwheel=event=>{
    if(modal.scrollHeight>modal.clientHeight){event.preventDefault();modal.scrollTop+=event.deltaY;event.stopPropagation();}
   };
@@ -160,7 +160,7 @@ function showCompanionInventory(){
    const isOwned=copies>0,equipped=equippedId===companion.id;
    return '<article class="companion-inventory-card '+(equipped?'is-equipped':'')+(isOwned?'':' is-locked')+'" style="--companion-accent:'+(isOwned?companion.color:'#60718a')+'">'+
     '<div class="companion-inventory-card-head"><span class="companion-inventory-glyph">'+(isOwned?companion.glyph:'?')+'</span><div><small>'+(isOwned?companion.rarity.toUpperCase()+' · '+companion.role.map(role=>role.replace(/-/g,' ')).join(' / '):'SIGNAL UNRESOLVED')+'</small><h3>'+(isOwned?companion.name:'UNKNOWN COMPANION')+'</h3><p>'+(isOwned?companion.epithet:'Not yet recruited')+'</p></div><span class="companion-inventory-status">'+(equipped?'EQUIPPED':isOwned?'OWNED ×'+copies:'LOCKED')+'</span></div>'+
-    (isOwned?'<p class="companion-inventory-description">'+companion.visual+'</p><div class="companion-inventory-stats"><span>ROLE <b>'+companion.role.map(role=>role.replace(/-/g,' ')).join(' / ')+'</b></span><span>BASIC ATTACK <b>'+companion.basicAttack.name+'</b></span><span>PASSIVE <b>'+companion.passive.name+'</b></span></div><p class="companion-inventory-passive">'+companion.passive.description+'</p>':'<p class="companion-inventory-description">Recruit this companion from Mystery Deliveries to add it to your collection.</p>')+
+    (isOwned?'<p class="companion-inventory-description">'+companion.visual+'</p>':'<p class="companion-inventory-description">Recruit this companion from Mystery Deliveries to add it to your collection.</p>')+'<div class="companion-inventory-ability"><span class="companion-inventory-ability-icon" aria-hidden="true">⚔</span><div><small>BASIC ATTACK · '+companion.basicAttack.name+'</small><p>'+companion.basicAttack.description+'</p></div></div><div class="companion-inventory-ability"><span class="companion-inventory-ability-icon" aria-hidden="true">✧</span><div><small>PASSIVE · '+companion.passive.name+'</small><p>'+companion.passive.description+'</p></div></div>'+
     '<button type="button" class="btn companion-inventory-equip" data-companion-inventory-action="'+companion.id+'" '+(!isOwned||!safe.companionSystemUnlocked?'disabled':'')+'>'+(equipped?'UNEQUIP COMPANION':!safe.companionSystemUnlocked?'SYSTEM LOCKED':!isOwned?'NOT RECRUITED':'EQUIP COMPANION')+'</button></article>';
   }).join('');
   const placeholders=Array.from({length:5},(_,i)=>'<article class="companion-inventory-card is-locked" style="--companion-accent:#60718a"><div class="companion-inventory-card-head"><span class="companion-inventory-glyph">?</span><div><small>ROSTER SLOT '+String(i+4).padStart(2,'0')+'</small><h3>UNKNOWN COMPANION</h3><p>Future content</p></div><span class="companion-inventory-status">LOCKED</span></div><p class="companion-inventory-description">This roster slot is reserved for a future companion.</p></article>').join('');
