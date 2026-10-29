@@ -45,6 +45,7 @@ function showMainMenu(){if(window.__voidCodexBackAlign){window.removeEventListen
 
 function showUnifiedCodex(tab='perks'){
  if(tab==='weapons')showVoidWeaponCodex();
+ else if(tab==='companions')showCompanionCodex();
  else if(tab==='story')showStoryArchive();
  else showPerkCodex();
 }
@@ -53,7 +54,7 @@ function addUnifiedCodexTabs(active){
  const modal=$('modal');if(!modal)return;
  modal.classList.add('unified-codex-modal');
  modal.querySelectorAll('.world-holo-back').forEach(button=>button.remove());
- const tabs='<nav class="unified-codex-tabs" aria-label="Codex sections"><button type="button" data-unified-codex-tab="perks" '+(active==='perks'?'aria-current="page"':'')+'>PERK CODEX</button><button type="button" data-unified-codex-tab="weapons" '+(active==='weapons'?'aria-current="page"':'')+'>VOID WEAPONS</button><button type="button" data-unified-codex-tab="story" '+(active==='story'?'aria-current="page"':'')+'>STORY ARCHIVE</button></nav>';
+ const tabs='<nav class="unified-codex-tabs" aria-label="Codex sections"><button type="button" data-unified-codex-tab="perks" '+(active==='perks'?'aria-current="page"':'')+'>PERK CODEX</button><button type="button" data-unified-codex-tab="weapons" '+(active==='weapons'?'aria-current="page"':'')+'>VOID WEAPONS</button><button type="button" data-unified-codex-tab="companions" '+(active==='companions'?'aria-current="page"':'')+'>COMPANIONS</button><button type="button" data-unified-codex-tab="story" '+(active==='story'?'aria-current="page"':'')+'>STORY ARCHIVE</button></nav>';
  modal.insertAdjacentHTML('afterbegin',tabs);
  let content=modal.querySelector('.unified-codex-content');
  if(!content){
@@ -137,6 +138,43 @@ function showVoidWeaponCodex(){
  $('overlay').classList.remove('hidden','closing','story-overlay','dialogue-field-overlay');
  sfx('portal');
  render();
+}
+
+
+function showCompanionCodex(){
+ state='companion-codex';
+ const modal=$('modal');
+ const render=()=>{
+  const safe=normalizeCompanionSave(saveData);
+  const ownedMap=Object.fromEntries(getOwnedCompanions(safe).map(companion=>[companion.id,companion]));
+  const roster=companions.map(companion=>{
+   const owned=ownedMap[companion.id],equipped=safe.equippedCompanionId===companion.id;
+   const locked=!safe.companionSystemUnlocked,hidden=!owned;
+   const detail=hidden?'Companion data remains classified until this unit is recruited.':
+    '<p class="companion-codex-description">'+companion.visual+'</p>'+
+    '<div class="companion-codex-kit"><small>BASIC ATTACK · '+companion.basicAttack.name+'</small><p>'+companion.basicAttack.description+'</p><small>PASSIVE · '+companion.passive.name+'</small><p>'+companion.passive.description+'</p><small>SIGNATURE · '+companion.signature.name+'</small><p>'+companion.signature.description+'</p></div>'+
+    '<div class="companion-codex-footer"><span>OWNED ×'+safe.companionInventory[companion.id]+'</span><span>'+(equipped?'CURRENTLY EQUIPPED':'AVAILABLE')+'</span></div>';
+   return '<article class="companion-codex-card '+(hidden?'is-undiscovered':'is-discovered')+(equipped?' is-equipped':'')+'" style="--companion-accent:'+(hidden?'#60718a':companion.color)+'">'+
+    '<div class="companion-codex-card-head"><span class="companion-codex-glyph">'+(hidden?'?':companion.glyph)+'</span><div><small>'+(hidden?'SIGNAL UNRESOLVED':companion.rarity.toUpperCase()+' · '+('★'.repeat(companion.stars))+' · '+companion.role.map(role=>role.replace(/-/g,' ')).join(' / '))+'</small><h3>'+(hidden?'UNKNOWN COMPANION':companion.name)+'</h3><p>'+(hidden?'Identity classified':companion.epithet)+'</p></div></div>'+
+    (hidden?'<p class="companion-codex-description">Companion identity and abilities are hidden until recruited.</p><div class="companion-codex-lock">◇ UNDISCOVERED</div>':detail)+
+    '<button type="button" class="btn companion-codex-action" data-companion-action="'+companion.id+'" '+(locked||hidden?'disabled':'')+'>'+(equipped?'UNEQUIP COMPANION':locked?'LOCKED':hidden?'NOT RECRUITED':'EQUIP COMPANION')+'</button></article>';
+  }).join('');
+  const placeholders=Array.from({length:5},(_,i)=>'<article class="companion-codex-card is-undiscovered" style="--companion-accent:#60718a"><div class="companion-codex-card-head"><span class="companion-codex-glyph">?</span><div><small>ROSTER SLOT '+String(i+4).padStart(2,'0')+' · CLASSIFIED</small><h3>UNKNOWN COMPANION</h3><p>Signal not yet recovered</p></div></div><p class="companion-codex-description">This registry entry will become available in a future content update.</p><div class="companion-codex-lock">◇ UNDISCOVERED</div></article>').join('');
+  modal.className='modal companion-codex-modal';
+  modal.innerHTML='<div class="eyebrow">ARCHIVE / COMPANION REGISTRY</div><h2>COMPANION COLLECTION</h2><p>Recruit a companion from Mystery Deliveries, then equip one unit to accompany your core. Companions are persistent campaign collectibles.</p>'+
+   '<div class="companion-codex-summary"><div><b>'+Object.keys(ownedMap).length+' / 8</b><small>RECRUITED</small></div><div><b>'+(safe.equippedCompanionId?ownedMap[safe.equippedCompanionId]?.name||'NONE':'NONE')+'</b><small>EQUIPPED COMPANION</small></div><div><b>'+(safe.companionSystemUnlocked?'UNLOCKED':'LOCKED')+'</b><small>ACCESS STATUS</small></div></div>'+
+   (!safe.companionSystemUnlocked?'<div class="companion-codex-unlock">SYSTEM LOCKED · CLEAR WORLD 1, ROOM 10 TO UNLOCK COMPANION EQUIPMENT.</div>':'')+
+   '<div class="companion-codex-grid">'+roster+placeholders+'</div><div class="menu-actions"><button type="button" class="btn" id="companionCodexBack">← MAIN MENU</button></div>';
+  modal.querySelectorAll('[data-companion-action]').forEach(button=>button.onclick=()=>{
+   const id=button.dataset.companionAction;
+   const result=safe.equippedCompanionId===id?unequipCompanion(safe):equipCompanion(safe,id);
+   if(!result.equipped&&!result.unequipped){sfx('damage');return;}
+   saveData=result.saveData;persist();sfx('ui');render();
+  });
+  $('companionCodexBack').onclick=showMainMenu;
+ };
+ $('overlay').classList.remove('hidden','closing','story-overlay','dialogue-field-overlay');
+ sfx('portal');render();
 }
 
 function showPerkCodex(){state='codex';const perks=PERKCODEXDATA;
