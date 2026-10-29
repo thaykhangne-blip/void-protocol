@@ -1173,7 +1173,7 @@ function showVoidWeaponTenPull(rewards,onDone){
    const color=companion?.color||(rank>=5?'#ffd66b':rank>=4?'#c69aff':'#72dfff');
    const glyph=weapon?.glyph||companion?.glyph||'✧';
    const title=reward.presentationOnly?'MILESTONE REWARD':(weapon?.name||companion?.name||'NEXUS FRAGMENTS');
-   const detail=reward.presentationOnly?'ALREADY CLAIMED':(companion?'LEGENDARY ★★★★★ COMPANION':weapon?(weapon.rarity==='legendary'?'LEGENDARY ★★★★★':weapon.rarity==='unique'?'UNIQUE ★★★★':'RARE ★★★')+' VOID WEAPON':'+ '+reward.amount+' FRAGMENTS');
+   const detail=reward.presentationOnly?'ALREADY CLAIMED':(companion?'LEGENDARY ★★★★★ COMPANION'+(reward.convertedFragments?' · +'+reward.convertedFragments+' FRAGMENTS':''):weapon?(weapon.rarity==='legendary'?'LEGENDARY ★★★★★':weapon.rarity==='unique'?'UNIQUE ★★★★':'RARE ★★★')+' VOID WEAPON':'+ '+reward.amount+' FRAGMENTS');
    const conversion=reward.convertedFragments?'<em class="void-duplicate-conversion">✦ CONVERTED TO '+reward.convertedFragments.toLocaleString()+' FRAGMENTS</em>':'';
    return '<article class="void-ten-pull-card tier-'+cardTier+'" style="--pull-accent:'+color+';animation-delay:'+(index*35)+'ms"><span class="void-ten-pull-index">PULL '+String(index+1).padStart(2,'0')+'</span><div class="void-ten-pull-glyph">'+(revealed?glyph:'?')+'</div><b>'+(revealed?title:'SEALED')+'</b><small>'+(revealed?detail:'MYSTERY REWARD')+'</small>'+(revealed?conversion:'')+'</article>';
   }).join('');
@@ -1218,7 +1218,7 @@ function showCoreUpgradeSystem(back=showMainMenu,initialTab='upgrades'){
         const companionPool=companions.filter(companion=>companion.rarity==='legendary');
         const companion=companionPool[Math.floor(Math.random()*companionPool.length)];
         const grant=grantCompanion(saveData,companion.id,1);saveData=grant.saveData;
-        rewards.push({type:'companion',companionId:companion.id,rarity:companion.rarity,stars:companion.stars,worldId:-1,roomNumber:i+1,claimKey:'shop:'+Date.now()+':'+i});
+        rewards.push({type:'companion',companionId:companion.id,rarity:companion.rarity,stars:companion.stars,convertedFragments:grant.convertedFragments||0,worldId:-1,roomNumber:i+1,claimKey:'shop:'+Date.now()+':'+i});
       }else{
         const eligible=mustBeSignature?pool.filter(w=>w.category==='signature'):pool;
         const weapon=eligible[Math.floor(Math.random()*eligible.length)];
@@ -1670,7 +1670,7 @@ function showCompanionCodex(){
    return '<article class="companion-codex-card '+(hidden?'is-undiscovered':'is-discovered')+(equipped?' is-equipped':'')+'" style="--companion-accent:'+(hidden?'#60718a':companion.color)+'">'+
     '<div class="companion-codex-card-head"><span class="companion-codex-glyph">'+(hidden?'?':companion.glyph)+'</span><div><small>'+(hidden?'SIGNAL UNRESOLVED':companion.rarity.toUpperCase()+' · '+('★'.repeat(companion.stars))+' · '+companion.role.map(role=>role.replace(/-/g,' ')).join(' / '))+'</small><h3>'+(hidden?'UNKNOWN COMPANION':companion.name)+'</h3><p>'+(hidden?'Identity classified':companion.epithet)+'</p></div></div>'+
     (hidden?'<p class="companion-codex-description">Companion identity and abilities are hidden until recruited.</p><div class="companion-codex-lock">◇ UNDISCOVERED</div>':detail)+
-    '<button type="button" class="btn companion-codex-action" data-companion-action="'+companion.id+'" '+(locked||hidden?'disabled':'')+'>'+(equipped?'UNEQUIP COMPANION':locked?'LOCKED':hidden?'NOT RECRUITED':'EQUIP COMPANION')+'</button></article>';
+    '</article>';
   }).join('');
   const placeholders=Array.from({length:5},(_,i)=>'<article class="companion-codex-card is-undiscovered" style="--companion-accent:#60718a"><div class="companion-codex-card-head"><span class="companion-codex-glyph">?</span><div><small>ROSTER SLOT '+String(i+4).padStart(2,'0')+' · CLASSIFIED</small><h3>UNKNOWN COMPANION</h3><p>Signal not yet recovered</p></div></div><p class="companion-codex-description">This registry entry will become available in a future content update.</p><div class="companion-codex-lock">◇ UNDISCOVERED</div></article>').join('');
   modal.className='modal companion-codex-modal';
@@ -1678,12 +1678,6 @@ function showCompanionCodex(){
    '<div class="companion-codex-summary"><div><b>'+Object.keys(ownedMap).length+' / 8</b><small>RECRUITED</small></div><div><b>'+(safe.equippedCompanionId?ownedMap[safe.equippedCompanionId]?.name||'NONE':'NONE')+'</b><small>EQUIPPED COMPANION</small></div><div><b>'+(safe.companionSystemUnlocked?'UNLOCKED':'LOCKED')+'</b><small>ACCESS STATUS</small></div></div>'+
    (!safe.companionSystemUnlocked?'<div class="companion-codex-unlock">SYSTEM LOCKED · CLEAR WORLD 1, ROOM 10 TO UNLOCK COMPANION EQUIPMENT.</div>':'')+
    '<div class="companion-codex-grid">'+roster+placeholders+'</div>';
-  modal.querySelectorAll('[data-companion-action]').forEach(button=>button.onclick=()=>{
-   const id=button.dataset.companionAction;
-   const result=safe.equippedCompanionId===id?unequipCompanion(safe):equipCompanion(safe,id);
-   if(!result.equipped&&!result.unequipped){sfx('damage');return;}
-   saveData=result.saveData;persist();sfx('ui');render();
-  });
   addUnifiedCodexTabs('companions');
  };
  $('overlay').classList.remove('hidden','closing','story-overlay','dialogue-field-overlay');
