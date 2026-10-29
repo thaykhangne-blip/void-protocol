@@ -51,9 +51,17 @@ function aetherLayer(ac,frequency,endFrequency,duration,wave,volume,delay=0){
 }
 function sfx(type){
  if(!sfxEnabled)return;
- const now=performance.now(),minGap=type==='shoot'?95:type==='hit'?35:type==='text'?28:type==='aether_beam'?115:type==='aether_black_sun_pulse'?720:0;
+ const now=performance.now(),minGap=type==='shoot'?95:type==='hit'?35:type==='text'?28:type==='aether_beam'?115:type==='aether_black_sun_pulse'?720:type==='companion_ruin_fire'?420:type==='companion_ruin_hit'?110:type==='companion_solace_heal'?700:type==='companion_sanctuary'?2500:type==='companion_bastion_wave'?450:type==='companion_bastion_barrier'?2500:0;
  if(minGap&&now-(sfxLast[type]||0)<minGap)return;sfxLast[type]=now;
  const ac=ensureAudio();if(!ac)return;
+ // Companion effects use short, distinct layers with event-level throttling.
+ if(type==='companion_ruin_fire'){aetherLayer(ac,760,310,.085,'sawtooth',.018);aetherLayer(ac,1450,680,.055,'triangle',.012,.012);return}
+ if(type==='companion_ruin_hit'){aetherLayer(ac,330,95,.11,'sawtooth',.026);aetherLayer(ac,1050,420,.07,'triangle',.014,.012);return}
+ if(type==='companion_execute'){aetherLayer(ac,620,42,.32,'sawtooth',.045);aetherLayer(ac,1180,180,.25,'triangle',.025,.025);aetherLayer(ac,90,34,.28,'sine',.045,.045);return}
+ if(type==='companion_solace_heal'){aetherLayer(ac,660,990,.18,'sine',.024);aetherLayer(ac,990,1320,.2,'triangle',.014,.045);return}
+ if(type==='companion_sanctuary'){aetherLayer(ac,220,660,.42,'sine',.04);aetherLayer(ac,440,880,.48,'triangle',.025,.06);aetherLayer(ac,1320,1760,.28,'sine',.012,.16);return}
+ if(type==='companion_bastion_wave'){aetherLayer(ac,145,55,.2,'sine',.045);aetherLayer(ac,280,90,.16,'sawtooth',.02,.015);return}
+ if(type==='companion_bastion_barrier'){aetherLayer(ac,180,420,.34,'sine',.035);aetherLayer(ac,520,1040,.3,'triangle',.022,.035);aetherLayer(ac,1250,760,.2,'sine',.012,.11);return}
  // Aether gets layered, synthesized effects rather than one generic beep.
  if(type==='aether_beam'){aetherLayer(ac,980,260,.105,'sawtooth',.025);aetherLayer(ac,185,72,.09,'sine',.035,.012);aetherLayer(ac,1500,720,.045,'triangle',.012,.018);return}
  if(type==='aether_black_sun_start'){aetherLayer(ac,190,34,.9,'sine',.065);aetherLayer(ac,420,58,.72,'sawtooth',.025,.04);aetherLayer(ac,980,150,.62,'triangle',.018,.12);return}
