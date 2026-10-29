@@ -254,7 +254,7 @@ function updateCoreSkill(dt){if(!player||!core)return;clampVengeanceShields();if
    // During stasis the field is anchored to the moving Aether core, not the cast location.
    fx.x=player.x;fx.y=player.y;fx.phase='stasis';fx.tickTimer=(fx.tickTimer||0)-dt;
    for(const e of enemies){if(e.hp<=0||dist(e,fx)>fx.radius+(e.r||0))continue;e.stunned=Math.max(e.stunned||0,Math.min(remain,dt*1.5));e.stunDamageTaken=1;if(fx.tickTimer<=0)applyDamage(e,fx.damage,'#fff0a6',false,'AETHER EVENT HORIZON STASIS');}
-   if(fx.tickTimer<=0){fx.tickTimer=.32;fx.soundPulseTimer=(fx.soundPulseTimer||0)-.32;}
+   if(fx.tickTimer<=0)fx.tickTimer=.32;
   fx.soundPulseTimer=(fx.soundPulseTimer||0)-dt;if(fx.soundPulseTimer<=0){sfx('aether_black_sun_pulse');fx.soundPulseTimer=.92;}
   }else if(elapsed<9){
    if(fx.phase!=='moving'){
