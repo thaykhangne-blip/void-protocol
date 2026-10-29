@@ -345,7 +345,7 @@ function showVoidWeaponTenPull(rewards,onDone){
    const color=companion?.color||(rank>=5?'#ffd66b':rank>=4?'#c69aff':'#72dfff');
    const glyph=weapon?.glyph||companion?.glyph||'✧';
    const title=reward.presentationOnly?'MILESTONE REWARD':(weapon?.name||companion?.name||'NEXUS FRAGMENTS');
-   const detail=reward.presentationOnly?'ALREADY CLAIMED':(companion?'LEGENDARY ★★★★★ COMPANION':weapon?(weapon.rarity==='legendary'?'LEGENDARY ★★★★★':weapon.rarity==='unique'?'UNIQUE ★★★★':'RARE ★★★')+' VOID WEAPON':'+ '+reward.amount+' FRAGMENTS');
+   const detail=reward.presentationOnly?'ALREADY CLAIMED':(companion?'LEGENDARY ★★★★★ COMPANION'+(reward.convertedFragments?' · +'+reward.convertedFragments+' FRAGMENTS':''):weapon?(weapon.rarity==='legendary'?'LEGENDARY ★★★★★':weapon.rarity==='unique'?'UNIQUE ★★★★':'RARE ★★★')+' VOID WEAPON':'+ '+reward.amount+' FRAGMENTS');
    const conversion=reward.convertedFragments?'<em class="void-duplicate-conversion">✦ CONVERTED TO '+reward.convertedFragments.toLocaleString()+' FRAGMENTS</em>':'';
    return '<article class="void-ten-pull-card tier-'+cardTier+'" style="--pull-accent:'+color+';animation-delay:'+(index*35)+'ms"><span class="void-ten-pull-index">PULL '+String(index+1).padStart(2,'0')+'</span><div class="void-ten-pull-glyph">'+(revealed?glyph:'?')+'</div><b>'+(revealed?title:'SEALED')+'</b><small>'+(revealed?detail:'MYSTERY REWARD')+'</small>'+(revealed?conversion:'')+'</article>';
   }).join('');
@@ -390,7 +390,7 @@ function showCoreUpgradeSystem(back=showMainMenu,initialTab='upgrades'){
         const companionPool=companions.filter(companion=>companion.rarity==='legendary');
         const companion=companionPool[Math.floor(Math.random()*companionPool.length)];
         const grant=grantCompanion(saveData,companion.id,1);saveData=grant.saveData;
-        rewards.push({type:'companion',companionId:companion.id,rarity:companion.rarity,stars:companion.stars,worldId:-1,roomNumber:i+1,claimKey:'shop:'+Date.now()+':'+i});
+        rewards.push({type:'companion',companionId:companion.id,rarity:companion.rarity,stars:companion.stars,convertedFragments:grant.convertedFragments||0,worldId:-1,roomNumber:i+1,claimKey:'shop:'+Date.now()+':'+i});
       }else{
         const eligible=mustBeSignature?pool.filter(w=>w.category==='signature'):pool;
         const weapon=eligible[Math.floor(Math.random()*eligible.length)];
