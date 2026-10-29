@@ -27,10 +27,10 @@ function applyCoreEvolution(lv){
   if(lv===15){player.shatterglass=true;name='SHATTERGLASS';desc='Deal 15% more damage to slowed enemies.'}
   if(lv===20){player.absoluteZero=true;player.frostSlowDuration=3.2;name='ABSOLUTE ZERO';desc='Slow lasts 3.2s.'}
  }else if(id==='nova'){
-  if(lv===5){player.aetherWellRadiusBonus=(player.aetherWellRadiusBonus||0)+.08;name='EVENT HORIZON';desc='Aether singularity radius +8%.'}
-  if(lv===10){player.aetherCollapseMult=(player.aetherCollapseMult||1)*1.10;name='SINGULARITY AMPLIFIER';desc='Singularity detonation damage +10%.'}
-  if(lv===15){player.aetherOrbitalResonance=true;name='GRAVITATIONAL RESONANCE';desc='Enemies inside Aether singularities take 15% more periodic damage.'}
-  if(lv===20){player.aetherCollapseMult=(player.aetherCollapseMult||1)*1.15;name='BLACK SUN AFTERSHOCK';desc='Black Sun detonation damage +15%, still subject to its per-target damage cap.'}
+  if(lv===5){player.aetherStasisBonus=(player.aetherStasisBonus||0)+.6;name='EVENT HORIZON';desc='Event Horizon stasis lasts 0.6s longer before the singularity begins moving.'}
+  if(lv===10){player.aetherCollapsePerCaptureBonus=(player.aetherCollapsePerCaptureBonus||0)+.12;name='SINGULARITY AMPLIFIER';desc='Collapse damage gains +12% per additional enemy caught, up to +60%.'}
+  if(lv===15){player.aetherSlowFieldRank=1;name='GRAVITATIONAL RESONANCE';desc='Enemies hit by Aether field pulses are slowed by 20% for 1.2s.'}
+  if(lv===20){player.aetherAftershockRank=1;name='BLACK SUN AFTERSHOCK';desc='Black Sun collapse releases a secondary shockwave dealing 35% of collapse damage.'}
  }else if(id==='flash'){
   if(lv===5){player.flashChainPower=(player.flashChainPower||1)*1.10;name='ARC CONDUCTOR';desc='Lightning chain hits deal 10% more damage.'}
   if(lv===10){player.flashStunDurationBonus=(player.flashStunDurationBonus||0)+.20;name='STATIC CHARGE';desc='Static Shock stuns last 20% longer.'}
@@ -148,14 +148,14 @@ function perkRank(title){const t=String(title||'').toUpperCase();switch(t){
  case 'EMBER: PYRE CASCADE':return player?.pyreCascade||0;
  case 'FROST: CRYSTAL RESONANCE':return player?.crystalResonance||0;
  case 'AETHER: GRAVITATIONAL LENS':return Math.round((player?.aetherPullStrengthBonus||0)/.18);
- case 'AETHER: EVENT HORIZON':return Math.round((player?.aetherStasisBonus||0)/.6);
- case 'AETHER: SINGULARITY AMPLIFIER':return Math.round((player?.aetherCollapsePerCaptureBonus||0)/.12);
+ case 'AETHER: EVENT HORIZON':case 'EVENT HORIZON':return Math.round((player?.aetherStasisBonus||0)/.6);
+ case 'AETHER: SINGULARITY AMPLIFIER':case 'SINGULARITY AMPLIFIER':return Math.round((player?.aetherCollapsePerCaptureBonus||0)/.12);
  case 'AETHER: COLLAPSING STAR':return Math.round((player?.aetherBossCollapseBonus||0)/.20);
- case 'AETHER: GRAVITY WELL':return Math.round((player?.aetherPullStrengthBonus||0)/.18);
+ case 'AETHER: GRAVITY WELL':return Math.round((player?.aetherWellDurationBonus||0)/.8);
  case 'AETHER: LUMINAL OVERDRIVE':return Math.round((player?.aetherBlackSunRadiusBonus||0)/.12);
  case 'AETHER: ORBITAL RESONANCE':return player?.aetherRendPulseBonus?1:0;
- case 'AETHER: BLACK SUN AFTERSHOCK':return player?.aetherAftershockRank||0;
- case 'AETHER: GRAVITATIONAL RESONANCE':return player?.aetherSlowFieldRank||0;
+ case 'AETHER: BLACK SUN AFTERSHOCK':case 'BLACK SUN AFTERSHOCK':return player?.aetherAftershockRank||0;
+ case 'AETHER: GRAVITATIONAL RESONANCE':case 'GRAVITATIONAL RESONANCE':return player?.aetherSlowFieldRank||0;
  case 'PRISM: CUBIC OVERLOAD':return player?.elementalCubeOverload||0;
  case 'PRISM: CHAIN REACTION':return player?.elementalChainReaction||0;
  case 'PRISM: FROST LATTICE':return player?.elementalFrostLattice||0;
@@ -236,12 +236,12 @@ const coreExclusiveAdditions={
  ['FROST: ZERO-POINT FRACTURE','✦','RARE · Frozen enemies take 15% more damage.',true,()=>{player.frostFractureBonus=.15}]
  ],
  nova:[
+ ['AETHER: GRAVITATIONAL LENS','✦','Singularity fields pull ordinary enemies 18% harder and tighten grouping around their center.',false,()=>{player.aetherPullStrengthBonus=(player.aetherPullStrengthBonus||0)+.18}],
  ['AETHER: EVENT HORIZON','◉','Event Horizon stasis lasts 0.6s longer before the singularity begins moving.',false,()=>{player.aetherStasisBonus=(player.aetherStasisBonus||0)+.6}],
  ['AETHER: SINGULARITY AMPLIFIER','✦','Collapse damage gains +12% per enemy caught, up to +60%.',false,()=>{player.aetherCollapsePerCaptureBonus=(player.aetherCollapsePerCaptureBonus||0)+.12}],
  ['AETHER: COLLAPSING STAR','✹','RARE · Black Sun deals 20% more collapse damage to bosses and singularity cores.',true,()=>{player.aetherBossCollapseBonus=(player.aetherBossCollapseBonus||0)+.20}],
- ['AETHER: GRAVITY WELL','◉','RARE · Ordinary enemies are pulled 18% harder and grouped near the center.',true,()=>{player.aetherPullStrengthBonus=(player.aetherPullStrengthBonus||0)+.18}],
+ ['AETHER: GRAVITY WELL','◉','RARE · Event Horizon moving-singularity phase lasts +0.8s per rank, up to +2.4s.',true,()=>{player.aetherWellDurationBonus=Math.min(2.4,(player.aetherWellDurationBonus||0)+.8}],
  ['AETHER: LUMINAL OVERDRIVE','✦','RARE · Black Sun gravity field reaches 12% farther.',true,()=>{player.aetherBlackSunRadiusBonus=(player.aetherBlackSunRadiusBonus||0)+.12}],
- ['AETHER: ORBITAL RESONANCE','✦','Aether field pulses apply one additional Rend stack to enemies caught inside.',true,()=>{player.aetherOrbitalResonance=true;player.aetherRendPulseBonus=true}],
  ['AETHER: BLACK SUN AFTERSHOCK','◉','Black Sun collapse releases a secondary shockwave dealing 35% of collapse damage.',true,()=>{player.aetherAftershockRank=1}],
  ['AETHER: GRAVITATIONAL RESONANCE','◎','Enemies hit by Aether field pulses are slowed by 20% for 1.2s.',false,()=>{player.aetherSlowFieldRank=1}]
  ],
