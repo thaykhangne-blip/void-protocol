@@ -4,6 +4,7 @@ import { companions, COMPANION_BY_ID, MAX_EQUIPPED_COMPANIONS } from '../src/dat
 import {
   equipCompanion,
   getCompanion,
+  createCompanionCombatState,
   getCompanionDamageAmplification,
   getCompanionExecutionDamage,
   isCompanionExecuteTarget,
@@ -142,4 +143,14 @@ test('Ruin fallback execution damage scales with missing HP and remains non-nega
   assert.equal(getCompanionExecutionDamage({ hp: 50, maxHp: 100 }), 50);
   assert.equal(getCompanionExecutionDamage({ hp: 100, maxHp: 100 }), 40);
   assert.equal(getCompanionExecutionDamage({ hp: 0, maxHp: 100 }), 0);
+});
+
+
+test('Companion combat runtime state is transient and starts clean', () => {
+  const state = createCompanionCombatState();
+  assert.equal(state.companionId, null);
+  assert.equal(state.attackTimer, 0);
+  assert.equal(state.signatureCooldown, 0);
+  assert.deepEqual(state.projectiles, []);
+  assert.equal(state.hitCount, 0);
 });
