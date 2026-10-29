@@ -37,18 +37,18 @@ export const companions = [
       id: 'gentle-light',
       name: 'Gentle Light',
       incomingHealingMultiplier: 1.25,
-      incomingDamageMultiplier: 0.75,
-      description: "While deployed, increases the main core's incoming healing by 25% and reduces incoming damage by 25%."
+      incomingDamageMultiplier: 1,
+      description: "While deployed, increases healing received by the main core by 25%. Does not reduce incoming damage."
     },
     signature: {
       id: 'sanctuary',
       name: 'Sanctuary',
       triggerHpRatio: 0.35,
-      damageReductionRatio: 0.25,
+      damageReductionRatio: 0,
       duration: 3,
       healingMaxHpRatio: 0.10,
       cooldown: 30,
-      description: 'Automatically activates below 35% HP, reducing incoming damage by 25% and restoring 10% Max HP over 3 seconds. Cooldown: 30 seconds.'
+      description: 'Automatically activates below 35% HP and restores 10% Max HP over 3 seconds. It does not grant damage immunity or damage reduction. Cooldown: 30 seconds.'
     }
   },
   {
