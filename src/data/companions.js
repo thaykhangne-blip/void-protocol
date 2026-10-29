@@ -28,9 +28,8 @@ export const companions = [
       name: 'Radiant Pulse',
       canDamageEnemies: false,
       interval: 2.0,
-      healingMaxHpRatio: 0.025,
+      healingMaxHpRatio: 0.04,
       healingAttackRatio: 1.2,
-      overflowShieldCapMaxHpRatio: 0.35,
       description: "Periodically restores 2.5% of the main core's Max HP plus 120% of Solace's ATK. Excess healing becomes shield, capped at 35% of the main core's Max HP."
     },
     passive: {
