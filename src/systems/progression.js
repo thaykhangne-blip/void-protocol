@@ -148,6 +148,7 @@ function perkRank(title){const t=String(title||'').toUpperCase();switch(t){
  case 'EMBER: PYRE CASCADE':return player?.pyreCascade||0;
  case 'FROST: CRYSTAL RESONANCE':return player?.crystalResonance||0;
  case 'AETHER: GRAVITATIONAL LENS':return Math.round((player?.aetherPullStrengthBonus||0)/.18);
+ case 'AETHER: BLACK SUN CATALYST':return player?.novaSkillRelic||0;
  case 'AETHER: EVENT HORIZON':case 'EVENT HORIZON':return Math.round((player?.aetherStasisBonus||0)/.6);
  case 'AETHER: SINGULARITY AMPLIFIER':case 'SINGULARITY AMPLIFIER':return Math.round((player?.aetherCollapsePerCaptureBonus||0)/.12);
  case 'AETHER: COLLAPSING STAR':return Math.round((player?.aetherBossCollapseBonus||0)/.20);
