@@ -22,8 +22,6 @@ let developerMode=false;
 
 const highlightVoidWeaponNumbers = value => String(value ?? '').replace(/(\\d+(?:\\.\\d+)?%?)/g, '<span style="color:#5de8ff;font-weight:700;text-shadow:0 0 8px rgba(93,232,255,.18)">$1</span>');
 
-
-
 // COMBAT MODULE
 // Source fragment consumed by scripts/build.js. Do not import directly.
 
@@ -2915,3 +2913,7 @@ function fitGameScreen(){resizeGameCanvas();}window.addEventListener('resize',fi
 
 setupInputHandlers();setupTooltipHandlers();
 setupCombatHudHandlers();$('ultimateHud').onclick=()=>{sfx('ui');castUltimate()};$('skillHud').onclick=()=>{sfx('ui');useCoreSkill()};$('dashHud').onclick=performDash;$('pauseBtn').onclick=()=>{sfx('ui');if(['playing','portal','shop','paused'].includes(state))pauseGame();else if(state==='settings'){state='paused';showPauseMenu()}else if(state==='start'||state==='worldselect')showWorldSelect();else showPauseMenu()};showMainMenu();requestAnimationFrame(frame);window.__voidLoaderReady?.();
+
+
+})();
+
