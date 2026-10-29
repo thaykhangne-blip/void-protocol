@@ -507,6 +507,7 @@ if(roomTransition){
  const fade=roomTransition.phase==='out'?Math.min(1,roomTransition.elapsed/roomTransition.fadeOut):1-Math.min(1,roomTransition.elapsed/roomTransition.fadeIn);
  if(fade>0){ctx.save();ctx.globalAlpha=fade;ctx.fillStyle='#020207';ctx.fillRect(0,0,W,H);ctx.restore();}
 }
+ drawCompanionCombat(ctx);
  // Portal interaction takes place inside the void: hide the arena and render drifting stars.
  if(window.portalInteractionActive===true||(state==='portalTransition'&&portalTransition&&portalTransition.elapsed>=portalTransition.travelDuration)||(state==='portal'&&!$('overlay')?.classList.contains('hidden'))){
   ctx.save();ctx.globalAlpha=1;ctx.fillStyle='#020207';ctx.fillRect(0,0,W,H);
