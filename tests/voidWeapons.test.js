@@ -89,6 +89,9 @@ test('legacy saves with no Void Weapon fields normalize safely', () => {
   assert.deepEqual(normalized.voidWeaponClaims, []);
   assert.deepEqual(normalized.pendingVoidWeaponRewards, []);
   assert.equal(normalized.coreCurrency, 12);
+  assert.deepEqual(normalized.companionInventory, {});
+  assert.equal(normalized.equippedCompanionId, null);
+  assert.equal(normalized.companionSystemUnlocked, false);
 });
 
 
