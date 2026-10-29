@@ -463,6 +463,9 @@ function showVoidWeaponInventory(coreId){
 }
 
 function showCoreSelection(previewCoreId=null){
+ // Backfill Companion access for existing saves that completed the campaign before this system was added.
+ const campaignAlreadyPassedUnlock=(Number(saveData.bestRooms?.[0])||0)>=10||Number(saveData.lastWorld)>0||Number(saveData.campaignCheckpoint?.world)>0||(typeof allWorldsCleared==='function'&&allWorldsCleared());
+ if(!saveData.companionSystemUnlocked&&campaignAlreadyPassedUnlock){saveData=normalizeCompanionSave(saveData);saveData.companionSystemUnlocked=true;persist();}
  clearToast();state='coreselect';const modal=$('modal');let selected=Math.max(0,cores.findIndex(c=>c.id===(previewCoreId||player.coreId)));let typeTimer=null;
  modal.className='modal world-hologram-modal core-hologram-modal';
  modal.innerHTML=`<button type="button" class="world-holo-back" id="coreHoloBack" aria-label="Back to world select" title="Back to world select">←</button>
