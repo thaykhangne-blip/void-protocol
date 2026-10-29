@@ -70,7 +70,7 @@ Old saves normalize to an empty inventory, no equipped Companion and a locked sy
 
 ## Scope intentionally deferred
 
-- Companion-specific animation and sound design polish.
+- Additional Companion animation polish beyond the current procedural effects.
 - More than one equipment slot.
 - Companion duplicate conversion/refinement and dedicated pity mechanics.
 - Dedicated Companion balance telemetry and full browser-level combat regression tests.
