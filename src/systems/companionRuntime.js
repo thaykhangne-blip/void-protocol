@@ -22,7 +22,7 @@ function drawCompanionCombat(ctx){
  if(!player||state!=='playing'||!saveData?.companionSystemUnlocked)return;
  const c=activeCompanion();if(!c)return;
  const now=performance.now()*.001,position=companionWorldPosition(now),x=position.x,y=position.y,pulse=.5+.5*Math.sin(now*4);
- ctx.save();
+ ctx.save();ctx.translate(x,y);ctx.scale(.5,.5);ctx.translate(-x,-y);
  if(c.id==='ruin'){
   // Ruin: a predatory void relic, with a jagged crown, orbiting blades, and a glaring core.
   ctx.globalAlpha=.22+pulse*.18;ctx.fillStyle='#7e43ff';ctx.shadowColor='#b68aff';ctx.shadowBlur=30;
