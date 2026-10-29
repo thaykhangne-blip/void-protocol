@@ -119,3 +119,42 @@ export function getEquippedCompanion(saveData) {
   if (!safe.companionSystemUnlocked || !safe.equippedCompanionId) return null;
   return COMPANION_BY_ID[safe.equippedCompanionId] || null;
 }
+
+
+/**
+ * Combat runtime state is intentionally separate from persistent collection data.
+ * It is reset on a fresh run and room transitions; only equipped ownership is saved.
+ */
+export const COMPANION_COMBAT_DEFAULTS = Object.freeze({
+  solace: { attackTimer: 2, signatureCooldown: 0, signatureTimer: 0 },
+  ruin: { attackTimer: 1.5, signatureCooldown: 0 },
+  bastion: { attackTimer: 1.5, signatureCooldown: 0, barrierTimer: 0 }
+});
+
+export function createCompanionCombatState() {
+  return {
+    companionId: null,
+    attackTimer: 0,
+    signatureCooldown: 0,
+    signatureTimer: 0,
+    barrierTimer: 0,
+    projectiles: [],
+    hitCount: 0
+  };
+}
+
+export function getCompanionDamageAmplification(target, now = 0) {
+  return target && Number(target.companionDeathMarkUntil) > now ? 1.25 : 1;
+}
+
+export function isCompanionExecuteTarget(target, blackHole = null) {
+  return !!target && target !== blackHole && target.hp > 0 &&
+    !target.isBoss && !target.isMiniBoss && !target.isFinalBoss &&
+    target.role !== 'boss' && target.role !== 'miniboss' &&
+    Number(target.hp) / Math.max(1, Number(target.maxHp) || Number(target.hp)) <= 0.25;
+}
+
+export function getCompanionExecutionDamage(target) {
+  if (!target || !(target.hp > 0)) return 0;
+  return Math.max(0, 40 + Math.max(0, (Number(target.maxHp) || target.hp) - target.hp) * 0.20);
+}
