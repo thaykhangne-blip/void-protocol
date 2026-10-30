@@ -147,6 +147,33 @@ export const companions = [
       cannotRecursivelyTrigger: true,
       description: 'When a single hit deals at least 15% of the main core Max HP, creates a barrier with durability equal to 20% of Max HP for up to 10 seconds. Cooldown: 12 seconds. The barrier follows the main core and cannot trigger itself recursively.'
     }
+  },
+  {
+    id: 'echo',
+    name: 'ECHO',
+    epithet: 'The Resonance Engine',
+    rarity: 'legendary',
+    stars: 5,
+    element: 'sound',
+    role: ['offensive-support', 'damage-amplification'],
+    color: '#70e8f2',
+    glyph: '◎',
+    visual: 'A cyan sonic core surrounded by rotating resonance rings and pulsing sound-wave arcs.',
+    stats: { attack: 7, attackInterval: 3.0, followDistance: 50, targetingRange: 220 },
+    basicAttack: {
+      id: 'sonic-pulse', name: 'Sonic Pulse', damage: 5, interval: 3.0, radius: 145,
+      markDuration: 4, markDamageTakenRatio: 0.10,
+      description: 'Every 3 seconds, releases a circular sonic pulse that damages nearby enemies and marks them for 4 seconds. Marked enemies take 10% increased damage from the Main Core.'
+    },
+    passive: {
+      id: 'harmonic-feedback', name: 'Harmonic Feedback', attackThreshold: 10,
+      burstDamageRatio: 2.0, burstRadius: 145,
+      description: 'Every 10 Main Core attacks, triggers Harmonic Burst, dealing damage equal to 200% of the Main Core ATK to nearby enemies.'
+    },
+    signature: {
+      id: 'perfect-resonance', name: 'Perfect Resonance', duration: 4, damageBonusRatio: 0.15,
+      description: 'When Harmonic Burst activates, the Main Core deals 15% increased damage for 4 seconds. Activating it again refreshes the duration.'
+    }
   }
 ];
 
