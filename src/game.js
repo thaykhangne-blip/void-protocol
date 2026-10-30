@@ -1848,7 +1848,7 @@ function deploy(){
   saveData.campaignCheckpoint=null;beginSelectedWorld(idx);
  }
  modal.querySelectorAll('[data-holo-world]').forEach((b,i)=>b.addEventListener('click',()=>selectWorld(i)));
- $('worldDifficultyToggle').onclick=()=>{if(!allWorldsCleared())return;setWorldHardMode(selected,!saveData.hardModeByWorld?.[selected]);selectWorld(selected,false);};
+ const difficultyToggle=$('worldDifficultyToggle');if(difficultyToggle)difficultyToggle.onclick=()=>{if(!allWorldsCleared())return;setWorldHardMode(selected,!saveData.hardModeByWorld?.[selected]);selectWorld(selected,false);};
  $('worldHoloPrev').onclick=()=>selectWorld(Math.max(0,selected-1));
  $('worldHoloNext').onclick=()=>selectWorld(Math.min(worlds.length-1,selected+1));
  $('worldHoloDeploy').onclick=deploy;
