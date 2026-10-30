@@ -26,7 +26,7 @@ function triggerEchoHarmonicBurst(c){
  if(blackHole&&!blackHole.inactive&&blackHole.hp>0&&dist(origin,blackHole)<=radius+(blackHole.r||0))targets.push(blackHole);
  for(const t of targets){applyDamage(t,damage,c.color,false,'COMPANION ECHO · HARMONIC BURST');burst(t.x,t.y,c.color,7);}
  companionCombatState.signatureTimer=c.signature.duration||4;sfx('companion_echo_burst');
- skillFx.push({type:'companionEchoBurst',x:origin.x,y:origin.y,life:.58,max:.58,radius,color:c.color});burst(origin.x,origin.y,c.color,16);notify('ECHO · HARMONIC BURST');
+ skillFx.push({type:'companionEchoBurst',x:origin.x,y:origin.y,life:1.05,max:1.05,radius,color:c.color});burst(origin.x,origin.y,'#ffffff',28);burst(origin.x,origin.y,c.color,22);notify('ECHO · HARMONIC BURST');
 }
 
 function bastionShockwave(c){sfx('companion_bastion_wave');let hits=0;for(const t of enemies){if(t.hp<=0||dist(player,t)>c.basicAttack.radius+(t.r||0))continue;applyDamage(t,c.basicAttack.damage+player.damage*.08,c.color,false,'COMPANION SEISMIC STRIKE');t.stunned=Math.max(t.stunned||0,1);if(!(t.isBoss||t.isMiniBoss||t.isFinalBoss||t.role==='boss'||t.role==='miniboss')){const dx=t.x-player.x,dy=t.y-player.y,d=Math.hypot(dx,dy)||1,push=c.basicAttack.knockbackStrength*.18;t.x=Math.max(t.r||8,Math.min(W-(t.r||8),t.x+dx/d*push));t.y=Math.max(t.r||8,Math.min(H-(t.r||8),t.y+dy/d*push));}hits++;}skillFx.push({type:'companionBastionWave',x:player.x,y:player.y,life:.42,max:.42,radius:c.basicAttack.radius,color:c.color});burst(player.x,player.y,c.color,Math.min(12,4+hits*2));}
