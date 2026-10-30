@@ -130,7 +130,8 @@ export function getEquippedCompanion(saveData) {
 export const COMPANION_COMBAT_DEFAULTS = Object.freeze({
   solace: { attackTimer: 2, signatureCooldown: 0, signatureTimer: 0 },
   ruin: { attackTimer: 1.5, signatureCooldown: 0 },
-  bastion: { attackTimer: 1.5, signatureCooldown: 0, barrierTimer: 0 }
+  bastion: { attackTimer: 1.5, signatureCooldown: 0, barrierTimer: 0 },
+  echo: { attackTimer: 3, signatureCooldown: 0, signatureTimer: 0, hitCount: 0 }
 });
 
 export function createCompanionCombatState() {
