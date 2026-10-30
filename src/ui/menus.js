@@ -424,7 +424,7 @@ function perkExchangeInfo(name){
  if(general)return {desc:general.desc,rare:false};
  const standard={
  'OVERCHARGED PHOTONS':'ATK +2.2.',
- 'PREDICTIVE TARGETING':'Crit Chance +5 percentage points.',
+ 'PREDICTIVE TARGETING':'Crit Chance +5%.',
  'REACTIVE PLATING':'+18 Max HP and restore 18 HP.',
  'ACCELERATED CYCLE':'ATK Speed +15%.',
  'KINETIC DRIVE':'Movement Speed +10%; ATK Speed +8%.',
