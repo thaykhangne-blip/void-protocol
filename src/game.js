@@ -1828,7 +1828,7 @@ function selectWorld(index,animate=true){
   if($('worldHoloCoords'))$('worldHoloCoords').textContent=['ASH BELT / 04.19.8','CRYO SECTOR / 11.02.4','VERDANT ZONE / 07.28.1','EVENT EDGE / 00.00.0'][selected];
   if(name)name.textContent=w.name;
   const difficultyToggle=$('worldDifficultyToggle'),hardUnlocked=allWorldsCleared(),hardSelected=!!saveData.hardModeByWorld?.[selected];
-  difficultyToggle.disabled=!hardUnlocked;difficultyToggle.setAttribute('aria-pressed',String(hardSelected));difficultyToggle.classList.toggle('is-hard',hardSelected);difficultyToggle.title=hardUnlocked?'Switch this world between Normal and Hard difficulty':'Clear all four worlds to unlock Hard difficulty';const difficultyLabel=difficultyToggle.querySelector('.difficulty-toggle-label');if(difficultyLabel)difficultyLabel.textContent=hardSelected?'HARD':'NORMAL';
+  if(difficultyToggle){difficultyToggle.disabled=!hardUnlocked;difficultyToggle.setAttribute('aria-pressed',String(hardSelected));difficultyToggle.classList.toggle('is-hard',hardSelected);difficultyToggle.title=hardUnlocked?'Switch this world between Normal and Hard difficulty':'Clear all four worlds to unlock Hard difficulty';const difficultyLabel=difficultyToggle.querySelector('.difficulty-toggle-label');if(difficultyLabel)difficultyLabel.textContent=hardSelected?'HARD':'NORMAL';}
   if($('worldHoloRooms'))$('worldHoloRooms').textContent=String(w.rooms).padStart(2,'0');
   if($('worldHoloBest'))$('worldHoloBest').textContent=best+' / '+w.rooms;
   if($('worldHoloThreat'))$('worldHoloThreat').textContent=worldThreat[selected];
