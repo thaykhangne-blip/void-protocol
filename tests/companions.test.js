@@ -29,15 +29,23 @@ const baseSave = () => ({
   companionSystemUnlocked: false
 });
 
-test('initial Companion registry contains three distinct five-star legendary Companions', () => {
-  assert.deepEqual(companions.map(companion => companion.id), ['solace', 'ruin', 'bastion']);
-  assert.equal(new Set(companions.map(companion => companion.id)).size, 3);
+test('Companion registry contains four distinct five-star legendary Companions', () => {
+  assert.deepEqual(companions.map(companion => companion.id), ['solace', 'ruin', 'bastion', 'echo']);
+  assert.equal(new Set(companions.map(companion => companion.id)).size, 4);
   for (const companion of companions) {
     assert.equal(companion.rarity, 'legendary');
     assert.equal(companion.stars, 5);
     assert.ok(companion.basicAttack && companion.passive && companion.signature);
     assert.equal(COMPANION_BY_ID[companion.id], companion);
   }
+  const echo = COMPANION_BY_ID.echo;
+  assert.equal(echo.basicAttack.id, 'sonic-pulse');
+  assert.equal(echo.basicAttack.markDuration, 4);
+  assert.equal(echo.basicAttack.markDamageTakenRatio, 0.10);
+  assert.equal(echo.passive.attackThreshold, 10);
+  assert.equal(echo.passive.burstDamageRatio, 2);
+  assert.equal(echo.signature.damageBonusRatio, 0.15);
+  assert.equal(echo.signature.duration, 4);
   assert.equal(MAX_EQUIPPED_COMPANIONS, 1);
 });
 
