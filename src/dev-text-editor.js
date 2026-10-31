@@ -52,6 +52,7 @@
   }
   function decorate(item) {
     if (!item || !item.element || !authenticated || !enabled || item.element.dataset.voidEditorDecorated === 'true') return;
+    if (!item.element.isConnected) { requestAnimationFrame(() => decorate(item)); return; }
     item.element.dataset.voidEditorDecorated = 'true'; item.element.dataset.voidEditable = 'true';
     const button = document.createElement('button'); button.type = 'button'; button.className = 'void-dev-edit'; button.textContent = '✎ EDIT'; button.setAttribute('aria-label', 'Edit dialogue text');
     button.addEventListener('click', event => { event.stopPropagation(); openEditor({ ...item }); });
