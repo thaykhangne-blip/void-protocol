@@ -60,7 +60,7 @@
   function refreshAuthUI() {
     ensurePanel(); loginButton.hidden = authenticated; panel.querySelector('#voidDevTextLogout').hidden = !authenticated;
     panel.querySelector('#voidDevTextIntro').textContent = authenticated ? 'Authenticated. Press Ctrl+Shift+D to enable or disable Dev Mode.' : 'Only the configured GitHub account can authenticate.';
-    document.querySelectorAll('.void-dev-edit').forEach(node => node.remove());
+    document.querySelectorAll('.void-dev-edit').forEach(node => { if (node.previousElementSibling) delete node.previousElementSibling.dataset.voidEditorDecorated; node.remove(); });
   }
   async function checkAuth() {
     ensurePanel();
