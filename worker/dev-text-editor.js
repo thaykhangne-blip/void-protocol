@@ -8,7 +8,7 @@ function b64url(bytes) { let s = ''; for (const b of new Uint8Array(bytes)) s +=
 function decodeB64url(s) { s = s.replace(/-/g, '+').replace(/_/g, '/'); return Uint8Array.from(atob(s + '='.repeat((4 - s.length % 4) % 4)), c => c.charCodeAt(0)); }
 function cookie(request, name) { const part = (request.headers.get('Cookie') || '').split(';').map(x => x.trim()).find(x => x.startsWith(name + '=')); return part ? part.slice(name.length + 1) : ''; }
 function cookieHeader(name, value, maxAge, sameSite) { return name + '=' + value + '; Path=/; Max-Age=' + maxAge + '; HttpOnly; Secure; SameSite=' + (sameSite || 'None'); }
-function cors(request, env) { const origin = request.headers.get('Origin'); return origin && origin === env.ALLOWED_ORIGIN ? { 'access-control-allow-origin': origin, 'access-control-allow-credentials': 'true', 'access-control-allow-methods': 'GET,POST,OPTIONS', 'access-control-allow-headers': 'content-type', 'vary': 'Origin' } : {}; }
+function cors(request, env) { const origin = request.headers.get('Origin'); return origin && origin === env.ALLOWED_ORIGIN ? { 'access-control-allow-origin': origin, 'access-control-allow-credentials': 'true', 'access-control-allow-methods': 'GET,POST,OPTIONS', 'access-control-allow-headers': 'content-type,authorization', 'vary': 'Origin' } : {}; }
 async function hmac(secret, value) { const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']); return b64url(await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(value))); }
 async function signedSession(env, username) { const payload = b64url(new TextEncoder().encode(JSON.stringify({ username, exp: Math.floor(Date.now() / 1000) + SESSION_SECONDS }))); return payload + '.' + await hmac(env.SESSION_SECRET, payload); }
 async function readSession(request, env) {
@@ -49,7 +49,7 @@ function matchingBrace(text, start, open, close) {
 function replaceStoryLine(source, sceneId, lineIndex, newText) {
   if (typeof sceneId !== 'string' || !/^[a-zA-Z0-9_-]{1,100}$/.test(sceneId)) throw new Error('Invalid scene identifier.');
   if (!Number.isInteger(lineIndex) || lineIndex < 0 || lineIndex > 100) throw new Error('Invalid dialogue line index.');
-  const idPattern = new RegExp('(?:["\\']id["\\']|\\bid)\\s*:\\s*["\\']' + sceneId + '["\\']');
+  const idPattern = new RegExp('"id"\\s*:\\s*"' + sceneId + '"|\\bid\\s*:\\s*"' + sceneId + '"');
   const idMatch = idPattern.exec(source);
   if (!idMatch) throw new Error('Scene not found: ' + sceneId);
   const objectStart = source.lastIndexOf('{', idMatch.index);
@@ -93,10 +93,11 @@ export default {
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers });
     try {
       checkConfig(env);
-      if (url.pathname === '/auth/login-url' && request.method === 'GET') {
+      if ((url.pathname === '/auth/login' || url.pathname === '/auth/login-url') && request.method === 'GET') {
         const state = crypto.randomUUID(), auth = new URL('https://github.com/login/oauth/authorize');
         auth.searchParams.set('client_id', env.GITHUB_OAUTH_CLIENT_ID); auth.searchParams.set('redirect_uri', env.GITHUB_OAUTH_CALLBACK_URL); auth.searchParams.set('scope', 'read:user'); auth.searchParams.set('state', state);
-        return json({ url: auth.toString() }, 200, { ...headers, 'set-cookie': cookieHeader(STATE_COOKIE, state, 600, 'Lax') });
+        if (url.pathname === '/auth/login-url') return json({ url: auth.toString() }, 200, { ...headers, 'set-cookie': cookieHeader(STATE_COOKIE, state, 600, 'Lax') });
+        return new Response('', { status: 302, headers: { location: auth.toString(), 'set-cookie': cookieHeader(STATE_COOKIE, state, 600, 'Lax'), 'cache-control': 'no-store' } });
       }
       if (url.pathname === '/auth/callback' && request.method === 'GET') {
         const state = cookie(request, STATE_COOKIE);
@@ -110,7 +111,7 @@ export default {
         const profile = await profileResponse.json();
         if (!profileResponse.ok || !profile.login || profile.login.toLowerCase() !== env.AUTHORIZED_GITHUB_USER.toLowerCase()) return new Response('This GitHub account is not authorized to use the developer editor.', { status: 403 });
         const session = await signedSession(env, profile.login);
-        return new Response('', { status: 302, headers: { location: env.ALLOWED_ORIGIN + '/?dev-auth=success', 'set-cookie': [cookieHeader(COOKIE, session, SESSION_SECONDS), cookieHeader(STATE_COOKIE, '', 0, 'Lax')], 'cache-control': 'no-store' } });
+        return new Response('', { status: 302, headers: { location: (env.FRONTEND_URL || env.ALLOWED_ORIGIN + '/') + (String(env.FRONTEND_URL || '').includes('?') ? '&' : '?') + 'dev-auth=success&dev-token=' + encodeURIComponent(session), 'set-cookie': cookieHeader(STATE_COOKIE, '', 0, 'Lax'), 'cache-control': 'no-store' } });
       }
       if (url.pathname === '/auth/me' && request.method === 'GET') {
         const session = await readSession(request, env);
@@ -126,10 +127,10 @@ export default {
         const token = await appToken(env);
         const path = '/repos/' + encodeURIComponent(env.REPO_OWNER) + '/' + encodeURIComponent(env.REPO_NAME) + '/contents/src/data/story.js';
         const current = await githubFetch(path, token);
-        const source = atob(current.content.replace(/\s/g, ''));
+        const source = new TextDecoder().decode(Uint8Array.from(atob(current.content.replace(/\s/g, '')), c => c.charCodeAt(0)));
         const updated = replaceStoryLine(source, input.sceneId, input.lineIndex, input.text);
         if (updated === source) return json({ error: 'No change detected.' }, 400, headers);
-        const commit = await githubFetch(path, token, { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ message: 'Edit story dialogue: ' + input.sceneId, content: btoa(unescape(encodeURIComponent(updated))), sha: current.sha, branch: env.GITHUB_BRANCH || 'main' }) });
+        const commit = await githubFetch(path, token, { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ message: 'Edit story dialogue: ' + input.sceneId, content: btoa(String.fromCharCode(...new TextEncoder().encode(updated))), sha: current.sha, branch: env.GITHUB_BRANCH || 'main' }) });
         return json({ ok: true, commit: commit.commit ? commit.commit.sha : null, sceneId: input.sceneId, lineIndex: input.lineIndex }, 200, headers);
       }
       return json({ error: 'Not found.' }, 404, headers);
