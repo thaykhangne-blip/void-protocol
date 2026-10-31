@@ -7,7 +7,7 @@ REPO_OWNER = "thaykhangne-blip"
 REPO_NAME = "void-protocol"
 GITHUB_BRANCH = "main"
 # Configure these in Cloudflare, not in public game files:
-# ALLOWED_ORIGIN = "https://YOUR-USERNAME.github.io"
+# FRONTEND_URL = "https://YOUR-USERNAME.github.io/void-protocol/"
 # AUTHORIZED_GITHUB_USER = "YOUR-GITHUB-USERNAME"
 # GITHUB_OAUTH_CLIENT_ID = "..."
 # GITHUB_OAUTH_CALLBACK_URL = "https://YOUR-WORKER.workers.dev/auth/callback"
