@@ -26,7 +26,7 @@ This feature is not live until you deploy and configure the Worker. Never paste 
    wrangler deploy
    ```
 4. Configure these Worker variables in Cloudflare:
-   - ALLOWED_ORIGIN: the exact published GitHub Pages origin, e.g. https://YOUR-USERNAME.github.io, with no path or trailing slash.
+   - FRONTEND_URL: the full published game URL, including /void-protocol/ if using a project site, and ending with a slash.
    - AUTHORIZED_GITHUB_USER: your exact GitHub username.
    - GITHUB_OAUTH_CLIENT_ID
    - GITHUB_OAUTH_CALLBACK_URL: the exact Worker callback URL.
