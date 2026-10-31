@@ -2574,3 +2574,9 @@ button.global-back-button { transition: opacity .18s ease; }
 /* Keep the core HP and EXP status HUD in the bottom-left during runs. */
 .screen > .particle-panel#particlePanel{top:auto!important;right:auto!important;bottom:12px!important;left:12px!important;}
 @media(max-width:700px){.screen > .particle-panel#particlePanel{top:auto!important;right:auto!important;bottom:8px!important;left:8px!important;}}
+
+
+/* Keep the pause/menu control at the top-right during runs. */
+.bottom{position:fixed!important;top:12px!important;right:12px!important;bottom:auto!important;left:auto!important;z-index:120!important;margin:0!important;padding:0!important;}
+.bottom>div{justify-content:flex-end!important;}
+@media(max-width:700px){.bottom{top:8px!important;right:8px!important;}}
