@@ -1,0 +1,19 @@
+name = "void-protocol-dev-text-editor"
+main = "dev-text-editor.js"
+compatibility_date = "2026-10-31"
+
+[vars]
+REPO_OWNER = "thaykhangne-blip"
+REPO_NAME = "void-protocol"
+GITHUB_BRANCH = "main"
+# Configure these in Cloudflare, not in public game files:
+# ALLOWED_ORIGIN = "https://YOUR-USERNAME.github.io"
+# AUTHORIZED_GITHUB_USER = "YOUR-GITHUB-USERNAME"
+# GITHUB_OAUTH_CLIENT_ID = "..."
+# GITHUB_OAUTH_CALLBACK_URL = "https://YOUR-WORKER.workers.dev/auth/callback"
+# GITHUB_APP_ID = "..."
+# GITHUB_APP_INSTALLATION_ID = "..."
+# Store private credentials with wrangler secret put:
+# GITHUB_OAUTH_CLIENT_SECRET
+# GITHUB_APP_PRIVATE_KEY
+# SESSION_SECRET
