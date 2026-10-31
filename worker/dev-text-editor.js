@@ -12,7 +12,9 @@ function cors(request, env) { const origin = request.headers.get('Origin'); retu
 async function hmac(secret, value) { const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']); return b64url(await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(value))); }
 async function signedSession(env, username) { const payload = b64url(new TextEncoder().encode(JSON.stringify({ username, exp: Math.floor(Date.now() / 1000) + SESSION_SECONDS }))); return payload + '.' + await hmac(env.SESSION_SECRET, payload); }
 async function readSession(request, env) {
-  const parts = cookie(request, COOKIE).split('.');
+  const authorization = request.headers.get('Authorization') || '';
+  const token = authorization.startsWith('Bearer ') ? authorization.slice(7) : cookie(request, COOKIE);
+  const parts = token.split('.');
   if (parts.length !== 2 || await hmac(env.SESSION_SECRET, parts[0]) !== parts[1]) return null;
   try { const data = JSON.parse(new TextDecoder().decode(decodeB64url(parts[0]))); if (!data.username || data.exp < Date.now() / 1000 || data.username.toLowerCase() !== env.AUTHORIZED_GITHUB_USER.toLowerCase()) return null; return data; } catch { return null; }
 }
@@ -83,7 +85,7 @@ function replaceStoryLine(source, sceneId, lineIndex, newText) {
   return source.slice(0, targetStart) + updatedLine + source.slice(targetEnd);
 }
 function checkConfig(env) {
-  const keys = ['ALLOWED_ORIGIN','AUTHORIZED_GITHUB_USER','GITHUB_OAUTH_CLIENT_ID','GITHUB_OAUTH_CLIENT_SECRET','GITHUB_OAUTH_CALLBACK_URL','GITHUB_APP_ID','GITHUB_APP_INSTALLATION_ID','GITHUB_APP_PRIVATE_KEY','SESSION_SECRET','REPO_OWNER','REPO_NAME'];
+  const keys = ['ALLOWED_ORIGIN','AUTHORIZED_GITHUB_USER','GITHUB_OAUTH_CLIENT_ID','GITHUB_OAUTH_CLIENT_SECRET','GITHUB_OAUTH_CALLBACK_URL','GITHUB_APP_ID','GITHUB_APP_INSTALLATION_ID','GITHUB_APP_PRIVATE_KEY','SESSION_SECRET','REPO_OWNER','REPO_NAME','FRONTEND_URL'];
   const missing = keys.filter(k => !env[k]);
   if (missing.length) throw new Error('Worker configuration missing: ' + missing.join(', '));
 }
