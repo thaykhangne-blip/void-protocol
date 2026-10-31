@@ -24,6 +24,7 @@ async function githubFetch(path, token, options = {}) {
   if (!response.ok) throw new Error('GitHub API error ' + response.status + ': ' + (data.message || 'request failed'));
   return data;
 }
+function encodeBase64Utf8(text) { const bytes = new TextEncoder().encode(text); let binary = ''; for (let i = 0; i < bytes.length; i += 32768) binary += String.fromCharCode(...bytes.subarray(i, i + 32768)); return btoa(binary); }
 function pemBytes(pem) { return Uint8Array.from(atob(pem.replace(/-----BEGIN PRIVATE KEY-----|-----END PRIVATE KEY-----|\s/g, '')), c => c.charCodeAt(0)); }
 async function appToken(env) {
   const now = Math.floor(Date.now() / 1000);
@@ -132,7 +133,7 @@ export default {
         const source = new TextDecoder().decode(Uint8Array.from(atob(current.content.replace(/\s/g, '')), c => c.charCodeAt(0)));
         const updated = replaceStoryLine(source, input.sceneId, input.lineIndex, input.text);
         if (updated === source) return json({ error: 'No change detected.' }, 400, headers);
-        const commit = await githubFetch(path, token, { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ message: 'Edit story dialogue: ' + input.sceneId, content: btoa(String.fromCharCode(...new TextEncoder().encode(updated))), sha: current.sha, branch: env.GITHUB_BRANCH || 'main' }) });
+        const commit = await githubFetch(path, token, { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ message: 'Edit story dialogue: ' + input.sceneId, content: encodeBase64Utf8(updated), sha: current.sha, branch: env.GITHUB_BRANCH || 'main' }) });
         return json({ ok: true, commit: commit.commit ? commit.commit.sha : null, sceneId: input.sceneId, lineIndex: input.lineIndex }, 200, headers);
       }
       return json({ error: 'Not found.' }, 404, headers);
