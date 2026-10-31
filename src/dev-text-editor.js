@@ -71,7 +71,7 @@
   document.addEventListener('keydown', event => {
     if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'd') {
       event.preventDefault(); ensurePanel();
-      if (!panel.hidden) { panel.hidden = true; return; }
+      if (!panel.hidden && !authenticated) { panel.hidden = true; return; }
       panel.hidden = false;
       if (!authenticated) { status('Sign in with the authorized GitHub account.'); return; }
       enabled = !enabled; document.body.classList.toggle('void-dev-enabled', enabled); refreshAuthUI();
