@@ -2,10 +2,13 @@
 (() => {
   'use strict';
   const API = String(window.VOID_TEXT_EDITOR_API || '').replace(/\/$/, '');
+  let sessionToken = sessionStorage.getItem('voidDevEditorSession') || '';
+  const consumeToken = () => { const params = new URLSearchParams(location.search); const token = params.get('dev-token'); if (token) { sessionToken = token; sessionStorage.setItem('voidDevEditorSession', token); params.delete('dev-token'); params.delete('dev-auth'); const query = params.toString(); history.replaceState({}, '', location.pathname + (query ? '?' + query : '') + location.hash); } };
+  consumeToken();
   let authenticated = false, enabled = false, panel, statusNode, loginButton, selected = null;
   const request = async (path, options = {}) => {
     if (!API) throw new Error('Developer API is not configured. See docs/dev-text-editor.md.');
-    const response = await fetch(API + path, { ...options, credentials: 'include', headers: { 'Content-Type': 'application/json', ...(options.headers || {}) } });
+    const response = await fetch(API + path, { ...options, credentials: 'include', headers: { 'Content-Type': 'application/json', ...(sessionToken ? { Authorization: 'Bearer ' + sessionToken } : {}), ...(options.headers || {}) } });
     const data = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(data.error || ('Request failed (' + response.status + ')'));
     return data;
@@ -27,8 +30,8 @@
     panel = document.createElement('section'); panel.id = 'voidDevTextPanel'; panel.hidden = true;
     panel.innerHTML = `<h2>VOID PROTOCOL · DEV TOOLS</h2><p id="voidDevTextIntro">Sign in with the authorized GitHub account to edit campaign dialogue.</p><div id="voidDevTextEditor" hidden><label for="voidDevTextValue">Selected text</label><textarea id="voidDevTextValue" maxlength="8000" spellcheck="true"></textarea><div class="void-dev-row"><button id="voidDevTextApply" type="button">APPLY PREVIEW</button><button id="voidDevTextSave" type="button">SAVE TO GITHUB</button><button id="voidDevTextCancel" type="button">CANCEL</button></div></div><div class="void-dev-row"><button id="voidDevTextLogin" type="button">SIGN IN WITH GITHUB</button><button id="voidDevTextLogout" type="button" hidden>SIGN OUT</button><button id="voidDevTextClose" type="button">CLOSE</button></div><div id="voidDevTextStatus" role="status"></div>`;
     document.body.append(panel); statusNode = panel.querySelector('#voidDevTextStatus'); loginButton = panel.querySelector('#voidDevTextLogin');
-    loginButton.addEventListener('click', async () => { try { const result = await request('/auth/login-url'); window.location.assign(result.url); } catch (e) { status(e.message, true); } });
-    panel.querySelector('#voidDevTextLogout').addEventListener('click', async () => { try { await request('/auth/logout', { method: 'POST', body: '{}' }); authenticated = false; enabled = false; document.body.classList.remove('void-dev-enabled'); refreshAuthUI(); status('Signed out.'); } catch (e) { status(e.message, true); } });
+    loginButton.addEventListener('click', async () => { try { window.location.assign(API + '/auth/login'); } catch (e) { status(e.message, true); } });
+    panel.querySelector('#voidDevTextLogout').addEventListener('click', async () => { try { await request('/auth/logout', { method: 'POST', body: '{}' }); sessionToken = ''; sessionStorage.removeItem('voidDevEditorSession'); authenticated = false; enabled = false; document.body.classList.remove('void-dev-enabled'); refreshAuthUI(); status('Signed out.'); } catch (e) { status(e.message, true); } });
     panel.querySelector('#voidDevTextClose').addEventListener('click', () => { panel.hidden = true; });
     panel.querySelector('#voidDevTextCancel').addEventListener('click', () => { panel.querySelector('#voidDevTextEditor').hidden = true; status('Edit cancelled.'); });
   }
