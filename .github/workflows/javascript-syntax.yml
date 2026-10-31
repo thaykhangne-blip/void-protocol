@@ -26,6 +26,9 @@ jobs:
       - name: Run modular build and syntax checks
         run: npm run check
 
+      - name: Check developer editor JavaScript
+        run: node --check src/dev-text-editor.js && node --check worker/dev-text-editor.js
+
       - name: Run automated tests
         run: npm run test:companions
 
