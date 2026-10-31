@@ -2569,3 +2569,8 @@ button.global-back-button { transition: opacity .18s ease; }
 #shieldTrack{box-sizing:border-box;height:6px;margin-top:3px;margin-bottom:5px;border:1px solid #f4f7ff55;background:#20283a;border-radius:2px;overflow:hidden}
 #shieldTrack #shieldbar{display:block;height:100%;min-width:0;background:linear-gradient(90deg,#dfe8ff,#fff)!important;box-shadow:0 0 8px #fff9;transition:width .15s}
 @media(max-width:680px){.overlay.companion-inventory-overlay{padding:8px}.companion-inventory-grid{grid-template-columns:minmax(0,1fr)}.companion-inventory-modal{width:100%}}
+
+
+/* Keep the core HP and EXP status HUD in the bottom-left during runs. */
+.screen > .particle-panel#particlePanel{top:auto!important;right:auto!important;bottom:12px!important;left:12px!important;}
+@media(max-width:700px){.screen > .particle-panel#particlePanel{top:auto!important;right:auto!important;bottom:8px!important;left:8px!important;}}
