@@ -26,14 +26,14 @@ export const voidWeapons = [
     rarity: 'legendary',
     color: '#8cecff',
     glyph: '❄',
-    description: 'FROST · FREEZE AND SHATTER',
+    description: 'FROST · PERMAFROST AND SHATTERPOINT',
     stats: { atkFlat: 1.1, hpPct: 0.14, armorPct: 0.13 },
     passive: {
       name: 'Stillpoint',
       effectId: 'stillpoint',
       statKey: 'critChance',
       values: [0.08, 0.10, 0.12, 0.14, 0.16],
-      description: 'Crit Chance: +8% / 10% / 12% / 14% / 16%. Absolute Zero: Frozen enemies take 25% / 30% / 35% / 40% / 45% more damage. Glacial Shatter: Auto-attacking a frozen enemy triggers an explosion for 100% / 125% / 150% / 175% / 200% ATK as bonus damage, damaging nearby enemies and applying 1 / 1 / 2 / 2 / 3 Chill stacks.'
+      description: 'Crit Chance: +8% / 10% / 12% / 14% / 16%. Permafrost: Critical damage increases by 12% for each frozen enemy. Absolute Zero: Frozen enemies take 25% / 30% / 35% / 40% / 45% more damage. Shatterpoint: Crystal Ascendancy splinters deal 55% ATK as guaranteed critical damage.'
     }
   },
   {
