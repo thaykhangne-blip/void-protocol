@@ -216,7 +216,6 @@ export const voidWeapons = [
     stats: { atkFlat: 0.8, hpPct: 0.11, armorPct: 0.1 },
     passive: { name: 'Convergence Index', effectId: 'general-singularity-compass', statKey: 'damage', values: [0.14, 0.16, 0.18, 0.20, 0.22], description: 'Damage: +14% / 16% / 18% / 20% / 22%.' }
   },
-,
   {
     id: 'ashen-vector',
     name: 'Ashen Vector',
