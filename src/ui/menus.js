@@ -116,7 +116,7 @@ function showVoidWeaponCodex(){
     '<div class="void-weapon-codex-card-head"><span class="void-weapon-codex-glyph">'+(hidden?'?':weapon.glyph)+'</span><div><small>'+(hidden?'SIGNAL UNRESOLVED':(weapon.rarity||'legendary').toUpperCase()+' · '+(weapon.category==='general'?'GENERAL':'SIGNATURE')+' · '+(weapon.rarity==='legendary'?'★★★★★':weapon.rarity==='unique'?'★★★★':'★★★'))+'</small><h3>'+(hidden?'UNKNOWN VOID WEAPON':weapon.name)+'</h3></div><span class="void-weapon-codex-rank">'+(hidden?'LOCKED':'R'+rank+'/'+MAX_VOID_WEAPON_REFINEMENT)+'</span></div>'+
     (hidden?'<p class="void-weapon-codex-secret">Weapon identity and signature data remain classified until the weapon is recovered.</p><div class="void-weapon-codex-lock">◇ UNDISCOVERED</div>':
      '<p class="void-weapon-codex-description">'+weapon.description+'</p>'+
-     '<div class="void-weapon-codex-stats">'+(()=>{const refinementBonus=Math.max(0,Math.min(5,rank||0))*0.02;return '<span>ATK <b>+'+Math.round((weapon.stats.atkPct+refinementBonus)*100)+'%</b></span><span>MAX HP <b>+'+Math.round((weapon.stats.hpPct+refinementBonus)*100)+'%</b></span><span>DEF <b>+'+Math.round((weapon.stats.armorPct+refinementBonus)*100)+'%</b></span>'})()+'</div>'+
+     '<div class="void-weapon-codex-stats">'+(()=>{const refinementBonus=Math.max(0,Math.min(5,rank||0))*0.02;return '<span>ATK <b>+'+(Number.isFinite(Number(weapon.stats.atkPct))?Math.round((Number(weapon.stats.atkPct)+refinementBonus)*100)+'%':(Number(weapon.stats.atkFlat)||0).toFixed(1))+'</b></span><span>MAX HP <b>+'+Math.round((weapon.stats.hpPct+refinementBonus)*100)+'%</b></span><span>DEF <b>+'+Math.round((weapon.stats.armorPct+refinementBonus)*100)+'%</b></span>'})()+'</div>'+
      '<div class="void-weapon-codex-passive"><small>'+weapon.passive.name+'</small><p>'+highlightVoidWeaponNumbers(weapon.passive.description)+'</p></div>'+
      '<div class="void-weapon-codex-footer"><span>OWNED ×'+owned.copies+'</span><span>'+(rank>=MAX_VOID_WEAPON_REFINEMENT?'MAX RANK':'RANK '+rank+' · '+(MAX_VOID_WEAPON_REFINEMENT-rank)+' TO MAX')+'</span></div>'+
      '<div class="void-weapon-codex-equipment">'+(equippedCores.length?'EQUIPPED · '+equippedCores.join(', '):'NOT CURRENTLY EQUIPPED')+'</div>')+
@@ -280,7 +280,7 @@ function selectWorld(index,animate=true){
   if($('worldHoloBest'))$('worldHoloBest').textContent=best+' / '+w.rooms;
   if($('worldHoloThreat'))$('worldHoloThreat').textContent=worldThreat[selected];
   if($('worldHoloLock'))$('worldHoloLock').textContent=unlocked?'● UPLINK READY · DESTINATION STABLE':'▰ LOCKED · CLEAR THE PREVIOUS WORLD TO UNLOCK';
-  $('worldHoloLock').classList.toggle('is-locked',!unlocked);
+  const worldLock=$('worldHoloLock');if(worldLock)worldLock.classList.toggle('is-locked',!unlocked);
   const deploy=$('worldHoloDeploy');deploy.disabled=!unlocked;deploy.innerHTML=unlocked?'DEPLOY TO WORLD <span>↗</span>':'DESTINATION LOCKED <span>⌁</span>';
   $('worldHoloPrev').disabled=selected===0;$('worldHoloNext').disabled=selected===worlds.length-1;
   modal.querySelectorAll('[data-holo-world]').forEach((b,i)=>{b.classList.toggle('active',i===selected);b.classList.toggle('locked',i>=saveData.unlockedWorlds);b.setAttribute('aria-current',i===selected?'true':'false');});
