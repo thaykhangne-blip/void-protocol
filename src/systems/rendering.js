@@ -420,7 +420,7 @@ function drawEnemyCreature(e){
  const key=[worldIndex,role,radius,color].join('|');
  let sprite=enemyBodySpriteCache.get(key);
  if(!sprite){
-  const size=Math.ceil(radius*3.6),canvas=document.createElement('canvas');
+  const size=Math.ceil(radius*4.2),canvas=document.createElement('canvas');
   canvas.width=size;canvas.height=size;
   const spriteCtx=canvas.getContext('2d');
   if(!spriteCtx){drawEnemyCreatureBody(e,ctx,false);return;}
