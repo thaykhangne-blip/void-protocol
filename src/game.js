@@ -2304,6 +2304,40 @@ function sfx(type){
 // Source fragment consumed by scripts/build.js. Do not import directly.
 // Canvas drawing and visual presentation helpers.
 
+// Reusable offscreen sprite cache. Static, expensive canvas primitives are
+// rasterized once and then blitted during the frame loop.
+const renderSpriteCache = new Map();
+function getRenderSprite(key, width, height, drawSprite) {
+ const cacheKey=key+'@'+width+'x'+height;
+ let sprite=renderSpriteCache.get(cacheKey);
+ if(sprite)return sprite;
+ const canvas=document.createElement('canvas');
+ canvas.width=Math.max(1,Math.ceil(width));
+ canvas.height=Math.max(1,Math.ceil(height));
+ const spriteCtx=canvas.getContext('2d');
+ if(!spriteCtx)return null;
+ drawSprite(spriteCtx,canvas.width,canvas.height);
+ renderSpriteCache.set(cacheKey,canvas);
+ return canvas;
+}
+function prewarmRenderAssets(){
+ // The event-horizon center is static; only its surrounding accretion bands animate.
+ for(const [key,color] of [['aether-horizon','#000000'],['aether-ult-horizon','#02010a']]){
+  getRenderSprite(key,96,96,(spriteCtx,w,h)=>{
+   const cx=w/2,cy=h/2,r=w*.43;
+   const gradient=spriteCtx.createRadialGradient(cx-r*.18,cy-r*.2,1,cx,cy,r);
+   gradient.addColorStop(0,color);
+   gradient.addColorStop(.76,color);
+   gradient.addColorStop(.9,key.includes('ult')?'#171329':'#100b12');
+   gradient.addColorStop(1,'#000000');
+   spriteCtx.fillStyle=gradient;
+   spriteCtx.beginPath();spriteCtx.arc(cx,cy,r,0,Math.PI*2);spriteCtx.fill();
+   spriteCtx.strokeStyle=key.includes('ult')?'rgba(255,247,207,.8)':'rgba(255,211,153,.8)';
+   spriteCtx.lineWidth=1.2;spriteCtx.beginPath();spriteCtx.arc(cx,cy,r*.94,0,Math.PI*2);spriteCtx.stroke();
+  });
+ }
+}
+
 function renderStatusHud(){const host=$('statusHud');if(!host||!player){if(host)host.innerHTML='';return}if(state!=='playing'){host.innerHTML='';host.style.display='none';return}const effects=[];if(core?.id==='elemental'&&(player.elementalEmpowerTimer||0)>0)effects.unshift({icon:'◈',label:'Elemental Convergence',time:player.elementalEmpowerTimer,type:'buff',color:'#ff71cd',className:'elemental-convergence'});if(core?.id==='nova'&&player?.voidWeaponPassive==='eventide-array'&&hasAetherEventideSingularity()){const rank=Math.max(1,Math.min(5,player.voidWeaponRank||1));const reduction=Math.round([15,20,25,30,35][rank-1]);effects.unshift({icon:'◉',label:'Eventide Aegis · '+reduction+'% DMG Reduction',value:reduction+'%',permanent:true,type:'buff',color:'#fff7cf',className:'eventide-aegis'});}if(core?.id==='remielle')effects.push({icon:'✧',label:'VOID BURST',value:String(player.voidflares||0)+'/'+String(player.maxVoidflares||3),permanent:true,type:'buff',color:'#ff9ed8'});if(player.inv>0)effects.push({icon:'✧',label:'Invulnerable',time:player.inv,type:'buff',color:'#b9f8ff'});if(core?.id==='ember'&&(player.skillActive||0)>0)effects.push({icon:'♨',label:'Ring of Fire',time:player.skillActive,type:'buff',color:'#ff4b2e'});if(core?.id==='frost'&&(player.frostEmpowerTimer||0)>0)effects.push({icon:'✧',label:'Crystal Ascendancy',time:player.frostEmpowerTimer,type:'buff',color:'#a8f4ff'});if(core?.id==='frost'&&(player.frostEmergencyTimer||0)>0)effects.push({icon:'⬡',label:'Emergency Ward',time:player.frostEmergencyTimer,type:'buff',color:'#dffbff'});if(core?.id==='remielle'&&(player.skillActive||0)>0){effects.push({icon:'✧',label:'Prism Flight',time:player.skillActive,type:'buff',color:'#ff9ed8'});if((player.skillShieldHp||0)>0)effects.push({icon:'⬡',label:'Dawn Shield '+Math.ceil(player.skillShieldHp),time:player.skillShield,type:'buff',color:'#ffb7e7'});}if((player.ultHaste||0)>0)effects.push({icon:'ϟ',label:'Overclock',time:player.ultHaste,type:'buff',color:'#c18aff'});host.innerHTML=effects.slice(0,6).map(e=>{const permanent=!!e.permanent,display=permanent?(e.value??e.label):(Number.isFinite(e.time)?e.time.toFixed(1)+'s':'');const detail=permanent?e.label:(e.label+': '+(Number.isFinite(e.time)?e.time.toFixed(1)+'s remaining':''));return '<div class="status-chip '+e.type+(e.className?' '+e.className:'')+'" title="Player · '+detail+'"><span class="status-icon" style="color:'+e.color+'">'+e.icon+'</span><span class="status-time">'+display+'</span></div>';}).join('');host.style.display=effects.length?'grid':'none'}
 
 function drawDashChargeDiamonds(){
@@ -2486,9 +2520,15 @@ function drawAetherSingularity(fx){
   ctx.beginPath();ctx.arc(Math.cos(a)*rr,Math.sin(a)*rr*.23,i%3===0?1.15:.8,0,Math.PI*2);ctx.fill();
  }
  ctx.restore();
- ctx.globalAlpha=.72*fade;ctx.strokeStyle='rgba(255,211,153,.8)';ctx.lineWidth=.9;
- ctx.beginPath();ctx.arc(0,0,horizonRadius*1.14,0,Math.PI*2);ctx.stroke();
- ctx.globalAlpha=1;ctx.fillStyle='#000';ctx.beginPath();ctx.arc(0,0,horizonRadius,0,Math.PI*2);ctx.fill();
+ const horizonSprite=getRenderSprite(isUlt?'aether-ult-horizon':'aether-horizon',96,96,()=>{});
+ if(horizonSprite){
+  ctx.globalAlpha=fade;
+  ctx.drawImage(horizonSprite,-horizonRadius*1.28,-horizonRadius*1.28,horizonRadius*2.56,horizonRadius*2.56);
+ }else{
+  ctx.globalAlpha=.72*fade;ctx.strokeStyle='rgba(255,211,153,.8)';ctx.lineWidth=.9;
+  ctx.beginPath();ctx.arc(0,0,horizonRadius*1.14,0,Math.PI*2);ctx.stroke();
+  ctx.globalAlpha=1;ctx.fillStyle='#000';ctx.beginPath();ctx.arc(0,0,horizonRadius,0,Math.PI*2);ctx.fill();
+ }
  ctx.restore();
 }
 
@@ -3000,7 +3040,7 @@ function updateUI(){if(!player)return;const hpPct=Math.max(0,Math.min(100,player
 
 function fitGameScreen(){resizeGameCanvas();}window.addEventListener('resize',fitGameScreen);window.addEventListener('load',()=>{fitGameScreen();const target=Math.ceil((W*H)/6200);while(stars.length<target)stars.push({x:Math.random()*W,y:Math.random()*H,s:Math.random()<.85?1:2,a:rand(.15,.8),p:rand(0,6)});mouse.x=Math.min(W,Math.max(0,mouse.x));mouse.y=Math.min(H,Math.max(0,mouse.y));mouse.lastX=mouse.x;mouse.lastY=mouse.y;});
 
-setupInputHandlers();setupTooltipHandlers();
+prewarmRenderAssets();setupInputHandlers();setupTooltipHandlers();
 setupCombatHudHandlers();$('ultimateHud').onclick=()=>{sfx('ui');castUltimate()};$('skillHud').onclick=()=>{sfx('ui');useCoreSkill()};$('dashHud').onclick=performDash;$('pauseBtn').onclick=()=>{sfx('ui');if(['playing','portal','shop','paused'].includes(state))pauseGame();else if(state==='settings'){state='paused';showPauseMenu()}else if(state==='start'||state==='worldselect')showWorldSelect();else showPauseMenu()};showMainMenu();requestAnimationFrame(frame);window.__voidLoaderReady?.();
 
 
