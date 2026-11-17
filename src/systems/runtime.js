@@ -10,5 +10,5 @@ function updateUI(){if(!player)return;const hpPct=Math.max(0,Math.min(100,player
 
 function fitGameScreen(){resizeGameCanvas();}window.addEventListener('resize',fitGameScreen);window.addEventListener('load',()=>{fitGameScreen();const target=Math.ceil((W*H)/6200);while(stars.length<target)stars.push({x:Math.random()*W,y:Math.random()*H,s:Math.random()<.85?1:2,a:rand(.15,.8),p:rand(0,6)});mouse.x=Math.min(W,Math.max(0,mouse.x));mouse.y=Math.min(H,Math.max(0,mouse.y));mouse.lastX=mouse.x;mouse.lastY=mouse.y;});
 
-setupInputHandlers();setupTooltipHandlers();
+prewarmRenderAssets();setupInputHandlers();setupTooltipHandlers();
 setupCombatHudHandlers();$('ultimateHud').onclick=()=>{sfx('ui');castUltimate()};$('skillHud').onclick=()=>{sfx('ui');useCoreSkill()};$('dashHud').onclick=performDash;$('pauseBtn').onclick=()=>{sfx('ui');if(['playing','portal','shop','paused'].includes(state))pauseGame();else if(state==='settings'){state='paused';showPauseMenu()}else if(state==='start'||state==='worldselect')showWorldSelect();else showPauseMenu()};showMainMenu();requestAnimationFrame(frame);window.__voidLoaderReady?.();
