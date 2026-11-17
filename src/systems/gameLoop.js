@@ -11,7 +11,7 @@ function updateAetherBeamQueue(dt){
  sfx('aether_beam');
  const candidates=[...(enemies||[]).filter(e=>e&&e.hp>0)];
  if(blackHole&&blackHole.hp>0&&!blackHole.inactive)candidates.push(blackHole);
- const target=candidates.sort((a,b)=>dist(player,a)-dist(player,b))[0];
+ let target=null,nearestDistance=Infinity;for(const candidate of candidates){const d=dist(player,candidate);if(d<nearestDistance){nearestDistance=d;target=candidate;}}
  const angle=Number.isFinite(beam.angle)?beam.angle:(target?Math.atan2(target.y-player.y,target.x-player.x):0),length=beam.length||700;
  let originX=player.x,originY=player.y;
  if(beam.rotatingEmitter){const count=Math.max(1,Math.min(4,beam.beamCount||2)),time=performance.now()*.001,emitterAngle=time*1.4+beam.beamIndex*Math.PI*2/count,radius=player.r+2.5;originX=player.x+Math.cos(emitterAngle)*radius;originY=player.y+Math.sin(emitterAngle)*radius;}
